@@ -1,0 +1,33 @@
+// $scroll-o: $primary;
+// $scroll-i: $secondary;
+body{
+    display: grid;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    grid-template-columns: repeat(1, 2fr);
+    grid-template-rows: repeat(1, 2fr);
+
+//     &::-webkit-scrollbar{
+//       width: 0.5rem;
+//     }
+//     &::-webkit-scrollbar-track {
+//       background: $scroll-i;
+//   }
+//     &::-webkit-scrollbar-thumb{
+//       background-color: $scroll-o;
+//       border-radius: 0.5rem;
+//     }
+  }
+
+
+  section {        
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    flex-wrap: wrap;
+    margin: auto;
+    height: 90vh;
+  }
+
