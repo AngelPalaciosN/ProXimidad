@@ -1,8 +1,6 @@
-@use 'responsive';
-@use "bootstrap/scss/bootstrap";
-
-
-// $primary: #FFD700; 
-// $secondary: #0033A0; 
-// $danger: #CE1126; 
-// Colores principales de la pagina con boostrap
+@use 'variables' as *;
+@use "bootstrap/scss/bootstrap" with (
+  $primary: $primary-color,
+  $secondary: $secondary-color,
+  $body-bg: $background-color
+);

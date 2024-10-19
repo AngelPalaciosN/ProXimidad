@@ -1,8 +1,15 @@
-#head{
-    display: flex;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    background-color: black;
-    color: white;
+@use '../variables' as *;
+
+.header {
+  background-color: $primary-color;
+  padding: 1rem 0;
+}
+
+.text-white {
+  color: white !important;
+}
+
+.nav-link {
+  color: white !important;
+
 }
