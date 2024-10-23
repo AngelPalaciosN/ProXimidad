@@ -21,12 +21,12 @@ body{
     }
   }
   section {        
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    text-align: center;
-    flex-wrap: wrap;
-    margin: auto;
-    height: 90vh;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    text-align: center !important;
+    flex-wrap: wrap !important;
+    margin: auto !important;
+    height: 90vh !important;
   }
 

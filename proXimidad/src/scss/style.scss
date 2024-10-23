@@ -1,4 +1,5 @@
 @use 'variables' as *;
+@use 'responsive';
 @use "bootstrap/scss/bootstrap" with (
   $primary: $primary-color,
   $secondary: $secondary-color,

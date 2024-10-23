@@ -1,6 +1,5 @@
 import React from 'react';
 import { Container, Row, Col, Button, Form } from 'react-bootstrap';
-import Header from './Header';
 import '../../scss/component-styles/Sec1.scss';
 
 export default function Sec1() {

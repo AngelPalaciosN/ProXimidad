@@ -1,10 +1,6 @@
 @use '../variables' as *;
+
 .sec1 {
-    .hero {
-      background-color: $background-color;
-      padding: 4rem 0;
-    }
-  
     .contact-form-container {
       background-color: lighten($secondary-color, 35%);
       border-radius: 8px;
