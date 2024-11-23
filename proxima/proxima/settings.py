@@ -82,8 +82,8 @@ DATABASES = {
         'NAME': 'proximidad',
         'USER': 'root',
         'PASSWORD': 'root',
-        'HOST': 'localhost',  # O la dirección IP del servidor MySQL
-        'PORT': '3306',  # El puerto predeterminado de MySQL
+        'HOST': 'localhost', 
+        'PORT': '3306',  
     }
 }
 
