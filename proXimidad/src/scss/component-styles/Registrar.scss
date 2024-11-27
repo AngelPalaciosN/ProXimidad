@@ -1,0 +1,69 @@
+@use '../variables' as *;
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  background-color: $primary;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 10;
+
+  .formulario {
+    display: grid;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;  
+    width: 100%;
+    max-width: 500px; 
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start; 
+      justify-content: center;
+      width: 60vh;
+      margin-bottom: 1rem;
+    }
+
+    .form-control {
+      width: 100%;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-top: 0.3rem;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 0.8rem;
+      background-color: $primary;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 1rem;
+
+      &:disabled {
+        background-color: #aaa;
+        cursor: not-allowed;
+      }
+    }
+
+    .error {
+      color: red;
+      font-size: 0.9rem;
+      margin-top: 0.3rem;
+    }
+  }
+}

@@ -1,16 +1,18 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './components/Home';
-import Lista from './components/modules/Lista_usuarios'
-import './scss/style.scss'
+import Lista from './components/modules/Lista_usuarios';
+import './scss/style.scss';
 
 function App() {
   return (
-    <>
-      <Home/> 
-      <Lista/>
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/usuarios" element={<Lista />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

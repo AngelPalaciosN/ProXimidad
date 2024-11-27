@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { validateForm } from './modules/validar';
+import { validateForm } from './modules/validar'; // Asumo que este es tu validador de formulario
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
+import '../scss/component-styles/Registrar.scss';
 
-const Registrar = ({ setFormVisible }) => {
+const Registrar = ({ onClose }) => {
   const [formData, setFormData] = useState({
     nombre_completo: '',
     correo_electronico: '',
     telefono: '',
     direccion: '',
     cedula: '',
-    tipo_usuario: 'proveedor'
+    tipo_usuario: 'proveedor',
+    codigo_verificacion: ''
   });
 
   const [errors, setErrors] = useState({});
@@ -34,9 +36,9 @@ const Registrar = ({ setFormVisible }) => {
     }
 
     setLoading(true);
-    
+
     try {
-      const response = await fetch('http://localhost:8000/api/register/', {
+      const response = await fetch('http://localhost:8000/proX/usuarios/registrar/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -44,12 +46,13 @@ const Registrar = ({ setFormVisible }) => {
         body: JSON.stringify(formData),
       });
 
+      const responseData = await response.json();
       if (response.ok) {
+      
         alert('Registro exitoso');
-        setFormVisible(false);
+        onClose();  
       } else {
-        const errorData = await response.json();
-        setErrors(errorData.errors || { general: 'Error en el registro' });
+        setErrors(responseData.errors || { general: 'Error en el registro' });
       }
     } catch (error) {
       setErrors({ general: 'Error de conexión' });
@@ -60,11 +63,11 @@ const Registrar = ({ setFormVisible }) => {
 
   return (
     <div className="form-container">
-      <IconButton className="close-button" onClick={() => setFormVisible(false)}>
+      <IconButton className="close-button" onClick={onClose}>
         <CloseIcon />
       </IconButton>
       
-      <form onSubmit={handleSubmit}>
+      <form className="formulario" onSubmit={handleSubmit}>
         <h2>Registro de Usuario</h2>
         
         <div className="form-group">
@@ -133,6 +136,19 @@ const Registrar = ({ setFormVisible }) => {
         </div>
 
         <div className="form-group">
+          <input
+            type="text"
+            name="codigo_verificacion"
+            value={formData.codigo_verificacion}
+            onChange={handleChange}
+            placeholder="Código de Verificación"
+          />
+          {errors.codigo_verificacion && (
+            <span className="error">{errors.codigo_verificacion}</span>
+          )}
+        </div>
+
+        <div className="form-group">
           <select
             name="tipo_usuario"
             value={formData.tipo_usuario}
@@ -143,12 +159,11 @@ const Registrar = ({ setFormVisible }) => {
           </select>
         </div>
 
-        <button 
-          type="submit" 
-          disabled={loading}
-        >
+        <button type="submit" disabled={loading}>
           {loading ? 'Registrando...' : 'Registrar'}
         </button>
+        
+        {errors.general && <div className="error general-error">{errors.general}</div>}
       </form>
     </div>
   );

@@ -1,11 +1,12 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Form from '../Registrar';
 import { Container, Row, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom'; 
 import '../../scss/component-styles/Header.scss';
 
 const Header = () => {
-  const [isFormVisible, setFormVisible] = React.useState(false);
-  
+  const [isFormVisible, setFormVisible] = useState(false);
+
   const handleabrirform = () => {
     setFormVisible(true);
   };
@@ -13,7 +14,6 @@ const Header = () => {
   const handlecerrarForm = () => {
     setFormVisible(false);
   };
-
 
   return (
     <header className="header">
@@ -25,10 +25,20 @@ const Header = () => {
           <Col>
             <nav>
               <ul className="list-unstyled d-flex justify-content-end mb-0">
-                <li><a href="#" className="text-white me-3">Inicio</a></li>
-                <li><a href="#" className="text-white me-3">Servicios</a></li>
-                <li><a href="#" className="text-white me-3">Acerca de</a></li>
-                <li><a href="#" onClick={() => { handleabrirform(); }} className="text-white">Iniciar sesion</a></li>
+                <li><Link to="/" className="text-white me-3">Inicio</Link></li>
+                <li><Link to="/servicios" className="text-white me-3">Servicios</Link></li>
+                <li>
+                  <button 
+                    onClick={(e) => {
+                      e.preventDefault(); 
+                      handleabrirform();
+                    }} 
+                    className="text-white bg-transparent border-0"
+                  >
+                    Iniciar sesión
+                  </button>
+                </li>
+                <li><Link to="/usuarios" className="text-white me-3">Lista de usuarios</Link></li>
               </ul>
             </nav>
           </Col>
@@ -36,12 +46,12 @@ const Header = () => {
       </Container>
 
       {isFormVisible && (
-          <div className="overlay">
-            <div className="form-container">
-              <Form onClose={handlecerrarForm} />
-            </div>
+        <div className="overlay">
+          <div className="form-container">
+            <Form onClose={handlecerrarForm} />
           </div>
-        )}
+        </div>
+      )}
     </header>
   );
 };
