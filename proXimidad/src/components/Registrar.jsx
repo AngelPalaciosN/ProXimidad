@@ -160,7 +160,7 @@ const Registrar = ({ onClose }) => {
           </select>
         </div>
 
-        <button type="submit" disabled={loading}>
+        <button type="submit" disabled={loading} id='btn-registrar'>
           {loading ? 'Registrando...' : 'Registrar'}
         </button>
         
