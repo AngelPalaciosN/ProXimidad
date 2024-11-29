@@ -1,6 +1,7 @@
-// src/components/UsuarioList.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Header from './Header'
+import '../../scss/component-styles/Listaust.scss'
 
 const UsuarioList = () => {
     const [usuarios, setUsuarios] = useState([]);
@@ -13,7 +14,8 @@ const UsuarioList = () => {
                 const response = await axios.get('http://localhost:8000/proX/usuarios/'); 
                 setUsuarios(response.data);
             } catch (err) {
-                setError(err);
+                console.error('Error fetching users:', err);
+                setError('No se pudieron cargar los usuarios');
             } finally {
                 setLoading(false);
             }
@@ -22,20 +24,36 @@ const UsuarioList = () => {
         fetchUsuarios();
     }, []);
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error.message}</div>;
+    const renderUserList = (title, listId, users) => (
+        <div className='container-fluid' id={listId}>
+            <div className='container'>
+                <h1>{title}</h1>
+                {users.length > 0 ? (
+                    <ul>
+                        {users.map(usuario => (
+                            <li key={usuario.id} id='u'>
+                                {usuario.nombre_completo} - {usuario.correo_electronico}
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>No hay usuarios disponibles</p>
+                )}
+            </div>
+        </div>
+    );
+
+    if (loading) return <div>Cargando...</div>;
+    if (error) return <div>Error: {error}</div>;
 
     return (
-        <div>
-            <h1>Lista de Usuarios</h1>
-            <ul>
-                {usuarios.map(usuario => (
-                    <li key={usuario.id}>
-                        {usuario.nombre_completo} - {usuario.correo_electronico}
-                    </li>
-                ))}
-            </ul>
-        </div>
+        <>
+            <Header />
+            <div className='container-fluid' id='main'>
+                {renderUserList('Favoritos', 'favoritos', usuarios)}
+                {renderUserList('Lista de Usuarios', 'usuarios', usuarios)}
+            </div>
+        </>
     );
 };
 

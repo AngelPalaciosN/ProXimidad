@@ -62,6 +62,7 @@ const Registrar = ({ onClose }) => {
   };
 
   return (
+    <section className="form">
     <div className="form-container">
       <IconButton className="close-button" onClick={onClose}>
         <CloseIcon />
@@ -166,6 +167,7 @@ const Registrar = ({ onClose }) => {
         {errors.general && <div className="error general-error">{errors.general}</div>}
       </form>
     </div>
+    </section>
   );
 };
 

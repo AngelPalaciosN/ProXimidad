@@ -8,6 +8,8 @@ body{
     box-sizing: border-box;
     grid-template-columns: repeat(1, 2fr);
     grid-template-rows: repeat(1, 2fr);
+    width: 100% !important;
+    
 
   &::-webkit-scrollbar{
     width: 0.5rem;
@@ -20,6 +22,8 @@ body{
     border-radius: 0.5rem;
     }
   }
+
+
   section {        
     display: flex !important;
     align-items: center !important;
@@ -30,3 +34,17 @@ body{
     height: 90vh !important;
   }
 
+
+
+  h1{
+    display: flex;
+    justify-content: center !important;
+    width: 100%;
+  }
+
+  #root{
+    display: flex;
+    width: 100% !important;
+    flex-direction: column;
+
+  }

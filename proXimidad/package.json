@@ -22,7 +22,7 @@
     "react-bootstrap": "^2.10.5",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.0.1",
-    "sass": "^1.80.2"
+    "sass": "^1.81.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",

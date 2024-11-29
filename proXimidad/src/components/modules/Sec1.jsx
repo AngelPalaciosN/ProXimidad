@@ -9,8 +9,8 @@ export default function Sec1() {
           <Container>
             <Row className="align-items-center">
               <Col md={6}>
-                <h2 className="text-primary mb-4">Bienvenido a Nuestra Página</h2>
-                <p className="text-secondary mb-4">Ofrecemos a cardenas por 100 pesos</p>
+                <h2 className="text-primary mb-4">Bienvenido a proXimidad</h2>
+                <p className="text-secondary mb-4">Ofrecemos a servicios a la puerta de tu hogar</p>
                 <Button variant="primary" size="lg">Comienza Ahora</Button>
               </Col>
               <Col md={6}>
