@@ -13,19 +13,6 @@
   background-color: rgba(0, 0, 0, 0.5); 
   z-index: 9999; 
 
-  button {
-    padding: 0.8rem;
-    color: white;
-    border: none;
-    width: 100%;
-    margin-top: 1rem;
-    background-color: transparent !important;
-
-}
-#btn-registrar{
-  background-color: $primary !important;
-}
-  
   .formulario {
     display: grid;
     text-align: center;
@@ -37,6 +24,10 @@
     background-color: white;
     padding: 2rem;
     border-radius: 8px; 
+    box-sizing: border-box;
+    @media (max-width: 768px) {
+      padding: 1.5rem;
+    }
   }
 
   .form-group {
@@ -71,12 +62,29 @@
       background-color: #aaa;
       cursor: not-allowed;
     }
+
+    &:first-of-type {
+      margin-top: 2rem; /* For the first submit button */
+    }
   }
 
   .error {
     color: red;
     font-size: 0.9rem;
     margin-top: 0.3rem;
+  }
+
+  #btn-login-redirect {
+    background-color: transparent;
+    color: $primary;
+    text-decoration: underline;
+    border: none;
+    cursor: pointer;
+    width: auto;
+    margin-top: 1rem;
+    &:hover {
+      color: darken($primary, 10%);
+    }
   }
 }
 

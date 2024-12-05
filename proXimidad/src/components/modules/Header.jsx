@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import Form from '../Registrar';
+import Form from './Registrar';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom'; 
+import { FaSearch } from 'react-icons/fa';
+import { useAuth } from '../../Auth';
 import '../../scss/component-styles/Header.scss';
 
 const Header = () => {
   const [isFormVisible, setFormVisible] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   const handleabrirform = () => {
     setFormVisible(true);
@@ -30,30 +33,52 @@ const Header = () => {
       >
         Inicio
       </Link>
-      <Link 
-        to="/servicios" 
-        className="nav-link"
-        onClick={isMobile ? toggleMobileMenu : undefined}
-      >
-        Servicios
-      </Link>
 
       <Link 
         to="/usuarios" 
         className="nav-link"
         onClick={isMobile ? toggleMobileMenu : undefined}
       >
-        Lista de usuarios
+        Proveedores
       </Link>
-      <button 
-        onClick={(e) => {
-          e.preventDefault(); 
-          handleabrirform();
-        }} 
-        className="login-button"
+
+      <Link 
+        to="/Sobre" 
+        className="nav-link"
+        onClick={isMobile ? toggleMobileMenu : undefined}
       >
-        Iniciar sesión
-      </button>
+        Nosotros
+      </Link>
+
+      <Link 
+        to="/servicios" 
+        className="nav-link"
+        onClick={isMobile ? toggleMobileMenu : undefined}
+      >
+        <FaSearch /> Buscar
+      </Link>
+
+      {user ? (
+        <>
+          <span className="nav-link">Hola, {user.nombre}</span>
+          <button 
+            onClick={logout} 
+            className="login-button"
+          >
+            Cerrar sesión
+          </button>
+        </>
+      ) : (
+        <button 
+          onClick={(e) => {
+            e.preventDefault(); 
+            handleabrirform();
+          }} 
+          className="login-button"
+        >
+          Registrate!!
+        </button>
+      )}
     </div>
   );
 

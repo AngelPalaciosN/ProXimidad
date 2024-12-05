@@ -1,6 +1,14 @@
 @use '../variables' as *;
 @use '../responsive';
 
+$primary-color: #005187;
+$secondary-color: #4d82bc;
+$background-color: #fcffff;
+$text-color: #333;
+$border-color: #ddd;
+$hover-color: rgba(0, 0, 0, 0.1);
+$input-border-color: #ccc;
+
 body {
     display: flex;
     flex-direction: column;
@@ -16,7 +24,7 @@ body {
     .container-fluid {
         display: flex !important;
         margin: 2rem !important;
-        width: 70%;
+        width: 100%;
         flex-direction: column;
 
         .container {
@@ -30,37 +38,58 @@ body {
 
     #u {
         display: flex;
-        border: 1px solid black;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid $border-color;
         padding: 1rem;
         margin: 1rem 0 0 0;
-        cursor: pointer;
         border-radius: 1rem;
-        align-items: center;
         transition: background-color 0.3s ease;
 
         &:hover {
-            background-color: rgba(0, 0, 0, 0.05);
+            background-color: $hover-color;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 0.5rem;
+
+            .icon-button {
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 1.2rem;
+                transition: color 0.3s ease;
+
+                &.star {
+                    color: $secondary-color;
+
+                    &:hover {
+                        color: darken($secondary-color, 10%);
+                    }
+                }
+
+                &.delete {
+                    color: red;
+
+                    &:hover {
+                        color: darken(red, 10%);
+                    }
+                }
+            }
         }
     }
 }
 
-#favoritos {
-    width: 35% !important;
+#favoritos, #usuarios {
+    width: 100% !important;
 
-    #u {
-        width: 38vh !important; 
-    }
-}
-
-#usuarios {
-    #lista {
-        border: 1px solid black;
-        padding: 4rem;
-        margin: 1rem 0 0 0;
-        cursor: pointer;
+    .container {
+        border: 1px solid $border-color;
+        padding: 2rem;
         border-radius: 1rem;
         height: 60vh;
-        overflow-y: auto; 
+        overflow-y: auto;
     }
 }
 

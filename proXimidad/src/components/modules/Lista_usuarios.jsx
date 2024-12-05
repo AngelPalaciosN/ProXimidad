@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Header from './Header'
-import '../../scss/component-styles/Listaust.scss'
+import Header from './Header';
+import { FaStar, FaTimes } from 'react-icons/fa';
+import Swal from 'sweetalert2';
+import '../../scss/component-styles/Listaust.scss';
 
 const UsuarioList = () => {
     const [usuarios, setUsuarios] = useState([]);
+    const [favoritos, setFavoritos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -21,8 +24,64 @@ const UsuarioList = () => {
             }
         };
 
+        const fetchFavoritos = async () => {
+            try {
+                const response = await axios.get('http://localhost:8000/proX/favoritos/usuario/1/'); // Reemplaza 1 con el ID del usuario actual
+                setFavoritos(response.data.map(fav => fav.favorito));
+            } catch (err) {
+                console.error('Error fetching favorites:', err);
+            }
+        };
+
         fetchUsuarios();
+        fetchFavoritos();
     }, []);
+
+    const handleAddToFavorites = async (usuarioId) => {
+        Swal.fire({
+            title: '¿Añadir a favoritos?',
+            text: "¿Estás seguro de que quieres añadir este usuario a tus favoritos?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, añadir'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await axios.post('http://localhost:8000/proX/favoritos/', { usuario: 1, favorito: usuarioId }); // Reemplaza 1 con el ID del usuario actual
+                    setFavoritos([...favoritos, usuarioId]);
+                    Swal.fire('Añadido!', 'El usuario ha sido añadido a tus favoritos.', 'success');
+                } catch (err) {
+                    console.error('Error adding to favorites:', err);
+                    Swal.fire('Error', 'No se pudo añadir el usuario a favoritos.', 'error');
+                }
+            }
+        });
+    };
+
+    const handleRemoveFromFavorites = async (usuarioId) => {
+        Swal.fire({
+            title: '¿Eliminar de favoritos?',
+            text: "¿Estás seguro de que quieres eliminar este usuario de tus favoritos?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await axios.delete(`http://localhost:8000/proX/favoritos/eliminar/1/${usuarioId}/`); // Reemplaza 1 con el ID del usuario actual
+                    setFavoritos(favoritos.filter(fav => fav !== usuarioId));
+                    Swal.fire('Eliminado!', 'El usuario ha sido eliminado de tus favoritos.', 'success');
+                } catch (err) {
+                    console.error('Error removing from favorites:', err);
+                    Swal.fire('Error', 'No se pudo eliminar el usuario de favoritos.', 'error');
+                }
+            }
+        });
+    };
 
     const renderUserList = (title, listId, users) => (
         <div className='container-fluid' id={listId}>
@@ -32,7 +91,21 @@ const UsuarioList = () => {
                     <ul>
                         {users.map(usuario => (
                             <li key={usuario.id} id='u'>
-                                {usuario.nombre_completo} - {usuario.correo_electronico}
+                                <span>{usuario.nombre_completo} - {usuario.correo_electronico}</span>
+                                <div className='user-actions'>
+                                    <button 
+                                        className='icon-button' 
+                                        onClick={() => handleAddToFavorites(usuario.id)}
+                                    >
+                                        <FaStar className='icon star' />
+                                    </button>
+                                    <button 
+                                        className='icon-button' 
+                                        onClick={() => handleRemoveFromFavorites(usuario.id)}
+                                    >
+                                        <FaTimes className='icon delete' />
+                                    </button>
+                                </div>
                             </li>
                         ))}
                     </ul>
@@ -50,8 +123,8 @@ const UsuarioList = () => {
         <>
             <Header />
             <div className='container-fluid' id='main'>
-                {renderUserList('Favoritos', 'favoritos', usuarios)}
-                {renderUserList('Lista de Usuarios', 'usuarios', usuarios)}
+                {renderUserList('Favoritos', 'favoritos', usuarios.filter(usuario => favoritos.includes(usuario.id)))}
+                {renderUserList('Proveedores', 'usuarios', usuarios.filter(usuario => usuario.tipo_usuario === 'proveedor'))}
             </div>
         </>
     );

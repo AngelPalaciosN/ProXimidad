@@ -1,75 +1,77 @@
 @use '../variables' as *;
 
 .sec1 {
-    .contact-form-container {
-      background-color: lighten($secondary-color, 35%);
-      border-radius: 8px;
-      padding: 2rem;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  
-      h3 {
-        color: $primary-color;
-      }
-  
-      .form-control {
-        border-color: $secondary-color;
-  
-        &:focus {
-          border-color: $primary-color;
-          box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
-        }
-      }
-  
-      .btn-secondary {
-        background-color: $secondary-color;
-        border-color: $secondary-color;
-  
-        &:hover,
-        &:focus {
-          background-color: darken($secondary-color, 10%);
-          border-color: darken($secondary-color, 10%);
-        }
-      }
-    }
-  
-    .feature-card {
-      background-color: lighten($secondary-color, 30%);
-      border-radius: 8px;
-      transition: transform 0.3s ease;
-  
-      &:hover {
-        transform: translateY(-5px);
-      }
-    }
-  
-    .footer {
-      background-color: $primary-color;
+  width: 100% !important; // Changed from 100vh to 100%
+  padding: 4rem 0; // Added overall padding
+
+  .hero-content {
+    opacity: 0;
+    animation: fadeInLeft 0.8s forwards;
+    background-color: #f8f9fa; // Light background for the content area
+    padding: 3rem 2.5rem; // Increased padding
+    border-radius: 12px; // Added rounded corners
+    margin-bottom: 2rem; // Added margin between sections
+  }
+
+  .typing-effect {
+    position: relative;
+    margin-bottom: 1.5rem; // Added margin
+    
+    .cursor {
+      display: inline-block;
+      margin-left: 2px;
+      animation: blink 0.7s infinite;
     }
   }
-  
-  // Ajustes adicionales
-  .text-primary {
-    color: $primary-color !important;
-  }
-  
-  .text-secondary {
-    color: $secondary-color !important;
-  }
-  
-  .btn-primary {
-    background-color: $primary-color;
-    border-color: $primary-color;
-  
-    &:hover,
-    &:focus {
-      background-color: darken($primary-color, 10%);
-      border-color: darken($primary-color, 10%);
+
+  .contact-form-container {
+    background-color: white;
+    border-radius: 12px;
+    padding: 3rem 2.5rem; // Increased padding
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-top: 2rem; // Added margin from top
+
+    &:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 2rem; // Increased margin
     }
   }
-  
-  // Estilos responsivos
+
+  form {
+    padding: 0 !important; // Removed form padding
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  @keyframes fadeInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  // Responsive adjustments
   @media (max-width: 767px) {
     .contact-form-container {
       margin-top: 2rem;
+      padding: 1.5rem;
     }
   }
+}
+
+#box{
+  margin-left: 2rem;
+}
