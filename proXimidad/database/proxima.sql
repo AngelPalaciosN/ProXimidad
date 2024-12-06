@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-12-2024 a las 02:31:33
+-- Tiempo de generación: 06-12-2024 a las 04:44:16
 -- Versión del servidor: 11.4.3-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -86,22 +86,26 @@ INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALU
 (22, 'Can change session', 6, 'change_session'),
 (23, 'Can delete session', 6, 'delete_session'),
 (24, 'Can view session', 6, 'view_session'),
-(25, 'Can add usuario', 7, 'add_usuario'),
-(26, 'Can change usuario', 7, 'change_usuario'),
-(27, 'Can delete usuario', 7, 'delete_usuario'),
-(28, 'Can view usuario', 7, 'view_usuario'),
-(29, 'Can add categoria', 8, 'add_categoria'),
-(30, 'Can change categoria', 8, 'change_categoria'),
-(31, 'Can delete categoria', 8, 'delete_categoria'),
-(32, 'Can view categoria', 8, 'view_categoria'),
+(25, 'Can add categoria', 7, 'add_categoria'),
+(26, 'Can change categoria', 7, 'change_categoria'),
+(27, 'Can delete categoria', 7, 'delete_categoria'),
+(28, 'Can view categoria', 7, 'view_categoria'),
+(29, 'Can add usuario', 8, 'add_usuario'),
+(30, 'Can change usuario', 8, 'change_usuario'),
+(31, 'Can delete usuario', 8, 'delete_usuario'),
+(32, 'Can view usuario', 8, 'view_usuario'),
 (33, 'Can add servicio', 9, 'add_servicio'),
 (34, 'Can change servicio', 9, 'change_servicio'),
 (35, 'Can delete servicio', 9, 'delete_servicio'),
 (36, 'Can view servicio', 9, 'view_servicio'),
-(37, 'Can add favorito', 10, 'add_favorito'),
-(38, 'Can change favorito', 10, 'change_favorito'),
-(39, 'Can delete favorito', 10, 'delete_favorito'),
-(40, 'Can view favorito', 10, 'view_favorito');
+(37, 'Can add comentario', 10, 'add_comentario'),
+(38, 'Can change comentario', 10, 'change_comentario'),
+(39, 'Can delete comentario', 10, 'delete_comentario'),
+(40, 'Can view comentario', 10, 'view_comentario'),
+(41, 'Can add favorito', 11, 'add_favorito'),
+(42, 'Can change favorito', 11, 'change_favorito'),
+(43, 'Can delete favorito', 11, 'delete_favorito'),
+(44, 'Can view favorito', 11, 'view_favorito');
 
 -- --------------------------------------------------------
 
@@ -156,7 +160,7 @@ CREATE TABLE `auth_user_user_permissions` (
 CREATE TABLE `categoria` (
   `categoria_id` bigint(20) NOT NULL,
   `nombre_categoria` varchar(100) NOT NULL,
-  `descripcion_categoria` text DEFAULT NULL
+  `descripcion_categoria` longtext DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -168,6 +172,26 @@ INSERT INTO `categoria` (`categoria_id`, `nombre_categoria`, `descripcion_catego
 (2, 'Aseo', 'Servicios de limpieza y mantenimiento de espacios.'),
 (3, 'Jardinería', 'Servicios de mantenimiento y diseño de jardines.'),
 (4, 'Plomería', 'Servicios de reparación y mantenimiento de sistemas de plomería.');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `comentarios`
+--
+
+CREATE TABLE `comentarios` (
+  `comentario_id` bigint(20) NOT NULL,
+  `mensaje` longtext NOT NULL,
+  `servicio_fk` bigint(20) NOT NULL,
+  `usuario_fk` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `comentarios`
+--
+
+INSERT INTO `comentarios` (`comentario_id`, `mensaje`, `servicio_fk`, `usuario_fk`) VALUES
+(1, 'sa', 5, 1);
 
 -- --------------------------------------------------------
 
@@ -208,10 +232,11 @@ INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
 (2, 'auth', 'permission'),
 (4, 'auth', 'user'),
 (5, 'contenttypes', 'contenttype'),
-(8, 'proX', 'categoria'),
-(10, 'proX', 'favorito'),
+(7, 'proX', 'categoria'),
+(10, 'proX', 'comentario'),
+(11, 'proX', 'favorito'),
 (9, 'proX', 'servicio'),
-(7, 'proX', 'usuario'),
+(8, 'proX', 'usuario'),
 (6, 'sessions', 'session');
 
 -- --------------------------------------------------------
@@ -232,27 +257,25 @@ CREATE TABLE `django_migrations` (
 --
 
 INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
-(1, 'contenttypes', '0001_initial', '2024-11-27 00:08:30.499686'),
-(2, 'auth', '0001_initial', '2024-11-27 00:08:31.363761'),
-(3, 'admin', '0001_initial', '2024-11-27 00:08:31.676831'),
-(4, 'admin', '0002_logentry_remove_auto_add', '2024-11-27 00:08:31.716661'),
-(5, 'admin', '0003_logentry_add_action_flag_choices', '2024-11-27 00:08:31.843603'),
-(6, 'contenttypes', '0002_remove_content_type_name', '2024-11-27 00:08:32.077797'),
-(7, 'auth', '0002_alter_permission_name_max_length', '2024-11-27 00:08:32.144760'),
-(8, 'auth', '0003_alter_user_email_max_length', '2024-11-27 00:08:32.307025'),
-(9, 'auth', '0004_alter_user_username_opts', '2024-11-27 00:08:32.338328'),
-(10, 'auth', '0005_alter_user_last_login_null', '2024-11-27 00:08:32.416852'),
-(11, 'auth', '0006_require_contenttypes_0002', '2024-11-27 00:08:32.419872'),
-(12, 'auth', '0007_alter_validators_add_error_messages', '2024-11-27 00:08:32.439030'),
-(13, 'auth', '0008_alter_user_username_max_length', '2024-11-27 00:08:32.551366'),
-(14, 'auth', '0009_alter_user_last_name_max_length', '2024-11-27 00:08:32.669402'),
-(15, 'auth', '0010_alter_group_name_max_length', '2024-11-27 00:08:32.723334'),
-(16, 'auth', '0011_update_proxy_permissions', '2024-11-27 00:08:32.741970'),
-(17, 'auth', '0012_alter_user_first_name_max_length', '2024-11-27 00:08:32.810015'),
-(18, 'proX', '0001_initial', '2024-11-27 00:08:32.820114'),
-(19, 'sessions', '0001_initial', '2024-11-27 00:08:32.909610'),
-(20, 'proX', '0002_categoria_servicio', '2024-12-05 01:19:45.629959'),
-(21, 'proX', '0003_favorito', '2024-12-05 02:58:54.998819');
+(1, 'contenttypes', '0001_initial', '2024-12-06 03:24:06.647765'),
+(2, 'auth', '0001_initial', '2024-12-06 03:24:06.951344'),
+(3, 'admin', '0001_initial', '2024-12-06 03:24:07.033360'),
+(4, 'admin', '0002_logentry_remove_auto_add', '2024-12-06 03:24:07.048909'),
+(5, 'admin', '0003_logentry_add_action_flag_choices', '2024-12-06 03:24:07.071896'),
+(6, 'contenttypes', '0002_remove_content_type_name', '2024-12-06 03:24:07.193455'),
+(7, 'auth', '0002_alter_permission_name_max_length', '2024-12-06 03:24:07.338186'),
+(8, 'auth', '0003_alter_user_email_max_length', '2024-12-06 03:24:07.389574'),
+(9, 'auth', '0004_alter_user_username_opts', '2024-12-06 03:24:07.520008'),
+(10, 'auth', '0005_alter_user_last_login_null', '2024-12-06 03:24:07.590021'),
+(11, 'auth', '0006_require_contenttypes_0002', '2024-12-06 03:24:07.592149'),
+(12, 'auth', '0007_alter_validators_add_error_messages', '2024-12-06 03:24:07.608291'),
+(13, 'auth', '0008_alter_user_username_max_length', '2024-12-06 03:24:07.669028'),
+(14, 'auth', '0009_alter_user_last_name_max_length', '2024-12-06 03:24:07.726611'),
+(15, 'auth', '0010_alter_group_name_max_length', '2024-12-06 03:24:07.764720'),
+(16, 'auth', '0011_update_proxy_permissions', '2024-12-06 03:24:07.788509'),
+(17, 'auth', '0012_alter_user_first_name_max_length', '2024-12-06 03:24:07.842424'),
+(18, 'proX', '0001_initial', '2024-12-06 03:24:08.219625'),
+(19, 'sessions', '0001_initial', '2024-12-06 03:24:08.263191');
 
 -- --------------------------------------------------------
 
@@ -281,43 +304,28 @@ CREATE TABLE `favoritos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `historial_servicios`
---
-
-CREATE TABLE `historial_servicios` (
-  `historial_id` bigint(20) NOT NULL,
-  `servicio_id` bigint(20) DEFAULT NULL,
-  `arrendador_id` bigint(20) DEFAULT NULL,
-  `fecha_arrendamiento` datetime NOT NULL,
-  `duracion` int(11) NOT NULL,
-  `estado` enum('activo','finalizado','cancelado') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `servicios`
 --
 
 CREATE TABLE `servicios` (
   `id` bigint(20) NOT NULL,
   `nombre_servicio` varchar(100) NOT NULL,
-  `descripcion` text NOT NULL,
+  `descripcion` longtext NOT NULL,
   `precio_base` decimal(10,2) NOT NULL,
-  `proveedor_id` bigint(20) DEFAULT NULL,
+  `imagen_url` varchar(255) DEFAULT NULL,
   `categoria_id` bigint(20) DEFAULT NULL,
-  `imagen_url` varchar(255) DEFAULT NULL
+  `proveedor_id` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `servicios`
 --
 
-INSERT INTO `servicios` (`id`, `nombre_servicio`, `descripcion`, `precio_base`, `proveedor_id`, `categoria_id`, `imagen_url`) VALUES
-(5, 'Transporte Público', 'Servicio de transporte público en la ciudad.', 30000.00, 1, 1, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.tiktok.com%2Fdiscover%2Fbuses-de-medell%25C3%25ADn&psig=AOvVaw1cqWYBSQ71tcs9LjH85HkW&ust=1733449891149000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKj7npvCj4oDFQAAAAAdAAAAABAR'),
-(6, 'Aseo Doméstico', 'Servicio de aseo y limpieza para hogares.', 25000.00, 1, 2, 'https://www.google.com/imgres?q=servicio%20limpieza%20imagen%20hd&imgurl=https%3A%2F%2Fst3.depositphotos.com%2F1194063%2F19051%2Fi%2F450%2Fdepositphotos_190518090-stock-photo-cleaning-concept-housecleaning-hygiene-spring.jpg&imgrefurl=https%3A%2F%2Fdeposi'),
-(7, 'Jardinería Básica', 'Servicio de mantenimiento básico de jardines.', 20000.00, 3, 3, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pexels.com%2Fes-es%2Fbuscar%2Fjardines%2F&psig=AOvVaw3NIFbCuD0syMrMHeQPTv_u&ust=1733450033619000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCIC62ejCj4oDFQAAAAAdAAAAABAV'),
-(8, 'Plomería Básica', 'Servicio de reparaciones básicas de plomería.', 15000.00, 3, 4, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Funsplash.com%2Fes%2Fs%2Ffotos%2Fplomer%25C3%25ADa&psig=AOvVaw1dDQ6r53NRNIsfxJnpwN93&ust=1733450140416000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKC5vJHDj4oDFQAAAAAdAAAAABAE');
+INSERT INTO `servicios` (`id`, `nombre_servicio`, `descripcion`, `precio_base`, `imagen_url`, `categoria_id`, `proveedor_id`) VALUES
+(5, 'Transporte Público', 'Servicio de transporte público en la ciudad.', 30000.00, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.tiktok.com%2Fdiscover%2Fbuses-de-medell%25C3%25ADn&psig=AOvVaw1cqWYBSQ71tcs9LjH85HkW&ust=1733449891149000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKj7npvCj4oDFQAAAAAdAAAAABAR', 1, 1),
+(6, 'Aseo Doméstico', 'Servicio de aseo y limpieza para hogares.', 25000.00, 'https://www.google.com/imgres?q=servicio%20limpieza%20imagen%20hd&imgurl=https%3A%2F%2Fst3.depositphotos.com%2F1194063%2F19051%2Fi%2F450%2Fdepositphotos_190518090-stock-photo-cleaning-concept-housecleaning-hygiene-spring.jpg&imgrefurl=https%3A%2F%2Fdeposi', 2, 1),
+(7, 'Jardinería Básica', 'Servicio de mantenimiento básico de jardines.', 20000.00, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pexels.com%2Fes-es%2Fbuscar%2Fjardines%2F&psig=AOvVaw3NIFbCuD0syMrMHeQPTv_u&ust=1733450033619000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCIC62ejCj4oDFQAAAAAdAAAAABAV', 3, 3),
+(8, 'Plomería Básica', 'Servicio de reparaciones básicas de plomería.', 15000.00, 'https://www.google.com/url?sa=i&url=https%3A%2F%2Funsplash.com%2Fes%2Fs%2Ffotos%2Fplomer%25C3%25ADa&psig=AOvVaw1dDQ6r53NRNIsfxJnpwN93&ust=1733450140416000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKC5vJHDj4oDFQAAAAAdAAAAABAE', 4, 3);
 
 -- --------------------------------------------------------
 
@@ -333,7 +341,7 @@ CREATE TABLE `usuario` (
   `direccion` varchar(200) NOT NULL,
   `cedula` varchar(100) NOT NULL,
   `codigo_verificacion` int(11) NOT NULL,
-  `tipo_usuario` enum('proveedor','arrendador') NOT NULL
+  `tipo_usuario` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -401,6 +409,14 @@ ALTER TABLE `categoria`
   ADD PRIMARY KEY (`categoria_id`);
 
 --
+-- Indices de la tabla `comentarios`
+--
+ALTER TABLE `comentarios`
+  ADD PRIMARY KEY (`comentario_id`),
+  ADD KEY `comentarios_servicio_fk_af9736b6_fk_servicios_id` (`servicio_fk`),
+  ADD KEY `comentarios_usuario_fk_9ba7d8e7_fk_usuario_id` (`usuario_fk`);
+
+--
 -- Indices de la tabla `django_admin_log`
 --
 ALTER TABLE `django_admin_log`
@@ -437,20 +453,12 @@ ALTER TABLE `favoritos`
   ADD KEY `favoritos_favorito_id_90999b62_fk_usuario_id` (`favorito_id`);
 
 --
--- Indices de la tabla `historial_servicios`
---
-ALTER TABLE `historial_servicios`
-  ADD PRIMARY KEY (`historial_id`),
-  ADD KEY `servicio_id` (`servicio_id`),
-  ADD KEY `arrendador_id` (`arrendador_id`);
-
---
 -- Indices de la tabla `servicios`
 --
 ALTER TABLE `servicios`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `proveedor_id` (`proveedor_id`),
-  ADD KEY `categoria_id` (`categoria_id`);
+  ADD KEY `servicios_categoria_id_ab82091d_fk_categoria_categoria_id` (`categoria_id`),
+  ADD KEY `servicios_proveedor_id_611ef217_fk_usuario_id` (`proveedor_id`);
 
 --
 -- Indices de la tabla `usuario`
@@ -479,7 +487,7 @@ ALTER TABLE `auth_group_permissions`
 -- AUTO_INCREMENT de la tabla `auth_permission`
 --
 ALTER TABLE `auth_permission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT de la tabla `auth_user`
@@ -506,6 +514,12 @@ ALTER TABLE `categoria`
   MODIFY `categoria_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT de la tabla `comentarios`
+--
+ALTER TABLE `comentarios`
+  MODIFY `comentario_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT de la tabla `django_admin_log`
 --
 ALTER TABLE `django_admin_log`
@@ -515,25 +529,19 @@ ALTER TABLE `django_admin_log`
 -- AUTO_INCREMENT de la tabla `django_content_type`
 --
 ALTER TABLE `django_content_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `favoritos`
 --
 ALTER TABLE `favoritos`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT de la tabla `historial_servicios`
---
-ALTER TABLE `historial_servicios`
-  MODIFY `historial_id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `servicios`
@@ -545,7 +553,7 @@ ALTER TABLE `servicios`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Restricciones para tablas volcadas
@@ -579,6 +587,13 @@ ALTER TABLE `auth_user_user_permissions`
   ADD CONSTRAINT `auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`);
 
 --
+-- Filtros para la tabla `comentarios`
+--
+ALTER TABLE `comentarios`
+  ADD CONSTRAINT `comentarios_servicio_fk_af9736b6_fk_servicios_id` FOREIGN KEY (`servicio_fk`) REFERENCES `servicios` (`id`),
+  ADD CONSTRAINT `comentarios_usuario_fk_9ba7d8e7_fk_usuario_id` FOREIGN KEY (`usuario_fk`) REFERENCES `usuario` (`id`);
+
+--
 -- Filtros para la tabla `django_admin_log`
 --
 ALTER TABLE `django_admin_log`
@@ -593,18 +608,11 @@ ALTER TABLE `favoritos`
   ADD CONSTRAINT `favoritos_usuario_id_b6cf59b1_fk_usuario_id` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`id`);
 
 --
--- Filtros para la tabla `historial_servicios`
---
-ALTER TABLE `historial_servicios`
-  ADD CONSTRAINT `historial_servicios_ibfk_1` FOREIGN KEY (`servicio_id`) REFERENCES `servicios` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `historial_servicios_ibfk_2` FOREIGN KEY (`arrendador_id`) REFERENCES `usuario` (`id`) ON DELETE CASCADE;
-
---
 -- Filtros para la tabla `servicios`
 --
 ALTER TABLE `servicios`
-  ADD CONSTRAINT `servicios_ibfk_1` FOREIGN KEY (`proveedor_id`) REFERENCES `usuario` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `servicios_ibfk_2` FOREIGN KEY (`categoria_id`) REFERENCES `categoria` (`categoria_id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `servicios_categoria_id_ab82091d_fk_categoria_categoria_id` FOREIGN KEY (`categoria_id`) REFERENCES `categoria` (`categoria_id`),
+  ADD CONSTRAINT `servicios_proveedor_id_611ef217_fk_usuario_id` FOREIGN KEY (`proveedor_id`) REFERENCES `usuario` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
