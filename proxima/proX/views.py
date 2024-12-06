@@ -3,9 +3,9 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
-from rest_framework.permissions import IsAuthenticated
-from .models import Usuario, Categoria, Servicio, Favorito
-from .serializers import UsuarioSerializer, CategoriaSerializer, ServicioSerializer, FavoritoSerializer
+from .models import Usuario, Categoria, Servicio, Favorito, Comentario
+from .serializers import UsuarioSerializer, CategoriaSerializer, ServicioSerializer, FavoritoSerializer, ComentarioSerializer
+
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
@@ -19,9 +19,7 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 
         try:
             serializer.is_valid(raise_exception=True)
-            
             usuario = serializer.save()
-            
             return Response({
                 'message': 'Registro exitoso',
                 'user_id': usuario.id,
@@ -44,15 +42,10 @@ class UsuarioViewSet(viewsets.ModelViewSet):
         codigo_verificacion = request.data.get('codigo_verificacion')
 
         try:
-            # Verificar si el usuario con ese correo existe
             usuario = Usuario.objects.get(correo_electronico=correo_electronico)
-
-            # Comparar el código de verificación
             if usuario.codigo_verificacion == codigo_verificacion:
-                # Generar tokens JWT
                 refresh = RefreshToken.for_user(usuario)
                 access_token = str(refresh.access_token)
-
                 return Response({
                     'message': 'Inicio de sesión exitoso',
                     'access_token': access_token
@@ -71,7 +64,7 @@ class UsuarioViewSet(viewsets.ModelViewSet):
         proveedores = self.queryset.filter(tipo_usuario='proveedor')
         serializer = self.get_serializer(proveedores, many=True)
         return Response(serializer.data)
-    
+
 class CategoriaViewSet(viewsets.ModelViewSet):
     queryset = Categoria.objects.all()
     serializer_class = CategoriaSerializer
@@ -109,3 +102,27 @@ class FavoritoViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Favorito.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+class ComentarioViewSet(viewsets.ModelViewSet):
+    queryset = Comentario.objects.all()
+    serializer_class = ComentarioSerializer
+
+    @action(detail=False, methods=['post'], url_path='crear')
+    def crear_comentario(self, request):
+        """
+        Crear un comentario para un servicio específico.
+        """
+        serializer = ComentarioSerializer(data=request.data)
+        if serializer.is_valid():
+            comentario = serializer.save()
+            return Response({
+                'message': 'Comentario creado con éxito',
+                'comentario_id': comentario.comentario_id,
+                'usuario': comentario.usuario.nombre_completo,
+                'servicio': comentario.servicio.nombre_servicio,
+                'mensaje': comentario.mensaje
+            }, status=status.HTTP_201_CREATED)
+        return Response({
+            'message': 'Error al crear el comentario',
+            'errors': serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)

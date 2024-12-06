@@ -8,7 +8,7 @@ class Categoria(models.Model):
     class Meta:
         app_label = 'proX'
         db_table = 'categoria'
-        managed = False
+        managed = True
 
     def __str__(self):
         return self.nombre_categoria
@@ -21,15 +21,12 @@ class Usuario(models.Model):
     direccion = models.CharField(max_length=200)
     cedula = models.CharField(max_length=100)
     codigo_verificacion = models.IntegerField()
-    tipo_usuario = models.CharField(max_length=50, choices=[
-        ('proveedor', 'Proveedor'),
-        ('arrendador', 'Arrendador')
-    ])
+    tipo_usuario = models.CharField(max_length=50, choices=[('proveedor', 'Proveedor'), ('arrendador', 'Arrendador')])
 
     class Meta:
         app_label = 'proX'
         db_table = 'usuario'
-        managed = False
+        managed = True
 
     def __str__(self):
         return self.nombre_completo
@@ -46,7 +43,7 @@ class Servicio(models.Model):
     class Meta:
         app_label = 'proX'
         db_table = 'servicios'
-        managed = False
+        managed = True
 
     def __str__(self):
         return self.nombre_servicio
@@ -62,3 +59,17 @@ class Favorito(models.Model):
 
     def __str__(self):
         return f'{self.usuario.nombre_completo} -> {self.favorito.nombre_completo}'
+
+class Comentario(models.Model):
+    comentario_id = models.BigAutoField(primary_key=True)
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, db_column='usuario_fk')
+    servicio = models.ForeignKey(Servicio, on_delete=models.CASCADE, db_column='servicio_fk')
+    mensaje = models.TextField()
+
+    class Meta:
+        app_label = 'proX'
+        db_table = 'comentarios'
+        managed = True
+
+    def __str__(self):
+        return f'Comentario de {self.usuario.nombre_completo} sobre {self.servicio.nombre_servicio}'

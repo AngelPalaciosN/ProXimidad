@@ -1,21 +1,21 @@
 @use '../variables' as *;
 
 .sec1 {
-  width: 100% !important; // Changed from 100vh to 100%
-  padding: 4rem 0; // Added overall padding
+  width: 100% !important; 
+  padding: 4rem 0; 
 
   .hero-content {
     opacity: 0;
     animation: fadeInLeft 0.8s forwards;
-    background-color: #f8f9fa; // Light background for the content area
-    padding: 3rem 2.5rem; // Increased padding
-    border-radius: 12px; // Added rounded corners
-    margin-bottom: 2rem; // Added margin between sections
+    background-color: #f8f9fa; 
+    padding: 3rem 2.5rem;
+    border-radius: 12px; 
+    margin-bottom: 2rem; 
   }
 
   .typing-effect {
     position: relative;
-    margin-bottom: 1.5rem; // Added margin
+    margin-bottom: 1.5rem; 
     
     .cursor {
       display: inline-block;
@@ -24,12 +24,21 @@
     }
   }
 
+  .animated-x {
+    display: inline-block;
+    transition: transform 0.3s ease-in-out, color 0.5s ease-in-out;
+  }
+  
+  .animated-x.animate {
+    transform: rotate(10deg);
+  }
+
   .contact-form-container {
     background-color: white;
     border-radius: 12px;
-    padding: 3rem 2.5rem; // Increased padding
+    padding: 4rem 3rem; 
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    margin-top: 2rem; // Added margin from top
+    margin-top: 2rem; 
 
     &:hover {
       transform: translateY(-10px);
@@ -39,12 +48,12 @@
     h3 {
       font-weight: 600;
       text-align: center;
-      margin-bottom: 2rem; // Increased margin
+      margin-bottom: 2rem;
     }
   }
 
   form {
-    padding: 0 !important; // Removed form padding
+    padding: 0 !important; 
   }
 
   @keyframes blink {
@@ -63,15 +72,14 @@
     }
   }
 
-  // Responsive adjustments
   @media (max-width: 767px) {
     .contact-form-container {
       margin-top: 2rem;
-      padding: 1.5rem;
+      padding: 2rem; // Ajustar el padding para pantallas pequeñas
     }
   }
 }
 
-#box{
+#box {
   margin-left: 2rem;
 }

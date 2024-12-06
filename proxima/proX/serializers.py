@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from .models import Usuario, Categoria, Servicio, Favorito
+from .models import Usuario, Categoria, Servicio, Favorito, Comentario
 
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
-        fields = '__all__'  
+        fields = '__all__'
 
     def validate_correo_electronico(self, value):
         if Usuario.objects.filter(correo_electronico=value).exists():
@@ -39,3 +39,8 @@ class FavoritoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Favorito
         fields = '__all__'
+
+class ComentarioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comentario
+        fields = ['comentario_id', 'usuario', 'servicio', 'mensaje']

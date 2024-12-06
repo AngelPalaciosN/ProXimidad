@@ -42,13 +42,13 @@ const Header = () => {
         Proveedores
       </Link>
 
-      <Link 
+      {/* <Link 
         to="/Sobre" 
         className="nav-link"
         onClick={isMobile ? toggleMobileMenu : undefined}
       >
         Nosotros
-      </Link>
+      </Link> */}
 
       <Link 
         to="/servicios" 

@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { validateForm } from './validar';
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
+import { validateForm } from './Validar';
 import { useNavigate } from 'react-router-dom'; 
 import '../../scss/component-styles/Registrar.scss';
 
@@ -69,9 +67,7 @@ const Registrar = ({ onClose }) => {
   return (
     <section className="form">
       <div className="form-container">
-        <IconButton className="close-button" onClick={onClose}>
-          <CloseIcon />
-        </IconButton>
+        <button className="close-button" onClick={onClose}>×</button>
 
         <form className="formulario" onSubmit={handleSubmit}>
           <h2>Registro de Usuario</h2>
