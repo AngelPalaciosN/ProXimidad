@@ -36,11 +36,16 @@ PERFORMANCE OF THIS SOFTWARE.
 #endif
 
 #if ((MYSQL_VERSION_ID >= 50555 && MYSQL_VERSION_ID <= 50599) || \
-(MYSQL_VERSION_ID >= 50636 && MYSQL_VERSION_ID <= 50699) || \
-(MYSQL_VERSION_ID >= 50711 && MYSQL_VERSION_ID <= 50799) || \
-(MYSQL_VERSION_ID >= 80000)) && \
-!defined(MARIADB_BASE_VERSION) && !defined(MARIADB_VERSION_ID)
+     (MYSQL_VERSION_ID >= 50636 && MYSQL_VERSION_ID <= 50699) || \
+     (MYSQL_VERSION_ID >= 50711 && MYSQL_VERSION_ID <= 50799) || \
+     (MYSQL_VERSION_ID >= 80000)) && \
+     !defined(MARIADB_BASE_VERSION) && !defined(MARIADB_VERSION_ID)
 #define HAVE_ENUM_MYSQL_OPT_SSL_MODE
+#endif
+
+#if defined(MARIADB_VERSION_ID) && MARIADB_VERSION_ID >= 100403 || \
+    !defined(MARIADB_VERSION_ID) && MYSQL_VERSION_ID >= 50723
+#define HAVE_MYSQL_SERVER_PUBLIC_KEY
 #endif
 
 #define PY_SSIZE_T_CLEAN 1
@@ -431,7 +436,7 @@ _mysql_ConnectionObject_Initialize(
                   "client_flag", "ssl", "ssl_mode",
                   "local_infile",
                   "read_timeout", "write_timeout", "charset",
-                  "auth_plugin",
+                  "auth_plugin", "server_public_key_path",
                   NULL } ;
     int connect_timeout = 0;
     int read_timeout = 0;
@@ -442,14 +447,15 @@ _mysql_ConnectionObject_Initialize(
          *read_default_file=NULL,
          *read_default_group=NULL,
          *charset=NULL,
-         *auth_plugin=NULL;
+         *auth_plugin=NULL,
+         *server_public_key_path=NULL;
 
     self->converter = NULL;
     self->open = false;
     self->reconnect = false;
 
     if (!PyArg_ParseTupleAndKeywords(args, kwargs,
-                "|ssssisOiiisssiOsiiiss:connect",
+                "|ssssisOiiisssiOsiiisss:connect",
                 kwlist,
                 &host, &user, &passwd, &db,
                 &port, &unix_socket, &conv,
@@ -462,10 +468,19 @@ _mysql_ConnectionObject_Initialize(
                 &read_timeout,
                 &write_timeout,
                 &charset,
-                &auth_plugin
+                &auth_plugin,
+                &server_public_key_path
     ))
         return -1;
 
+#ifndef HAVE_MYSQL_SERVER_PUBLIC_KEY
+    if (server_public_key_path) {
+        PyErr_SetString(_mysql_NotSupportedError, "server_public_key_path is not supported");
+        return -1;
+    }
+#endif
+    // For compatibility with PyPy, we need to keep strong reference
+    // to unicode objects until we use UTF8.
 #define _stringsuck(d,t,s) {t=PyMapping_GetItemString(s,#d);\
         if(t){d=PyUnicode_AsUTF8(t);ssl_keepref[n_ssl_keepref++]=t;}\
         PyErr_Clear();}
@@ -542,24 +557,35 @@ _mysql_ConnectionObject_Initialize(
         mysql_options(&(self->connection), MYSQL_OPT_SSL_CAPATH, capath);
         mysql_options(&(self->connection), MYSQL_OPT_SSL_CIPHER, cipher);
     }
-
-    if (ssl_mode_set) {
-#ifdef HAVE_ENUM_MYSQL_OPT_SSL_MODE
-        mysql_options(&(self->connection), MYSQL_OPT_SSL_MODE, &ssl_mode_num);
-#else
-        // MariaDB doesn't support MYSQL_OPT_SSL_MODE.
-        // See https://github.com/PyMySQL/mysqlclient/issues/474
-        // TODO: Does MariaDB supports PREFERRED and VERIFY_CA?
-        // We support only two levels for now.
-        my_bool enforce_tls = 1;
-        if (ssl_mode_num >= SSLMODE_REQUIRED) {
-            mysql_optionsv(&(self->connection), MYSQL_OPT_SSL_ENFORCE, (void *)&enforce_tls);
-        }
-        if (ssl_mode_num >= SSLMODE_VERIFY_CA) {
-            mysql_optionsv(&(self->connection), MYSQL_OPT_SSL_VERIFY_SERVER_CERT, (void *)&enforce_tls);
-        }
-#endif
+    for (int i=0 ; i<n_ssl_keepref; i++) {
+        Py_DECREF(ssl_keepref[i]);
+        ssl_keepref[i] = NULL;
     }
+
+#ifdef HAVE_ENUM_MYSQL_OPT_SSL_MODE
+    if (ssl_mode_set) {
+        mysql_options(&(self->connection), MYSQL_OPT_SSL_MODE, &ssl_mode_num);
+    }
+#else
+    // MariaDB doesn't support MYSQL_OPT_SSL_MODE.
+    // See https://github.com/PyMySQL/mysqlclient/issues/474
+    // And MariDB 11.4 changed the default value of MYSQL_OPT_SSL_ENFORCE and
+    // MYSQL_OPT_SSL_VERIFY_SERVER_CERT to 1.
+    // https://github.com/mariadb-corporation/mariadb-connector-c/commit/8dffd56936df3d03eeccf47904773860a0cdeb57
+    // We emulate the ssl_mode and old behavior.
+    my_bool my_true = 1;
+    my_bool my_false = 0;
+    if (ssl_mode_num >= SSLMODE_REQUIRED) {
+        mysql_options(&(self->connection), MYSQL_OPT_SSL_ENFORCE, (void *)&my_true);
+    } else {
+        mysql_options(&(self->connection), MYSQL_OPT_SSL_ENFORCE, (void *)&my_false);
+    }
+    if (ssl_mode_num >= SSLMODE_VERIFY_CA) {
+        mysql_options(&(self->connection), MYSQL_OPT_SSL_VERIFY_SERVER_CERT, (void *)&my_true);
+    } else {
+        mysql_options(&(self->connection), MYSQL_OPT_SSL_VERIFY_SERVER_CERT, (void *)&my_false);
+    }
+#endif
 
     if (charset) {
         mysql_options(&(self->connection), MYSQL_SET_CHARSET_NAME, charset);
@@ -567,19 +593,16 @@ _mysql_ConnectionObject_Initialize(
     if (auth_plugin) {
         mysql_options(&(self->connection), MYSQL_DEFAULT_AUTH, auth_plugin);
     }
+#ifdef HAVE_MYSQL_SERVER_PUBLIC_KEY
+    if (server_public_key_path) {
+        mysql_options(&(self->connection), MYSQL_SERVER_PUBLIC_KEY, server_public_key_path);
+    }
+#endif
 
     Py_BEGIN_ALLOW_THREADS
     conn = mysql_real_connect(&(self->connection), host, user, passwd, db,
                   port, unix_socket, client_flag);
     Py_END_ALLOW_THREADS
-
-    if (ssl) {
-        int i;
-        for (i=0; i<n_ssl_keepref; i++) {
-            Py_DECREF(ssl_keepref[i]);
-            ssl_keepref[i] = NULL;
-        }
-    }
 
     if (!conn) {
         _mysql_Exception(self);

@@ -21,6 +21,7 @@ class Usuario(models.Model):
     direccion = models.CharField(max_length=200)
     cedula = models.CharField(max_length=100)
     codigo_verificacion = models.IntegerField()
+    codigo_fecha_generacion = models.DateTimeField(null=True, blank=True)
     tipo_usuario = models.CharField(max_length=50, choices=[('proveedor', 'Proveedor'), ('arrendador', 'Arrendador')])
 
     class Meta:

@@ -3,7 +3,7 @@ import { validateForm } from './Validar';
 import { useNavigate } from 'react-router-dom'; 
 import '../../scss/component-styles/Registrar.scss';
 
-const Registrar = ({ onClose }) => {
+const Registrar = ({ onClose, onFormularioChange }) => {
   const [formData, setFormData] = useState({
     nombre_completo: '',
     correo_electronico: '',
@@ -61,7 +61,7 @@ const Registrar = ({ onClose }) => {
   };
 
   const handleLoginRedirect = () => {
-    navigate('/Iniciar'); 
+    onFormularioChange('iniciarSesion');
   };
 
   return (

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import Form from './Registrar';
+import Registrar from './Registrar';
+import IniciarSesion from './Iniciar';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom'; 
 import { FaSearch } from 'react-icons/fa';
@@ -7,17 +8,17 @@ import { useAuth } from '../../Auth';
 import '../../scss/component-styles/Header.scss';
 
 const Header = () => {
-  const [isFormVisible, setFormVisible] = useState(false);
+  const [formularioVisible, setFormularioVisible] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user, logout } = useAuth();
 
-  const handleabrirform = () => {
-    setFormVisible(true);
+  const handleAbrirFormulario = (formulario) => {
+    setFormularioVisible(formulario);
     setIsMobileMenuOpen(false);
   };
 
-  const handlecerrarForm = () => {
-    setFormVisible(false);
+  const handleCerrarFormulario = () => {
+    setFormularioVisible(null);
   };
 
   const toggleMobileMenu = () => {
@@ -42,14 +43,6 @@ const Header = () => {
         Proveedores
       </Link>
 
-      {/* <Link 
-        to="/Sobre" 
-        className="nav-link"
-        onClick={isMobile ? toggleMobileMenu : undefined}
-      >
-        Nosotros
-      </Link> */}
-
       <Link 
         to="/servicios" 
         className="nav-link"
@@ -72,7 +65,7 @@ const Header = () => {
         <button 
           onClick={(e) => {
             e.preventDefault(); 
-            handleabrirform();
+            handleAbrirFormulario('registrar');
           }} 
           className="login-button"
         >
@@ -113,10 +106,15 @@ const Header = () => {
         </div>
       )}
 
-      {isFormVisible && (
+      {formularioVisible && (
         <div className="overlay">
           <div className="form-container">
-            <Form onClose={handlecerrarForm} />
+            {formularioVisible === 'registrar' && (
+              <Registrar onClose={handleCerrarFormulario} onFormularioChange={handleAbrirFormulario} />
+            )}
+            {formularioVisible === 'iniciarSesion' && (
+              <IniciarSesion onClose={handleCerrarFormulario} onFormularioChange={handleAbrirFormulario} />
+            )}
           </div>
         </div>
       )}
