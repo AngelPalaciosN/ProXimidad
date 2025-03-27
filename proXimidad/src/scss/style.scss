@@ -5,3 +5,11 @@
   $secondary: $secondary-color,
   $body-bg: $background-color,
 );
+
+// Importar la fuente Quicksand
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
+// Aplicar la fuente a toda la página
+body {
+  font-family: "Quicksand", sans-serif;
+}

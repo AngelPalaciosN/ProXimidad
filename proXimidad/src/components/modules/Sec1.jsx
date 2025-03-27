@@ -7,7 +7,7 @@ import '../../scss/component-styles/Sec1.scss';
 
 const Sec1 = () => {
   const [displayText, setDisplayText] = useState('');
-  const fullText = "Ofrecemos servicios a la puerta de tu hogar";
+  const fullText = "Haciendo facil tu dedicacion";
   const xAnimations = [
     { 
       symbol: 'X', 
@@ -133,7 +133,7 @@ const Sec1 = () => {
       <Container>
         <Row className="g-4">
           <Col lg={6}>
-            <div className="hero-content">
+            <div className="hero-content" id="hero-1">
               <h2 
                 className="display-4 text-primary mb-3 animate__animated animate__fadeInLeft"
                 style={{ color: 'inherit' }}
@@ -151,7 +151,7 @@ const Sec1 = () => {
                 </span>
                 imidad
               </h2>
-              <p className="lead text-secondary mb-4 typing-effect">
+              <p className="lead mb-4 typing-effect" style={{ color: '#ffffff' }}>
                 {displayText}
                 <span className="cursor">|</span>
               </p>
@@ -166,61 +166,34 @@ const Sec1 = () => {
             </div>
           </Col>
           <Col lg={6}>
-            <div className="contact-form-container shadow-lg">
-              <h3 className="text-primary mb-4 text-center">Comentarios/Solicitudes</h3>
-              <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-4">
-                  <Form.Control 
-                    as="select" 
-                    name="usuario" 
-                    value={formData.usuario} 
-                    onChange={handleInputChange} 
-                    className="form-control-custom"
-                  >
-                    <option value="">Selecciona un usuario</option>
-                    {usuarios.map(usuario => (
-                      <option key={usuario.id} value={usuario.id}>
-                        {usuario.nombre_completo}
-                      </option>
-                    ))}
-                  </Form.Control>
-                </Form.Group>
-                <Form.Group className="mb-4">
-                  <Form.Control 
-                    as="select" 
-                    name="servicio" 
-                    value={formData.servicio} 
-                    onChange={handleInputChange} 
-                    className="form-control-custom"
-                  >
-                    <option value="">Selecciona un servicio</option>
-                    {servicios.map(servicio => (
-                      <option key={servicio.id} value={servicio.id}>
-                        {servicio.nombre_servicio}
-                      </option>
-                    ))}
-                  </Form.Control>
-                </Form.Group>
-                <Form.Group className="mb-4">
-                  <Form.Control 
-                    as="textarea" 
-                    rows={3} 
-                    name="mensaje" 
-                    placeholder="Mensaje" 
-                    value={formData.mensaje} 
-                    onChange={handleInputChange} 
-                    className="form-control-custom"
-                  />
-                </Form.Group>
-                <Button 
-                  variant="secondary" 
-                  type="submit" 
-                  className="w-100 btn-hover-rise d-flex align-items-center justify-content-center"
-                >
-                  <Send className="mr-2" size={18} />
-                  Enviar
-                </Button>
-              </Form>
+            <div className="hero-content" id='hero-2'>
+              <h2 
+                className="display-4 mb-3 animate__animated animate__fadeInLeft"
+                style={{ color: '#ffffff' }}
+              >
+                Tus ideas son importantes para nosotros. ¡Compártelas!
+              </h2>
+              <Button 
+                variant="primary" 
+                size="lg" 
+                className="btn-hover-rise d-flex align-items-center justify-content-center mx-auto rounded-circle"
+                style={{
+                  width: '10rem',
+                  height: '10rem',
+                  padding: 0,
+                  overflow: 'hidden'
+                }}
+              >
+                <img 
+                  src="/ruta-a-tu-imagen.png" 
+                  alt="Icono del botón"
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    objectFit: 'cover'
+                  }}
+                />
+              </Button>
             </div>
           </Col>
         </Row>

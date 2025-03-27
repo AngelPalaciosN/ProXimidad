@@ -73,3 +73,65 @@
       margin-top: 2rem;
     }
   }
+
+.sec2 {
+  background-color: $quartiry-color;
+  padding: 4rem 0;
+
+  .carousel {
+    .carousel-item {
+      height: 500px;
+
+      img {
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+      width: 50px;
+      height: 50px;
+      background-color: rgba($primary-color, 0.7);
+      border-radius: 50%;
+      top: 50%;
+      transform: translateY(-50%);
+      
+      &:hover {
+        background-color: $primary-color;
+      }
+    }
+
+    .carousel-indicators {
+      button {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: $primary-color;
+        margin: 0 5px;
+        
+        &.active {
+          background-color: $secondary-color;
+        }
+      }
+    }
+
+    .carousel-caption {
+      background: $sextiary-color;
+      padding: 20px;
+      border-radius: 8px;
+      bottom: 50px;
+
+      h3 {
+        color: white;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+
+      p {
+        color: white;
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
