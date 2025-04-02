@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { validateForm } from './Validar';
 import { useNavigate } from 'react-router-dom'; 
 import '../../scss/component-styles/Registrar.scss';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const Registrar = ({ onClose, onFormularioChange }) => {
   const [formData, setFormData] = useState({
@@ -11,7 +13,9 @@ const Registrar = ({ onClose, onFormularioChange }) => {
     direccion: '',
     cedula: '',
     tipo_usuario: 'proveedor',
-    codigo_verificacion: ''
+    codigo_verificacion: '',
+    username: '',
+    email: '',
   });
 
   const [errors, setErrors] = useState({});
@@ -38,23 +42,12 @@ const Registrar = ({ onClose, onFormularioChange }) => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/proX/usuarios/registrar/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const responseData = await response.json();
-      if (response.ok) {
-        alert('Registro exitoso');
-        onClose();  
-      } else {
-        setErrors(responseData.errors || { general: 'Error en el registro' });
-      }
+      const response = await axios.post('http://localhost:8000/register/', formData);
+      Swal.fire('Registro exitoso', `Tu contraseña es: ${response.data.password}`, 'success');
+      onClose();  
     } catch (error) {
-      setErrors({ general: 'Error de conexión' });
+      console.error('Error en el registro:', error);
+      Swal.fire('Error', 'No se pudo registrar el usuario', 'error');
     } finally {
       setLoading(false);
     }

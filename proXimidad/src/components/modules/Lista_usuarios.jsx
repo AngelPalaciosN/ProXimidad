@@ -14,7 +14,7 @@ const UsuarioList = () => {
     useEffect(() => {
         const fetchUsuarios = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/proX/usuarios/'); 
+                const response = await axios.get('http://localhost:8000/usuarios/'); 
                 setUsuarios(response.data);
             } catch (err) {
                 console.error('Error fetching users:', err);
@@ -26,7 +26,7 @@ const UsuarioList = () => {
 
         const fetchFavoritos = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/proX/favoritos/usuario/1/'); // Reemplaza 1 con el ID del usuario actual
+                const response = await axios.get('http://localhost:8000/favoritos/usuario/1/');
                 setFavoritos(response.data.map(fav => fav.favorito));
             } catch (err) {
                 console.error('Error fetching favorites:', err);
@@ -49,7 +49,7 @@ const UsuarioList = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await axios.post('http://localhost:8000/proX/favoritos/', { usuario: 1, favorito: usuarioId }); // Reemplaza 1 con el ID del usuario actual
+                    await axios.post('http://localhost:8000/favoritos/', { usuario: 1, favorito: usuarioId });
                     setFavoritos([...favoritos, usuarioId]);
                     Swal.fire('Añadido!', 'El usuario ha sido añadido a tus favoritos.', 'success');
                 } catch (err) {
@@ -72,7 +72,7 @@ const UsuarioList = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await axios.delete(`http://localhost:8000/proX/favoritos/eliminar/1/${usuarioId}/`); // Reemplaza 1 con el ID del usuario actual
+                    await axios.delete(`http://localhost:8000/favoritos/eliminar/1/${usuarioId}/`); 
                     setFavoritos(favoritos.filter(fav => fav !== usuarioId));
                     Swal.fire('Eliminado!', 'El usuario ha sido eliminado de tus favoritos.', 'success');
                 } catch (err) {

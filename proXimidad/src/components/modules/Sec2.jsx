@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Carousel } from 'react-bootstrap';
 import '../../scss/component-styles/Sec2.scss';
 
 export default function Sec2() {
+  const [servicios, setServicios] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:8000/servicios/')
+      .then(response => response.json())
+      .then(data => setServicios(data));
+  }, []);
+
   return (
     <section className="sec2">
       <Container>
