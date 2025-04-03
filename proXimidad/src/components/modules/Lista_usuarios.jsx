@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Header from './Header';
+import { useAuth } from '../../Auth';
 import { FaStar, FaTimes } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import '../../scss/component-styles/Listaust.scss';
@@ -10,6 +11,8 @@ const UsuarioList = () => {
     const [favoritos, setFavoritos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const { user } = useAuth();
 
     useEffect(() => {
         const fetchUsuarios = async () => {
@@ -25,17 +28,19 @@ const UsuarioList = () => {
         };
 
         const fetchFavoritos = async () => {
-            try {
-                const response = await axios.get('http://localhost:8000/favoritos/usuario/1/');
-                setFavoritos(response.data.map(fav => fav.favorito));
-            } catch (err) {
-                console.error('Error fetching favorites:', err);
+            if (user && user.usuario_id) {
+                try {
+                    const response = await axios.get(`http://localhost:8000/favoritos/usuario/${user.usuario_id}/`);
+                    setFavoritos(response.data.map(fav => fav.favorito));
+                } catch (err) {
+                    console.error('Error fetching favorites:', err);
+                }
             }
         };
 
         fetchUsuarios();
         fetchFavoritos();
-    }, []);
+    }, [user]);
 
     const handleAddToFavorites = async (usuarioId) => {
         Swal.fire({
@@ -49,7 +54,7 @@ const UsuarioList = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await axios.post('http://localhost:8000/favoritos/', { usuario: 1, favorito: usuarioId });
+                    await axios.post('http://localhost:8000/favoritos/', { usuario: user.usuario_id, favorito: usuarioId });
                     setFavoritos([...favoritos, usuarioId]);
                     Swal.fire('Añadido!', 'El usuario ha sido añadido a tus favoritos.', 'success');
                 } catch (err) {
@@ -72,7 +77,7 @@ const UsuarioList = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await axios.delete(`http://localhost:8000/favoritos/eliminar/1/${usuarioId}/`); 
+                    await axios.delete(`http://localhost:8000/favoritos/eliminar/${user.usuario_id}/${usuarioId}/`); 
                     setFavoritos(favoritos.filter(fav => fav !== usuarioId));
                     Swal.fire('Eliminado!', 'El usuario ha sido eliminado de tus favoritos.', 'success');
                 } catch (err) {
@@ -93,12 +98,18 @@ const UsuarioList = () => {
                             <li key={usuario.id} id='u'>
                                 <span>{usuario.nombre_completo} - {usuario.correo_electronico}</span>
                                 <div className='user-actions'>
-                                    <button 
-                                        className='icon-button' 
-                                        onClick={() => handleAddToFavorites(usuario.id)}
-                                    >
-                                        <FaStar className='icon star' />
-                                    </button>
+                                    {favoritos.includes(usuario.id) ? (
+                                        <button className='icon-button' disabled>
+                                            Ya es favorito
+                                        </button>
+                                    ) : (
+                                        <button 
+                                            className='icon-button' 
+                                            onClick={() => handleAddToFavorites(usuario.id)}
+                                        >
+                                            <FaStar className='icon star' />
+                                        </button>
+                                    )}
                                     <button 
                                         className='icon-button' 
                                         onClick={() => handleRemoveFromFavorites(usuario.id)}

@@ -4,6 +4,47 @@ import '../../scss/component-styles/Sec2.scss';
 
 export default function Sec2() {
   const [servicios, setServicios] = useState([]);
+  const xAnimations = [
+    { 
+      symbol: 'X', 
+      color: '#005187',
+      style: { transform: 'rotate(0deg)', transition: 'transform 0.3s ease-in-out' }
+    },
+    { 
+      symbol: '×', 
+      color: '#4d82bc',
+      style: { transform: 'scale(1.2)', transition: 'transform 0.3s ease-in-out' }
+    },
+    { 
+      symbol: '✗', 
+      color: '#005187',
+      style: { transform: 'skew(-10deg)', transition: 'transform 0.3s ease-in-out' }
+    },
+    { 
+      symbol: '𝗫', 
+      color: '#005187',
+      style: { opacity: 0.7, transition: 'opacity 0.3s ease-in-out' }
+    },
+    { 
+      symbol: '✘', 
+      color: '#4d82bc',
+      style: { transform: 'translateY(-3px)', transition: 'transform 0.3s ease-in-out' }
+    }
+  ];
+
+  const [currentXAnimation, setCurrentXAnimation] = useState(xAnimations[0]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentXAnimation(prevAnim => {
+        const currentIndex = xAnimations.indexOf(prevAnim);
+        const nextIndex = (currentIndex + 1) % xAnimations.length;
+        return xAnimations[nextIndex];
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     fetch('http://localhost:8000/servicios/')
@@ -13,6 +54,20 @@ export default function Sec2() {
 
   return (
     <section className="sec2">
+      <Container id='x'>
+        <div className="animated-x-container d-flex justify-content-center align-items-center">
+         <span
+          className={`animated-x ${currentXAnimation.symbol !== 'X' ? 'animate' : ''}`}
+          style={{
+            ...currentXAnimation.style,
+            color: currentXAnimation.color,
+            transition: 'color 0.5s ease-in-out, transform 0.3s ease-in-out'
+          }}
+         >
+          {currentXAnimation.symbol}
+          </span>
+        </div>
+      </Container>
       <Container>
         <Row className="justify-content-center">
           <Col md={8}>

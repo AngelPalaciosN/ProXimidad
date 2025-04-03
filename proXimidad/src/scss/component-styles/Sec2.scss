@@ -1,82 +1,29 @@
 @use '../variables' as *;
 
-.sec1 {
-    .contact-form-container {
-      background-color: lighten($secondary-color, 35%);
-      border-radius: 8px;
-      padding: 2rem;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  
-      h3 {
-        color: $primary-color;
-      }
-  
-      .form-control {
-        border-color: $secondary-color;
-  
-        &:focus {
-          border-color: $primary-color;
-          box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
-        }
-      }
-  
-      .btn-secondary {
-        background-color: $secondary-color;
-        border-color: $secondary-color;
-  
-        &:hover,
-        &:focus {
-          background-color: darken($secondary-color, 10%);
-          border-color: darken($secondary-color, 10%);
-        }
-      }
-    }
-  
-    .feature-card {
-      background-color: lighten($secondary-color, 30%);
-      border-radius: 8px;
-      transition: transform 0.3s ease;
-  
-      &:hover {
-        transform: translateY(-5px);
-      }
-    }
-  
-    .footer {
-      background-color: $primary-color;
-    }
-  }
-  
-  // Ajustes adicionales
-  .text-primary {
-    color: $primary-color !important;
-  }
-  
-  .text-secondary {
-    color: $secondary-color !important;
-  }
-  
-  .btn-primary {
-    background-color: $primary-color;
-    border-color: $primary-color;
-  
-    &:hover,
-    &:focus {
-      background-color: darken($primary-color, 10%);
-      border-color: darken($primary-color, 10%);
-    }
-  }
-  
-  // Estilos responsivos
-  @media (max-width: 767px) {
-    .contact-form-container {
-      margin-top: 2rem;
-    }
-  }
-
 .sec2 {
+  position: relative;
   background-color: $quartiry-color;
   padding: 4rem 0;
+
+  .animated-x-container {
+    height: 200px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding-bottom: 1rem;
+  }
+
+  #x{
+    height: 10rem;
+  }
+
+  .animated-x {
+    font-size: 5em;
+  }
 
   .carousel {
     .carousel-item {

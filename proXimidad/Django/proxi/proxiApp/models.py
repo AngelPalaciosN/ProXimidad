@@ -151,7 +151,6 @@ class Favoritos(models.Model):
     class Meta:
         managed = False
         db_table = 'favoritos'
-        unique_together = (('usuario', 'favorito'),)
 
 
 class Servicios(models.Model):

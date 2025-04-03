@@ -8,35 +8,6 @@ import '../../scss/component-styles/Sec1.scss';
 const Sec1 = () => {
   const [displayText, setDisplayText] = useState('');
   const fullText = "Haciendo facil tu dedicacion";
-  const xAnimations = [
-    { 
-      symbol: 'X', 
-      color: '#005187',
-      style: { transform: 'rotate(0deg)', transition: 'transform 0.3s ease-in-out' }
-    },
-    { 
-      symbol: '×', 
-      color: '#4d82bc',
-      style: { transform: 'scale(1.2)', transition: 'transform 0.3s ease-in-out' }
-    },
-    { 
-      symbol: '✗', 
-      color: '#005187',
-      style: { transform: 'skew(-10deg)', transition: 'transform 0.3s ease-in-out' }
-    },
-    { 
-      symbol: '𝗫', 
-      color: '#005187',
-      style: { opacity: 0.7, transition: 'opacity 0.3s ease-in-out' }
-    },
-    { 
-      symbol: '✘', 
-      color: '#4d82bc',
-      style: { transform: 'translateY(-3px)', transition: 'transform 0.3s ease-in-out' }
-    }
-  ];
-
-  const [currentXAnimation, setCurrentXAnimation] = useState(xAnimations[0]);
   const [usuarios, setUsuarios] = useState([]);
   const [servicios, setServicios] = useState([]);
   const [formData, setFormData] = useState({
@@ -58,21 +29,9 @@ const Sec1 = () => {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentXAnimation(prevAnim => {
-        const currentIndex = xAnimations.indexOf(prevAnim);
-        const nextIndex = (currentIndex + 1) % xAnimations.length;
-        return xAnimations[nextIndex];
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
     const fetchUsuarios = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/proX/usuarios/');
+        const response = await axios.get('http://localhost:8000/usuarios/');
         setUsuarios(response.data);
       } catch (err) {
         console.error('Error fetching users:', err);
@@ -81,7 +40,7 @@ const Sec1 = () => {
 
     const fetchServicios = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/proX/servicios/');
+        const response = await axios.get('http://localhost:8000/servicios/');
         setServicios(response.data);
       } catch (err) {
         console.error('Error fetching services:', err);
@@ -138,18 +97,7 @@ const Sec1 = () => {
                 className="display-4 text-primary mb-3 animate__animated animate__fadeInLeft"
                 style={{ color: 'inherit' }}
               >
-                Bienvenido a pro
-                <span 
-                  className={`animated-x ${currentXAnimation.symbol !== 'X' ? 'animate' : ''}`}
-                  style={{ 
-                    ...currentXAnimation.style,
-                    color: currentXAnimation.color, 
-                    transition: 'color 0.5s ease-in-out, transform 0.3s ease-in-out' 
-                  }}
-                >
-                  {currentXAnimation.symbol}
-                </span>
-                imidad
+                Bienvenido a proXimidad
               </h2>
               <p className="lead mb-4 typing-effect" style={{ color: '#ffffff' }}>
                 {displayText}

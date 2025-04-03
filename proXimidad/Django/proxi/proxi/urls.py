@@ -17,13 +17,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from proxiApp.views import servicios_list, usuarios_list, agregar_favorito, eliminar_favorito
-from proxiApp.auth_views import register
+from proxiApp.auth_views import register, login, generar_codigo, verificar_codigo
+from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
+    # API endpoints
     path('servicios/', servicios_list, name='servicios-list'),
     path('usuarios/', usuarios_list, name='usuarios-list'),
     path('favoritos/', agregar_favorito, name='agregar-favorito'),
     path('favoritos/eliminar/<int:usuario_id>/<int:favorito_id>/', eliminar_favorito, name='eliminar-favorito'),
-    path('register/', register, name='register'),
+    
+    # Auth endpoints
+    path('register/', csrf_exempt(register), name='register'),
+    path('login/', csrf_exempt(login), name='login'),
+    path('generar-codigo/', csrf_exempt(generar_codigo), name='generar-codigo'),
+    path('verificar-codigo/', csrf_exempt(verificar_codigo), name='verificar-codigo'),
 ]
