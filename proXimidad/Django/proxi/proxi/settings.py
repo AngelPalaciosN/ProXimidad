@@ -25,9 +25,7 @@ SECRET_KEY = 'django-insecure-+4!lyxyrot*7as_9&mg=o5bd@k@+^l$+3zo@9b6yno#v4ohp3z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    '192.168.207.112',
-]
+ALLOWED_HOSTS = ['192.168.207.112']
 
 
 # Application definition
@@ -118,8 +116,7 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173", 
-    "http://192.168.207.112:5173", 
-    "http://192.168.207.112:8000",
+    "http://192.168.207.112:5173",
 ]
 
 

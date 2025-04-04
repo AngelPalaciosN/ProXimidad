@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }) => {
     setError(null);
     
     try {
-      const response = await axios.post('http://192.168.207.112:8000/login/', credentials);
+const response = await axios.post('http://192.168.207.112:8000/login/', credentials);
       
       if (response.data && response.data.user) {
         setUser(response.data.user);
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }) => {
     setError(null);
     
     try {
-      const response = await axios.post('http://192.168.207.112:8000/verificar-codigo/', credentials);
+const response = await axios.post('http://192.168.207.112:8000/verificar-codigo/', credentials);
       
       if (response.data && response.data.user) {
         setUser(response.data.user);
