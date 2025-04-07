@@ -53,7 +53,7 @@ const Header = () => {
 
       {user ? (
         <>
-          <span className="nav-link">Hola, {user.nombre}</span>
+          <span className="nav-link">Hola, {user.nombre_completo}</span>
           <button 
             onClick={logout} 
             className="login-button"
@@ -65,11 +65,11 @@ const Header = () => {
         <button 
           onClick={(e) => {
             e.preventDefault(); 
-            handleAbrirFormulario('registrar');
+            handleAbrirFormulario('iniciarSesion');
           }} 
           className="login-button"
         >
-          Registrate!!
+          Iniciar Sesión
         </button>
       )}
     </div>

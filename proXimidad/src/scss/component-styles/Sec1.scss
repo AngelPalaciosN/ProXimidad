@@ -7,10 +7,13 @@
   .hero-content {
     opacity: 0;
     animation: fadeInLeft 0.8s forwards;
-    background-color: #f8f9fa; 
     padding: 3rem 2.5rem;
     border-radius: 12px; 
-    margin-bottom: 2rem; 
+    margin-bottom: 2rem;
+    height: 500px; // Aumentamos la altura para dar más espacio
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; // Cambiamos a space-between para distribuir mejor
   }
 
   .typing-effect {
@@ -21,6 +24,32 @@
       display: inline-block;
       margin-left: 2px;
       animation: blink 0.7s infinite;
+    }
+  }
+
+  #hero-1 {
+    background-color: $secondary-color;
+  }
+
+  #hero-2 {
+    background-color: $sextiary-color;
+    
+    h2 {
+      color: #ffffff !important;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .btn-hover-rise {
+      width: 8rem !important; // Reducimos un poco el tamaño del botón
+      height: 8rem !important;
+      padding: 0;
+      margin: 1rem auto; // Centramos horizontalmente con margen automático
+    }
+
+    img {
+      width: 3rem !important; // Ajustamos el tamaño de la imagen
+      height: 3rem !important;
     }
   }
 

@@ -3,40 +3,14 @@ import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 import { Send, ArrowRight } from 'lucide-react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
+import Registrar from './Registrar';
 import '../../scss/component-styles/Sec1.scss';
 
 const Sec1 = () => {
+  const navigate = useNavigate();
   const [displayText, setDisplayText] = useState('');
-  const fullText = "Ofrecemos servicios a la puerta de tu hogar";
-  const xAnimations = [
-    { 
-      symbol: 'X', 
-      color: '#005187',
-      style: { transform: 'rotate(0deg)', transition: 'transform 0.3s ease-in-out' }
-    },
-    { 
-      symbol: '×', 
-      color: '#4d82bc',
-      style: { transform: 'scale(1.2)', transition: 'transform 0.3s ease-in-out' }
-    },
-    { 
-      symbol: '✗', 
-      color: '#005187',
-      style: { transform: 'skew(-10deg)', transition: 'transform 0.3s ease-in-out' }
-    },
-    { 
-      symbol: '𝗫', 
-      color: '#005187',
-      style: { opacity: 0.7, transition: 'opacity 0.3s ease-in-out' }
-    },
-    { 
-      symbol: '✘', 
-      color: '#4d82bc',
-      style: { transform: 'translateY(-3px)', transition: 'transform 0.3s ease-in-out' }
-    }
-  ];
-
-  const [currentXAnimation, setCurrentXAnimation] = useState(xAnimations[0]);
+  const fullText = "Haciendo facil tu dedicacion";
   const [usuarios, setUsuarios] = useState([]);
   const [servicios, setServicios] = useState([]);
   const [formData, setFormData] = useState({
@@ -44,6 +18,15 @@ const Sec1 = () => {
     servicio: '',
     mensaje: ''
   });
+  const [formularioVisible, setFormularioVisible] = useState(null);
+
+  const handleAbrirFormulario = (formulario) => {
+    setFormularioVisible(formulario);
+  };
+
+  const handleCerrarFormulario = () => {
+    setFormularioVisible(null);
+  };
 
   useEffect(() => {
     let currentIndex = 0;
@@ -58,21 +41,9 @@ const Sec1 = () => {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentXAnimation(prevAnim => {
-        const currentIndex = xAnimations.indexOf(prevAnim);
-        const nextIndex = (currentIndex + 1) % xAnimations.length;
-        return xAnimations[nextIndex];
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
     const fetchUsuarios = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/proX/usuarios/');
+        const response = await axios.get('http://192.168.207.112:8000/usuarios/');
         setUsuarios(response.data);
       } catch (err) {
         console.error('Error fetching users:', err);
@@ -81,7 +52,7 @@ const Sec1 = () => {
 
     const fetchServicios = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/proX/servicios/');
+        const response = await axios.get('http://192.168.207.112:8000/servicios/');
         setServicios(response.data);
       } catch (err) {
         console.error('Error fetching services:', err);
@@ -113,8 +84,15 @@ const Sec1 = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.post('http://localhost:8000/proX/comentarios/crear/', formData);
-          Swal.fire('Enviado!', 'Tu comentario ha sido enviado.', 'success');
+          await axios.post('http://192.168.207.112:8000/proX/comentarios/crear/', formData);
+          Swal.fire({
+            title: 'Enviado!',
+            text: 'Tu comentario ha sido enviado.',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+          }).then(() => {
+            navigate('/Iniciar');
+          });
           setFormData({
             usuario: '',
             servicio: '',
@@ -133,25 +111,14 @@ const Sec1 = () => {
       <Container>
         <Row className="g-4">
           <Col lg={6}>
-            <div className="hero-content">
+            <div className="hero-content" id="hero-1">
               <h2 
                 className="display-4 text-primary mb-3 animate__animated animate__fadeInLeft"
                 style={{ color: 'inherit' }}
               >
-                Bienvenido a pro
-                <span 
-                  className={`animated-x ${currentXAnimation.symbol !== 'X' ? 'animate' : ''}`}
-                  style={{ 
-                    ...currentXAnimation.style,
-                    color: currentXAnimation.color, 
-                    transition: 'color 0.5s ease-in-out, transform 0.3s ease-in-out' 
-                  }}
-                >
-                  {currentXAnimation.symbol}
-                </span>
-                imidad
+                Bienvenido a proXimidad
               </h2>
-              <p className="lead text-secondary mb-4 typing-effect">
+              <p className="lead mb-4 typing-effect" style={{ color: '#ffffff' }}>
                 {displayText}
                 <span className="cursor">|</span>
               </p>
@@ -159,6 +126,7 @@ const Sec1 = () => {
                 variant="primary" 
                 size="lg" 
                 className="btn-hover-rise d-flex align-items-center mx-auto"
+                onClick={() => handleAbrirFormulario('registrar')}
               >
                 Comienza Ahora
                 <ArrowRight className="ml-2" size={20} />
@@ -166,65 +134,47 @@ const Sec1 = () => {
             </div>
           </Col>
           <Col lg={6}>
-            <div className="contact-form-container shadow-lg">
-              <h3 className="text-primary mb-4 text-center">Comentarios/Solicitudes</h3>
-              <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-4">
-                  <Form.Control 
-                    as="select" 
-                    name="usuario" 
-                    value={formData.usuario} 
-                    onChange={handleInputChange} 
-                    className="form-control-custom"
-                  >
-                    <option value="">Selecciona un usuario</option>
-                    {usuarios.map(usuario => (
-                      <option key={usuario.id} value={usuario.id}>
-                        {usuario.nombre_completo}
-                      </option>
-                    ))}
-                  </Form.Control>
-                </Form.Group>
-                <Form.Group className="mb-4">
-                  <Form.Control 
-                    as="select" 
-                    name="servicio" 
-                    value={formData.servicio} 
-                    onChange={handleInputChange} 
-                    className="form-control-custom"
-                  >
-                    <option value="">Selecciona un servicio</option>
-                    {servicios.map(servicio => (
-                      <option key={servicio.id} value={servicio.id}>
-                        {servicio.nombre_servicio}
-                      </option>
-                    ))}
-                  </Form.Control>
-                </Form.Group>
-                <Form.Group className="mb-4">
-                  <Form.Control 
-                    as="textarea" 
-                    rows={3} 
-                    name="mensaje" 
-                    placeholder="Mensaje" 
-                    value={formData.mensaje} 
-                    onChange={handleInputChange} 
-                    className="form-control-custom"
-                  />
-                </Form.Group>
-                <Button 
-                  variant="secondary" 
-                  type="submit" 
-                  className="w-100 btn-hover-rise d-flex align-items-center justify-content-center"
-                >
-                  <Send className="mr-2" size={18} />
-                  Enviar
-                </Button>
-              </Form>
+            <div className="hero-content" id='hero-2'>
+              <h2 
+                className="display-4 mb-3 animate__animated animate__fadeInLeft"
+                style={{ color: '#ffffff' }}
+              >
+                Tus ideas son importantes para nosotros. ¡Compártelas!
+              </h2>
+              <Button 
+                variant="primary" 
+                size="lg" 
+                className="btn-hover-rise d-flex align-items-center justify-content-center mx-auto rounded-circle"
+                style={{
+                  width: '10rem',
+                  height: '10rem',
+                  padding: 0,
+                  overflow: 'hidden'
+                }}
+              >
+                <img 
+                  src="/ruta-a-tu-imagen.png" 
+                  alt="Icono del botón"
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    objectFit: 'cover'
+                  }}
+                />
+              </Button>
             </div>
           </Col>
         </Row>
       </Container>
+      {formularioVisible && (
+        <div className="overlay">
+          <div className="form-container">
+            {formularioVisible === 'registrar' && (
+              <Registrar onClose={handleCerrarFormulario} />
+            )}
+          </div>
+        </div>
+      )}
     </section>
   );
 };

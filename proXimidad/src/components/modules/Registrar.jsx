@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { validateForm } from './Validar';
 import { useNavigate } from 'react-router-dom'; 
+import { useAuth } from '../../Auth';
 import '../../scss/component-styles/Registrar.scss';
+import Swal from 'sweetalert2';
+import CloseIcon from '@mui/icons-material/Close';
+import IconButton from '@mui/material/IconButton';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Registrar = ({ onClose, onFormularioChange }) => {
   const [formData, setFormData] = useState({
@@ -11,12 +16,13 @@ const Registrar = ({ onClose, onFormularioChange }) => {
     direccion: '',
     cedula: '',
     tipo_usuario: 'proveedor',
-    codigo_verificacion: ''
   });
 
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();  
+  const navigate = useNavigate();
+  
+  // Get auth context
+  const { register, loading, error } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,6 +30,14 @@ const Registrar = ({ onClose, onFormularioChange }) => {
       ...prev,
       [name]: value
     }));
+    
+    // Clear errors when user types
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: null
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -35,28 +49,25 @@ const Registrar = ({ onClose, onFormularioChange }) => {
       return;
     }
 
-    setLoading(true);
-
-    try {
-      const response = await fetch('http://localhost:8000/proX/usuarios/registrar/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+    const result = await register(formData);
+    
+    if (result.success) {
+      Swal.fire({
+        title: 'Registro exitoso',
+        html: `
+          <p>Tu cuenta ha sido creada correctamente.</p>
+        `,
+        icon: 'success',
+        confirmButtonText: 'Entendido'
       });
-
-      const responseData = await response.json();
-      if (response.ok) {
-        alert('Registro exitoso');
-        onClose();  
-      } else {
-        setErrors(responseData.errors || { general: 'Error en el registro' });
-      }
-    } catch (error) {
-      setErrors({ general: 'Error de conexión' });
-    } finally {
-      setLoading(false);
+      onClose();
+    } else {
+      Swal.fire({
+        title: 'Error',
+        text: result.error || 'No se pudo registrar el usuario',
+        icon: 'error',
+        confirmButtonText: 'Intentar de nuevo'
+      });
     }
   };
 
@@ -67,7 +78,13 @@ const Registrar = ({ onClose, onFormularioChange }) => {
   return (
     <section className="form">
       <div className="form-container">
-        <button className="close-button" onClick={onClose}>×</button>
+        <IconButton 
+          className="close-button" 
+          onClick={onClose}
+          aria-label="cerrar"
+        >
+          <CloseIcon />
+        </IconButton>
 
         <form className="formulario" onSubmit={handleSubmit}>
           <h2>Registro de Usuario</h2>
@@ -79,9 +96,11 @@ const Registrar = ({ onClose, onFormularioChange }) => {
               value={formData.nombre_completo}
               onChange={handleChange}
               placeholder="Nombre Completo"
+              disabled={loading}
+              className={errors.nombre_completo ? 'error-input' : ''}
             />
             {errors.nombre_completo && (
-              <span className="error">{errors.nombre_completo}</span>
+              <span className="error-message">{errors.nombre_completo}</span>
             )}
           </div>
 
@@ -92,9 +111,11 @@ const Registrar = ({ onClose, onFormularioChange }) => {
               value={formData.correo_electronico}
               onChange={handleChange}
               placeholder="Correo Electrónico"
+              disabled={loading}
+              className={errors.correo_electronico ? 'error-input' : ''}
             />
             {errors.correo_electronico && (
-              <span className="error">{errors.correo_electronico}</span>
+              <span className="error-message">{errors.correo_electronico}</span>
             )}
           </div>
 
@@ -105,9 +126,11 @@ const Registrar = ({ onClose, onFormularioChange }) => {
               value={formData.telefono}
               onChange={handleChange}
               placeholder="Teléfono"
+              disabled={loading}
+              className={errors.telefono ? 'error-input' : ''}
             />
             {errors.telefono && (
-              <span className="error">{errors.telefono}</span>
+              <span className="error-message">{errors.telefono}</span>
             )}
           </div>
 
@@ -118,9 +141,11 @@ const Registrar = ({ onClose, onFormularioChange }) => {
               value={formData.direccion}
               onChange={handleChange}
               placeholder="Dirección"
+              disabled={loading}
+              className={errors.direccion ? 'error-input' : ''}
             />
             {errors.direccion && (
-              <span className="error">{errors.direccion}</span>
+              <span className="error-message">{errors.direccion}</span>
             )}
           </div>
 
@@ -131,22 +156,11 @@ const Registrar = ({ onClose, onFormularioChange }) => {
               value={formData.cedula}
               onChange={handleChange}
               placeholder="Cédula"
+              disabled={loading}
+              className={errors.cedula ? 'error-input' : ''}
             />
             {errors.cedula && (
-              <span className="error">{errors.cedula}</span>
-            )}
-          </div>
-
-          <div className="form-group">
-            <input
-              type="text"
-              name="codigo_verificacion"
-              value={formData.codigo_verificacion}
-              onChange={handleChange}
-              placeholder="Código de Verificación"
-            />
-            {errors.codigo_verificacion && (
-              <span className="error">{errors.codigo_verificacion}</span>
+              <span className="error-message">{errors.cedula}</span>
             )}
           </div>
 
@@ -155,19 +169,33 @@ const Registrar = ({ onClose, onFormularioChange }) => {
               name="tipo_usuario"
               value={formData.tipo_usuario}
               onChange={handleChange}
+              disabled={loading}
             >
               <option value="proveedor">Proveedor</option>
               <option value="arrendador">Arrendador</option>
             </select>
           </div>
 
-          <button type="submit" disabled={loading} id='btn-registrar'>
-            {loading ? 'Registrando...' : 'Registrar'}
+          <button 
+            type="submit" 
+            disabled={loading} 
+            className="btn-submit"
+          >
+            {loading ? (
+              <CircularProgress size={20} color="inherit" />
+            ) : (
+              'Registrar'
+            )}
           </button>
           
-          {errors.general && <div className="error general-error">{errors.general}</div>}
+          {error && <div className="error-general">{error}</div>}
 
-          <button type="button" onClick={handleLoginRedirect} id="btn-login-redirect">
+          <button 
+            type="button" 
+            onClick={handleLoginRedirect} 
+            className="btn-switch"
+            disabled={loading}
+          >
             ¿Ya tienes cuenta? Inicia sesión
           </button>
         </form>
