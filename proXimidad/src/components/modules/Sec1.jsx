@@ -3,12 +3,9 @@ import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 import { Send, ArrowRight } from 'lucide-react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
-import Registrar from './Registrar';
 import '../../scss/component-styles/Sec1.scss';
 
 const Sec1 = () => {
-  const navigate = useNavigate();
   const [displayText, setDisplayText] = useState('');
   const fullText = "Haciendo facil tu dedicacion";
   const [usuarios, setUsuarios] = useState([]);
@@ -18,15 +15,6 @@ const Sec1 = () => {
     servicio: '',
     mensaje: ''
   });
-  const [formularioVisible, setFormularioVisible] = useState(null);
-
-  const handleAbrirFormulario = (formulario) => {
-    setFormularioVisible(formulario);
-  };
-
-  const handleCerrarFormulario = () => {
-    setFormularioVisible(null);
-  };
 
   useEffect(() => {
     let currentIndex = 0;
@@ -43,7 +31,7 @@ const Sec1 = () => {
   useEffect(() => {
     const fetchUsuarios = async () => {
       try {
-        const response = await axios.get('http://192.168.207.112:8000/usuarios/');
+        const response = await axios.get('http://localhost:8000/usuarios/');
         setUsuarios(response.data);
       } catch (err) {
         console.error('Error fetching users:', err);
@@ -52,7 +40,7 @@ const Sec1 = () => {
 
     const fetchServicios = async () => {
       try {
-        const response = await axios.get('http://192.168.207.112:8000/servicios/');
+        const response = await axios.get('http://localhost:8000/servicios/');
         setServicios(response.data);
       } catch (err) {
         console.error('Error fetching services:', err);
@@ -84,15 +72,8 @@ const Sec1 = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.post('http://192.168.207.112:8000/proX/comentarios/crear/', formData);
-          Swal.fire({
-            title: 'Enviado!',
-            text: 'Tu comentario ha sido enviado.',
-            icon: 'success',
-            confirmButtonText: 'Ok'
-          }).then(() => {
-            navigate('/Iniciar');
-          });
+          await axios.post('http://localhost:8000/proX/comentarios/crear/', formData);
+          Swal.fire('Enviado!', 'Tu comentario ha sido enviado.', 'success');
           setFormData({
             usuario: '',
             servicio: '',
@@ -126,7 +107,6 @@ const Sec1 = () => {
                 variant="primary" 
                 size="lg" 
                 className="btn-hover-rise d-flex align-items-center mx-auto"
-                onClick={() => handleAbrirFormulario('registrar')}
               >
                 Comienza Ahora
                 <ArrowRight className="ml-2" size={20} />
@@ -166,15 +146,6 @@ const Sec1 = () => {
           </Col>
         </Row>
       </Container>
-      {formularioVisible && (
-        <div className="overlay">
-          <div className="form-container">
-            {formularioVisible === 'registrar' && (
-              <Registrar onClose={handleCerrarFormulario} />
-            )}
-          </div>
-        </div>
-      )}
     </section>
   );
 };

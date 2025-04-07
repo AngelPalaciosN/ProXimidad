@@ -23,7 +23,7 @@ const BuscarS = () => {
     useEffect(() => {
         const fetchServicios = async () => {
             try {
-                const response = await axios.get('http://192.168.207.112:8000/servicios/');
+                const response = await axios.get('http://localhost:8000/servicios/');
                 
                 // Transformar datos para manejar la estructura específica
                 const serviciosTransformados = response.data.map(servicio => ({

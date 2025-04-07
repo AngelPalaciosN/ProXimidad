@@ -6,23 +6,10 @@
   $body-bg: $background-color,
 );
 
+// Importar la fuente Quicksand
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
 
+// Aplicar la fuente a toda la página
 body {
   font-family: "Quicksand", sans-serif;
-}
-
-.animated-line {
-  height: 5px;
-  background: linear-gradient(to right, rgba(0,0,0,0), $primary-color, rgba(0,0,0,0));
-  animation: animateLine 5s linear infinite;
-}
-
-@keyframes animateLine {
-  0% {
-    background-position: 0%;
-  }
-  100% {
-    background-position: 100%;
-  }
 }

@@ -11,7 +11,8 @@ body {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
     width: 100%;
-    overflow-x: hidden; 
+    overflow-x: hidden; // Previene scroll horizontal no deseado
+
     &::-webkit-scrollbar {
         width: 0.5rem;
     }
@@ -31,9 +32,9 @@ section {
     text-align: center;
     flex-wrap: wrap;
     margin: auto;
-    min-height: 90vh;
-    width: 100%; 
-    padding: 0 5%; 
+    min-height: 90vh; // Cambiado de height a min-height
+    width: 100%; // Cambiado de 110vh a 100%
+    padding: 0 5%; // Añadido padding para mejor responsive
 }
 
 h1 {
@@ -47,6 +48,8 @@ h1 {
     width: 100%;
     flex-direction: column;
 }
+
+// Media Queries para Responsividad
 @media screen and (max-width: 1200px) {
     section {
         height: auto;
@@ -64,22 +67,10 @@ h1 {
 
 @media screen and (max-width: 480px) {
     body {
-        font-size: 14px; 
+        font-size: 14px; // Reduce tamaño de fuente en dispositivos pequeños
     }
 
     section {
         padding: 0 1%;
     }
 }
-
-@media screen and (max-width: 480px) {
-    .Sphre,
-    .Sphre2 {
-      width: 5rem;
-      height: 5rem;
-      top: 1rem;
-      left: 1rem;
-      right: 1rem;
-      bottom: 1rem;
-    }
-  }

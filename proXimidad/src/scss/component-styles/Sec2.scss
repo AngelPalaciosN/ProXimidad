@@ -2,7 +2,7 @@
 
 .sec2 {
   position: relative;
-  background-color: $secondary-color;
+  background-color: $quartiry-color;
   padding: 4rem 0;
 
   .animated-x-container {
@@ -50,45 +50,24 @@
     }
 
     .carousel-indicators {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 1rem;
-
       button {
-        width: 30px;
-        height: 5px;
-        border-radius: 3px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
         background-color: $primary-color;
         margin: 0 5px;
-        opacity: 0.5;
-        transition: opacity 0.3s ease;
-        border: none;
-
+        
         &.active {
-          opacity: 1;
+          background-color: $secondary-color;
         }
       }
     }
 
-    .image-container {
-      height: 300px;
-      overflow: hidden;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-    }
-
-    .text-container {
+    .carousel-caption {
       background: $sextiary-color;
       padding: 20px;
       border-radius: 8px;
-      margin-top: -50px;
-      position: relative;
-      z-index: 10;
+      bottom: 50px;
 
       h3 {
         color: white;
