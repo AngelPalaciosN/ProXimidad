@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Button, Form } from 'react-bootstrap';
-import { Send, ArrowRight } from 'lucide-react';
+import React, { useState, useEffect, useRef } from "react";
+import { Container, Row, Col, Button, Form } from "react-bootstrap";
+import { ArrowRight, Send, MessageSquare } from "lucide-react";
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import '../../scss/component-styles/Sec1.scss';
 
-const Sec1 = () => {
-  const [displayText, setDisplayText] = useState('');
+export default function Sec1({ handleAbrirFormulario }) {
+  const [displayText, setDisplayText] = useState("");
   const fullText = "Haciendo facil tu dedicacion";
   const [usuarios, setUsuarios] = useState([]);
   const [servicios, setServicios] = useState([]);
   const [formData, setFormData] = useState({
-    usuario: '',
-    servicio: '',
-    mensaje: ''
+    usuario: "",
+    servicio: "",
+    mensaje: "",
   });
+  const [isFormVisible, setIsFormVisible] = useState(false);
+  const formRef = useRef(null);
 
   useEffect(() => {
     let currentIndex = 0;
@@ -29,9 +31,10 @@ const Sec1 = () => {
   }, []);
 
   useEffect(() => {
+    const baseUrl = import.meta.env.VITE_API_BASE_URL;
     const fetchUsuarios = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/usuarios/');
+        const response = await axios.get(`${baseUrl}/usuarios/`);
         setUsuarios(response.data);
       } catch (err) {
         console.error('Error fetching users:', err);
@@ -40,7 +43,7 @@ const Sec1 = () => {
 
     const fetchServicios = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/servicios/');
+        const response = await axios.get(`${baseUrl}/servicios/`);
         setServicios(response.data);
       } catch (err) {
         console.error('Error fetching services:', err);
@@ -55,12 +58,17 @@ const Sec1 = () => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
+  };
+
+  const toggleForm = () => {
+    setIsFormVisible(!isFormVisible);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/proX/comentarios/crear/`;
     Swal.fire({
       title: '¿Enviar comentario?',
       text: "¿Estás seguro de que quieres enviar este comentario?",
@@ -68,86 +76,129 @@ const Sec1 = () => {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, enviar'
+      confirmButtonText: 'Sí, enviar',
+      cancelButtonText: 'Cancelar'
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.post('http://localhost:8000/proX/comentarios/crear/', formData);
+          await axios.post(apiUrl, formData);
           Swal.fire('Enviado!', 'Tu comentario ha sido enviado.', 'success');
           setFormData({
-            usuario: '',
-            servicio: '',
-            mensaje: ''
+            usuario: "",
+            servicio: "",
+            mensaje: "",
           });
+          setIsFormVisible(false);
         } catch (err) {
           console.error('Error sending comment:', err);
-          Swal.fire('Error', 'No se pudo enviar tu comentario.', 'error');
+          Swal.fire('Error', 'No se pudo enviar tu comentario. Intenta de nuevo más tarde.', 'error');
         }
       }
     });
   };
 
   return (
-    <section className="sec1">
+    <section className="sec1" id="inicio">
       <Container>
-        <Row className="g-4">
-          <Col lg={6}>
+        <Row className="g-4 align-items-center">
+          <Col lg={6} className="mb-4 mb-lg-0">
             <div className="hero-content" id="hero-1">
-              <h2 
-                className="display-4 text-primary mb-3 animate__animated animate__fadeInLeft"
-                style={{ color: 'inherit' }}
-              >
-                Bienvenido a proXimidad
-              </h2>
-              <p className="lead mb-4 typing-effect" style={{ color: '#ffffff' }}>
-                {displayText}
-                <span className="cursor">|</span>
-              </p>
+              <div>
+                <h2 className="display-4 fw-bold mb-3 animate__animated animate__fadeInLeft">
+                  Bienvenido a <span className="text-highlight">proXimidad</span>
+                </h2>
+                <p className="lead mb-4 typing-effect">
+                  {displayText}
+                  <span className="cursor">|</span>
+                </p>
+                <p className="hero-description">
+                  Conectamos profesionales calificados con personas que necesitan servicios confiables en un solo lugar.
+                </p>
+              </div>
               <Button 
                 variant="primary" 
                 size="lg" 
-                className="btn-hover-rise d-flex align-items-center mx-auto"
-              >
+                className="btn-hover-rise d-flex align-items-center" 
+                onClick={() => handleAbrirFormulario('registrar')}
+               >
                 Comienza Ahora
-                <ArrowRight className="ml-2" size={20} />
+                <ArrowRight className="ms-2" size={20} />
               </Button>
             </div>
           </Col>
           <Col lg={6}>
-            <div className="hero-content" id='hero-2'>
-              <h2 
-                className="display-4 mb-3 animate__animated animate__fadeInLeft"
-                style={{ color: '#ffffff' }}
-              >
-                Tus ideas son importantes para nosotros. ¡Compártelas!
-              </h2>
-              <Button 
-                variant="primary" 
-                size="lg" 
-                className="btn-hover-rise d-flex align-items-center justify-content-center mx-auto rounded-circle"
-                style={{
-                  width: '10rem',
-                  height: '10rem',
-                  padding: 0,
-                  overflow: 'hidden'
-                }}
-              >
-                <img 
-                  src="/ruta-a-tu-imagen.png" 
-                  alt="Icono del botón"
-                  style={{
-                    width: '40px',
-                    height: '40px',
-                    objectFit: 'cover'
-                  }}
-                />
-              </Button>
+            <div className="hero-content" id="hero-2">
+              <div>
+                <h2 className="display-5 mb-3 animate__animated animate__fadeInLeft">
+                  Tus ideas son importantes para nosotros
+                </h2>
+                <p className="hero-description mb-4">
+                  ¡Comparte tus comentarios y ayúdanos a mejorar nuestra plataforma!
+                </p>
+              </div>
+
+              {isFormVisible ? (
+                <div className="comment-form-container" ref={formRef}>
+                  <Form onSubmit={handleSubmit}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Nombre</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="usuario"
+                        value={formData.usuario}
+                        onChange={handleInputChange}
+                        placeholder="Tu nombre"
+                        required
+                      />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Servicio Relacionado</Form.Label>
+                      <Form.Select name="servicio" value={formData.servicio} onChange={handleInputChange} required>
+                        <option value="">Selecciona un servicio</option>
+                        {servicios.map(servicio => (
+                          <option key={servicio.id} value={servicio.id}> 
+                            {servicio.nombre}
+                          </option>
+                        ))}
+                      </Form.Select>
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Mensaje</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        rows={3}
+                        name="mensaje"
+                        value={formData.mensaje}
+                        onChange={handleInputChange}
+                        placeholder="Tu comentario"
+                        required
+                      />
+                    </Form.Group>
+                    <div className="d-flex justify-content-between">
+                      <Button variant="outline-secondary" onClick={toggleForm}>
+                        Cancelar
+                      </Button>
+                      <Button variant="primary" type="submit" className="d-flex align-items-center">
+                        Enviar
+                        <Send className="ms-2" size={16} />
+                      </Button>
+                    </div>
+                  </Form>
+                </div>
+              ) : (
+                <Button
+                  variant="primary"
+                  className="comment-button d-flex align-items-center justify-content-center mx-auto"
+                  onClick={toggleForm}
+                >
+                  <MessageSquare size={24} />
+                  <span className="ms-2">Compartir Comentario</span>
+                </Button>
+              )}
             </div>
           </Col>
         </Row>
       </Container>
     </section>
   );
-};
-
-export default Sec1;
+}

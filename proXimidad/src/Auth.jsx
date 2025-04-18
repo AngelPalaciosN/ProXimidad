@@ -11,6 +11,9 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Base URL from environment variable
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   // Check if user is already logged in on component mount
   useEffect(() => {
     const checkAuth = async () => {
@@ -36,9 +39,9 @@ export const AuthProvider = ({ children }) => {
   const loginWithPassword = async (credentials) => {
     setLoading(true);
     setError(null);
-    
+    const apiUrl = `${API_BASE_URL}/login/`;
     try {
-      const response = await axios.post('http://192.168.207.112:8000/login/', credentials);
+      const response = await axios.post(apiUrl, credentials);
       
       if (response.data && response.data.user) {
         setUser(response.data.user);
@@ -47,7 +50,7 @@ export const AuthProvider = ({ children }) => {
         return { success: true, user: response.data.user };
       }
     } catch (err) {
-      console.error('Login error:', err);
+      console.error('Login error:', err.response || err.message || err);
       setError(err.response?.data?.error || 'Error al iniciar sesión');
       return { success: false, error: err.response?.data?.error || 'Error al iniciar sesión' };
     } finally {
@@ -59,9 +62,9 @@ export const AuthProvider = ({ children }) => {
   const loginWithCode = async (credentials) => {
     setLoading(true);
     setError(null);
-    
+    const apiUrl = `${API_BASE_URL}/verificar-codigo/`;
     try {
-      const response = await axios.post('http://192.168.207.112:8000/verificar-codigo/', credentials);
+      const response = await axios.post(apiUrl, credentials);
       
       if (response.data && response.data.user) {
         setUser(response.data.user);
@@ -70,7 +73,7 @@ export const AuthProvider = ({ children }) => {
         return { success: true, user: response.data.user };
       }
     } catch (err) {
-      console.error('Verification error:', err);
+      console.error('Verification error:', err.response || err.message || err);
       setError(err.response?.data?.error || 'Error al verificar el código');
       return { success: false, error: err.response?.data?.error || 'Error al verificar el código' };
     } finally {
@@ -82,12 +85,12 @@ export const AuthProvider = ({ children }) => {
   const generateCode = async (email) => {
     setLoading(true);
     setError(null);
-    
+    const apiUrl = `${API_BASE_URL}/generar-codigo/`;
     try {
-      const response = await axios.post('http://192.168.207.112:8000/generar-codigo/', { correo_electronico: email });
+      const response = await axios.post(apiUrl, { correo_electronico: email });
       return { success: true, message: response.data.message };
     } catch (err) {
-      console.error('Generate code error:', err);
+      console.error('Generate code error:', err.response || err.message || err);
       setError(err.response?.data?.error || 'Error al generar el código');
       return { success: false, error: err.response?.data?.error || 'Error al generar el código' };
     } finally {
@@ -99,16 +102,17 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     setLoading(true);
     setError(null);
-    
+    const apiUrl = `${API_BASE_URL}/register/`;
     try {
-      const response = await axios.post('http://192.168.207.112:8000/register/', userData);
+      const response = await axios.post(apiUrl, userData);
       return { 
         success: true, 
-        user: response.data,
-        password: response.data.password 
+        user: response.data, 
+        password: response.data.password
       };
     } catch (err) {
-      console.error('Registration error:', err);
+      // Log more detailed error information
+      console.error('Registration error:', err.response || err.message || err);
       setError(err.response?.data?.error || 'Error al registrar el usuario');
       return { success: false, error: err.response?.data?.error || 'Error al registrar el usuario' };
     } finally {

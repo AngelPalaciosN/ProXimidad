@@ -1,10 +1,25 @@
+// Colores principales (manteniendo los originales)
 $primary-color: #005187;
 $secondary-color: #4d82bc;
 $background-color: #fafafa;
 $terciary-color: #210124;
 $quartiry-color: #a09d9d;
-$sextiary-color:#e0e0e0;
+$sextiary-color: #e0e0e0;
 
+// Alias para Bootstrap
 $primary: $primary-color;
 $secondary: $secondary-color;
 $body-bg: $background-color;
+
+// Nuevas variables para mejorar la consistencia
+$text-dark: #333333;
+$text-light: #ffffff;
+$text-muted: #6c757d;
+$border-color: #dee2e6;
+$shadow-sm: 0 .125rem .25rem rgba(0,0,0,.075);
+$shadow-md: 0 .5rem 1rem rgba(0,0,0,.15);
+$shadow-lg: 0 1rem 3rem rgba(0,0,0,.175);
+$border-radius-sm: 0.25rem;
+$border-radius: 0.5rem;
+$border-radius-lg: 1rem;
+$transition-base: all 0.3s ease;

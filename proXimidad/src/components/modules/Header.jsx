@@ -1,123 +1,84 @@
 import React, { useState } from 'react';
-import Registrar from './Registrar';
-import IniciarSesion from './Iniciar';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Navbar, Nav, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom'; 
 import { FaSearch } from 'react-icons/fa';
+import { Menu, X } from 'lucide-react';
 import { useAuth } from '../../Auth';
 import '../../scss/component-styles/Header.scss';
 
-const Header = () => {
-  const [formularioVisible, setFormularioVisible] = useState(null);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+const Header = ({ handleAbrirFormulario }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const { user, logout } = useAuth();
 
-  const handleAbrirFormulario = (formulario) => {
-    setFormularioVisible(formulario);
-    setIsMobileMenuOpen(false);
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
   };
 
-  const handleCerrarFormulario = () => {
-    setFormularioVisible(null);
+  const handleCloseMenuAndModal = () => {
+    setIsOpen(false);
+  };
+  
+  const handleLogout = () => {
+      logout();
+      handleCloseMenuAndModal();
   };
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const renderNavButtons = (isMobile = false) => (
-    <div className={`nav-buttons ${isMobile ? 'mobile-menu' : ''}`}>
-      <Link 
-        to="/" 
-        className="nav-link"
-        onClick={isMobile ? toggleMobileMenu : undefined}
-      >
+  const renderNavContent = () => (
+    <>
+      <Nav.Link as={Link} to="/" className="nav-link" onClick={handleCloseMenuAndModal}>
         Inicio
-      </Link>
-
-      <Link 
-        to="/usuarios" 
-        className="nav-link"
-        onClick={isMobile ? toggleMobileMenu : undefined}
-      >
+      </Nav.Link>
+      <Nav.Link as={Link} to="/usuarios" className="nav-link" onClick={handleCloseMenuAndModal}>
         Proveedores
-      </Link>
-
-      <Link 
-        to="/servicios" 
-        className="nav-link"
-        onClick={isMobile ? toggleMobileMenu : undefined}
-      >
-        <FaSearch /> Buscar
-      </Link>
-
+      </Nav.Link>
+      <Nav.Link as={Link} to="/servicios" className="nav-link" onClick={handleCloseMenuAndModal}>
+        <FaSearch className="me-1" /> Buscar
+      </Nav.Link>
       {user ? (
         <>
-          <span className="nav-link">Hola, {user.nombre_completo}</span>
-          <button 
-            onClick={logout} 
-            className="login-button"
-          >
+          <Nav.Link as="span" className="nav-link text-light">Hola, {user.nombre_completo}</Nav.Link> 
+          <Button variant="outline-light" className="login-button ms-lg-3" onClick={handleLogout}>
             Cerrar sesión
-          </button>
+          </Button>
         </>
       ) : (
-        <button 
-          onClick={(e) => {
-            e.preventDefault(); 
-            handleAbrirFormulario('iniciarSesion');
-          }} 
-          className="login-button"
+        <Button 
+          variant="outline-light" 
+          className="login-button ms-lg-3" 
+          onClick={() => { handleAbrirFormulario('iniciarSesion'); handleCloseMenuAndModal(); }}
         >
           Iniciar Sesión
-        </button>
+        </Button>
       )}
-    </div>
+    </>
   );
 
   return (
     <header className="header">
       <Container>
-        <Row className="align-items-center">
-          <Col>
-            <h1 className="text-white" id='h1'>ProXimidad</h1>
-          </Col>
-          <Col className="d-flex justify-content-end align-items-center">
-            <div className="d-none d-md-flex">
-              {renderNavButtons()}
-            </div>
-            
-            {/* Mobile hamburger menu */}
-            <div 
-              className={`hamburger-menu ${isMobileMenuOpen ? 'open' : ''}`} 
-              onClick={toggleMobileMenu}
-            >
-              <div className="bar"></div>
-              <div className="bar"></div>
-              <div className="bar"></div>
-            </div>
-          </Col>
-        </Row>
+        <Navbar expand="lg" variant="dark" className="p-0" expanded={isOpen} onToggle={toggleMenu}>
+          <Navbar.Brand as={Link} to="/" className="d-flex align-items-center" onClick={handleCloseMenuAndModal}>
+             <img 
+               src="../../../public/Proximidad.svg"
+               alt="ProXimidad Logo"
+               height="40"
+               className="d-inline-block align-top me-2"
+               style={{ filter: 'brightness(0) invert(1)' }}
+             />
+          </Navbar.Brand>
+
+          <Navbar.Toggle aria-controls="basic-navbar-nav" className="hamburger-button p-0 border-0">
+             {isOpen ? <X size={24} color="white" /> : <Menu size={24} color="white" />} 
+          </Navbar.Toggle>
+
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="ms-auto nav-buttons align-items-center">
+              {renderNavContent()}
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+
       </Container>
-
-      {isMobileMenuOpen && (
-        <div className="mobile-menu">
-          {renderNavButtons(true)}
-        </div>
-      )}
-
-      {formularioVisible && (
-        <div className="overlay">
-          <div className="form-container">
-            {formularioVisible === 'registrar' && (
-              <Registrar onClose={handleCerrarFormulario} onFormularioChange={handleAbrirFormulario} />
-            )}
-            {formularioVisible === 'iniciarSesion' && (
-              <IniciarSesion onClose={handleCerrarFormulario} onFormularioChange={handleAbrirFormulario} />
-            )}
-          </div>
-        </div>
-      )}
     </header>
   );
 };

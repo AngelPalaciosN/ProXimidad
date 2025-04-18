@@ -6,9 +6,11 @@ import ListaUsuarios from './components/modules/Lista_usuarios';
 import Buscars from './components/modules/BuscarS';
 import IniciarSe from './components/modules/Iniciar';
 import './scss/style.scss';
+import { AuthProvider } from './Auth';
 
 function App() {
   return (
+    <AuthProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -17,6 +19,7 @@ function App() {
           <Route path="/Iniciar" element={<IniciarSe />} />
         </Routes>
       </BrowserRouter>
+    </AuthProvider>
   );
 }
 

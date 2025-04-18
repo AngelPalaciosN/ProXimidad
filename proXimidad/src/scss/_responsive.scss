@@ -1,76 +1,116 @@
-@use 'variables' as *;
+// Responsive mixins y variables
+$breakpoint-xs: 0;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+$breakpoint-xxl: 1400px;
 
-$scroll-o: $primary;
-$scroll-i: $secondary;
-
-body {
-    display: grid;
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
-    width: 100%;
-    overflow-x: hidden; // Previene scroll horizontal no deseado
-
-    &::-webkit-scrollbar {
-        width: 0.5rem;
-    }
-    &::-webkit-scrollbar-track {
-        background: $scroll-i;
-    }
-    &::-webkit-scrollbar-thumb {
-        background-color: $scroll-o;
-        border-radius: 0.5rem;
-    }
+@mixin media-breakpoint-up($breakpoint) {
+  @if $breakpoint == xs {
+    @media (min-width: $breakpoint-xs) { @content; }
+  } @else if $breakpoint == sm {
+    @media (min-width: $breakpoint-sm) { @content; }
+  } @else if $breakpoint == md {
+    @media (min-width: $breakpoint-md) { @content; }
+  } @else if $breakpoint == lg {
+    @media (min-width: $breakpoint-lg) { @content; }
+  } @else if $breakpoint == xl {
+    @media (min-width: $breakpoint-xl) { @content; }
+  } @else if $breakpoint == xxl {
+    @media (min-width: $breakpoint-xxl) { @content; }
+  }
 }
 
-section {        
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    text-align: center;
-    flex-wrap: wrap;
-    margin: auto;
-    min-height: 90vh; // Cambiado de height a min-height
-    width: 100%; // Cambiado de 110vh a 100%
-    padding: 0 5%; // Añadido padding para mejor responsive
+@mixin media-breakpoint-down($breakpoint) {
+  @if $breakpoint == xs {
+    @media (max-width: #{$breakpoint-sm - 1}) { @content; }
+  } @else if $breakpoint == sm {
+    @media (max-width: #{$breakpoint-md - 1}) { @content; }
+  } @else if $breakpoint == md {
+    @media (max-width: #{$breakpoint-lg - 1}) { @content; }
+  } @else if $breakpoint == lg {
+    @media (max-width: #{$breakpoint-xl - 1}) { @content; }
+  } @else if $breakpoint == xl {
+    @media (max-width: #{$breakpoint-xxl - 1}) { @content; }
+  }
 }
 
-h1 {
-    display: flex;
-    justify-content: center;
-    width: 100%;
+// Responsive container
+.container {
+  width: 100%;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  margin-right: auto;
+  margin-left: auto;
+  
+  @include media-breakpoint-up(sm) {
+    max-width: 540px;
+  }
+  
+  @include media-breakpoint-up(md) {
+    max-width: 720px;
+  }
+  
+  @include media-breakpoint-up(lg) {
+    max-width: 960px;
+  }
+  
+  @include media-breakpoint-up(xl) {
+    max-width: 1140px;
+  }
+  
+  @include media-breakpoint-up(xxl) {
+    max-width: 1320px;
+  }
 }
 
-#root {
-    display: flex;
-    width: 100%;
-    flex-direction: column;
+// Responsive grid
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -1rem;
+  margin-left: -1rem;
 }
 
-// Media Queries para Responsividad
-@media screen and (max-width: 1200px) {
-    section {
-        height: auto;
-        padding: 0 3%;
-    }
+// Responsive utilities
+.d-none {
+  display: none !important;
 }
 
-@media screen and (max-width: 768px) {
-    section {
-        flex-direction: column;
-        justify-content: center;
-        padding: 0 2%;
-    }
+@include media-breakpoint-up(sm) {
+  .d-sm-none {
+    display: none !important;
+  }
+  .d-sm-block {
+    display: block !important;
+  }
+  .d-sm-flex {
+    display: flex !important;
+  }
 }
 
-@media screen and (max-width: 480px) {
-    body {
-        font-size: 14px; // Reduce tamaño de fuente en dispositivos pequeños
-    }
+@include media-breakpoint-up(md) {
+  .d-md-none {
+    display: none !important;
+  }
+  .d-md-block {
+    display: block !important;
+  }
+  .d-md-flex {
+    display: flex !important;
+  }
+}
 
-    section {
-        padding: 0 1%;
-    }
+@include media-breakpoint-up(lg) {
+  .d-lg-none {
+    display: none !important;
+  }
+  
+  .d-lg-block {
+    display: block !important;
+  }
+  .d-lg-flex {
+    display: flex !important;
+  }
 }
