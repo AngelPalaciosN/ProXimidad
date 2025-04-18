@@ -67,8 +67,7 @@ const Iniciar = ({ onClose, onFormularioChange }) => {
 
     if (result.success) {
       setCodeRequested(true)
-      // Start a 60 second timer for code resend
-      setCodeTimer(60)
+      setCodeTimer(15)
       const interval = setInterval(() => {
         setCodeTimer((prev) => {
           if (prev <= 1) {

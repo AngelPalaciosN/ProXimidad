@@ -24,7 +24,7 @@ function Home (){
        <Header handleAbrirFormulario={handleAbrirFormulario} /> 
        <Sec1 handleAbrirFormulario={handleAbrirFormulario} /> 
        <Sec2/>
-       <Sec3/>
+       <Sec3 handleAbrirFormulario={handleAbrirFormulario}/>
        <Footer/>
 
        {formularioVisible && (

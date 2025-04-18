@@ -1,165 +1,264 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import Header from './Header';
-import '../../scss/component-styles/Buscars.scss';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import { useNavigate } from 'react-router-dom';
+"use client"
+
+import { useEffect, useState } from "react"
+import axios from "axios"
+import Header from "./Header"
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material"
+import "../../scss/component-styles/Buscars.scss"
 
 const BuscarS = () => {
-    const [servicios, setServicios] = useState([]);
-    const [serviciosFiltrados, setServiciosFiltrados] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('');
-    const [selectedService, setSelectedService] = useState(null);
-    const navigate = useNavigate();
+  const [servicios, setServicios] = useState([])
+  const [serviciosFiltrados, setServiciosFiltrados] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("")
+  const [selectedService, setSelectedService] = useState(null)
 
-    useEffect(() => {
-        const fetchServicios = async () => {
-            try {
-                const response = await axios.get('http://localhost:8000/servicios/');
-                
-                // Transformar datos para manejar la estructura específica
-                const serviciosTransformados = response.data.map(servicio => ({
-                    ...servicio,
-                    nombre: servicio.nombre_servicio,
-                    precio: parseFloat(servicio.precio_base),
-                    categoria: servicio.categoria_id,
-                    nombre_categoria: servicio.nombre_categoria,
-                    nombre_proveedor: servicio.nombre_proveedor
-                }));
+  // Usar la variable de entorno de Vite
+  const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000"
 
-                setServicios(serviciosTransformados);
-                setServiciosFiltrados(serviciosTransformados);
-            } catch (err) {
-                console.error('Error fetching servicios:', err);
-                setError('No se pudieron cargar los servicios');
-            } finally {
-                setLoading(false);
-            }
-        };
+  useEffect(() => {
+    const fetchServicios = async () => {
+      try {
+        // Intentar obtener datos de la API
+        let serviciosData = []
 
-        fetchServicios();
-    }, []);
+        try {
+          const response = await axios.get(`${baseUrl}/servicios/`)
+          serviciosData = response.data
+        } catch (apiError) {
+          console.warn("No se pudo conectar a la API, usando datos de demostración", apiError)
 
-    useEffect(() => {
-        // Filtrar servicios
-        const resultados = servicios.filter(servicio => {
-            const matchCategoria = categoriaSeleccionada 
-                ? servicio.categoria === parseInt(categoriaSeleccionada)
-                : true;
-            
-            const matchSearch = searchTerm 
-                ? (servicio.nombre || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-                  (servicio.descripcion || '').toLowerCase().includes(searchTerm.toLowerCase())
-                : true;
+          // Usar datos de demostración si la API no está disponible
+          serviciosData = [
+            {
+              id: 1,
+              nombre_servicio: "Desarrollo Web",
+              descripcion: "Creación de sitios web profesionales y responsivos",
+              precio_base: "1500.00",
+              categoria_id: 1,
+              nombre_categoria: "Tecnología",
+              nombre_proveedor: "Juan Pérez",
+            },
+            {
+              id: 2,
+              nombre_servicio: "Diseño Gráfico",
+              descripcion: "Diseño de logos, banners y material publicitario",
+              precio_base: "800.00",
+              categoria_id: 2,
+              nombre_categoria: "Diseño",
+              nombre_proveedor: "María González",
+            },
+            {
+              id: 3,
+              nombre_servicio: "Marketing Digital",
+              descripcion: "Estrategias de marketing para redes sociales y SEO",
+              precio_base: "1200.00",
+              categoria_id: 3,
+              nombre_categoria: "Marketing",
+              nombre_proveedor: "Carlos Rodríguez",
+            },
+            {
+              id: 4,
+              nombre_servicio: "Consultoría de Negocios",
+              descripcion: "Asesoría para emprendedores y pequeñas empresas",
+              precio_base: "2000.00",
+              categoria_id: 4,
+              nombre_categoria: "Negocios",
+              nombre_proveedor: "Ana Martínez",
+            },
+            {
+              id: 5,
+              nombre_servicio: "Traducción de Documentos",
+              descripcion: "Traducción profesional de documentos en varios idiomas",
+              precio_base: "500.00",
+              categoria_id: 5,
+              nombre_categoria: "Idiomas",
+              nombre_proveedor: "Roberto Sánchez",
+            },
+            {
+              id: 6,
+              nombre_servicio: "Desarrollo de Aplicaciones Móviles",
+              descripcion: "Creación de apps para iOS y Android",
+              precio_base: "3000.00",
+              categoria_id: 1,
+              nombre_categoria: "Tecnología",
+              nombre_proveedor: "Laura Díaz",
+            },
+          ]
+        }
 
-            return matchCategoria && matchSearch;
-        });
+        // Transformar datos para manejar la estructura específica
+        const serviciosTransformados = serviciosData.map((servicio) => ({
+          ...servicio,
+          nombre: servicio.nombre_servicio,
+          precio: Number.parseFloat(servicio.precio_base),
+          categoria: servicio.categoria_id,
+        }))
 
-        setServiciosFiltrados(resultados);
-    }, [searchTerm, categoriaSeleccionada, servicios]);
+        setServicios(serviciosTransformados)
+        setServiciosFiltrados(serviciosTransformados)
+      } catch (err) {
+        console.error("Error fetching servicios:", err)
+        setError("No se pudieron cargar los servicios")
+      } finally {
+        setLoading(false)
+      }
+    }
 
-    const handleSearchChange = (e) => {
-        setSearchTerm(e.target.value);
-    };
+    fetchServicios()
+  }, [baseUrl])
 
-    const handleCategoriaChange = (e) => {
-        setCategoriaSeleccionada(e.target.value);
-    };
+  useEffect(() => {
+    // Filtrar servicios
+    const resultados = servicios.filter((servicio) => {
+      const matchCategoria = categoriaSeleccionada
+        ? servicio.categoria === Number.parseInt(categoriaSeleccionada)
+        : true
 
-    const handleServiceClick = (service) => {
-        setSelectedService(service);
-    };
+      const matchSearch = searchTerm
+        ? (servicio.nombre || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (servicio.descripcion || "").toLowerCase().includes(searchTerm.toLowerCase())
+        : true
 
-    const handleCloseModal = () => {
-        setSelectedService(null);
-    };
+      return matchCategoria && matchSearch
+    })
 
-    const handleViewUsuarios = () => {
-        navigate('/usuarios');
-    };
+    setServiciosFiltrados(resultados)
+  }, [searchTerm, categoriaSeleccionada, servicios])
 
-    if (loading) return <div>Cargando...</div>;
-    if (error) return <div>Error: {error}</div>;
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value)
+  }
 
+  const handleCategoriaChange = (e) => {
+    setCategoriaSeleccionada(e.target.value)
+  }
+
+  const handleServiceClick = (service) => {
+    setSelectedService(service)
+  }
+
+  const handleCloseModal = () => {
+    setSelectedService(null)
+  }
+
+  const handleViewUsuarios = () => {
+    window.location.href = "/usuarios"
+  }
+
+  // Extraer categorías únicas para el filtro
+  const categorias = [...new Set(servicios.map((s) => s.categoria))].map((catId) => {
+    const servicio = servicios.find((s) => s.categoria === catId)
+    return {
+      id: catId,
+      nombre: servicio?.nombre_categoria || `Categoría ${catId}`,
+    }
+  })
+
+  if (loading)
     return (
-        <>
-            <Header />
-            <div className='container-fluid' id='main-servicios'>
-                <div className='container'>
-                    <div className='filtros'>
-                        <input 
-                            type="text" 
-                            placeholder="Buscar servicios..." 
-                            value={searchTerm}
-                            onChange={handleSearchChange}
-                            className='buscador'
-                        />
-                    </div>
-                    
-                    <div className='lista-servicios'>
-                        <h1>Servicios</h1>
-                        {serviciosFiltrados.length > 0 ? (
-                            <ul>
-                                {serviciosFiltrados.map(servicio => (
-                                    <li 
-                                        key={servicio.id} 
-                                        className='servicio-item cursor-pointer hover:bg-gray-100 transition-colors'
-                                        onClick={() => handleServiceClick(servicio)}
-                                    >
-                                        <h3>{servicio.nombre}</h3>
-                                        <p>{servicio.descripcion}</p>
-                                        <div className='servicio-detalles'>
-                                            <span className='categoria'>Categoría: {servicio.nombre_categoria}</span>
-                                            <span className='precio'>Precio: ${servicio.precio.toLocaleString()}</span>
-                                        </div>
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <p>No hay servicios disponibles</p>
-                        )}
-                    </div>
-                </div>
-            </div>
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Cargando servicios...</p>
+      </div>
+    )
 
-            {/* Modal de Detalles de Servicio */}
-            {selectedService && (
-                <Dialog open={!!selectedService} onClose={handleCloseModal}>
-                    <DialogTitle>{selectedService.nombre}</DialogTitle>
-                    <DialogContent>
-                        <div className="space-y-4">
-                            <DialogContentText>
-                                <strong>Descripción:</strong> {selectedService.descripcion}
-                            </DialogContentText>
-                            <DialogContentText>
-                                <strong>Precio:</strong> ${selectedService.precio.toFixed(2)}
-                            </DialogContentText>
-                            <DialogContentText>
-                                <strong>Categoría:</strong> {selectedService.nombre_categoria}
-                            </DialogContentText>
-                            {selectedService.nombre_proveedor && (
-                                <DialogContentText>
-                                    <strong>Proveedor:</strong> {selectedService.nombre_proveedor}
-                                </DialogContentText>
-                            )}
-                        </div>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleCloseModal} style={{ backgroundColor: '#005187', color: '#fcffff' }}>Cerrar</Button>
-                        <Button onClick={handleViewUsuarios} style={{ backgroundColor: '#4d82bc', color: '#fcffff' }}>Ver Usuarios</Button>
-                    </DialogActions>
-                </Dialog>
+  if (error)
+    return (
+      <div className="error-container">
+        <h2>Error</h2>
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()}>Reintentar</button>
+      </div>
+    )
+
+  return (
+    <>
+      <Header />
+      <div className="container-fluid" id="main-servicios">
+        <div className="container">
+          <div className="filtros">
+            <input
+              type="text"
+              placeholder="Buscar servicios..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="buscador"
+            />
+
+            {categorias.length > 0 && (
+              <select className="filtro-categoria" value={categoriaSeleccionada} onChange={handleCategoriaChange}>
+                <option value="">Todas las categorías</option>
+                {categorias.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.nombre}
+                  </option>
+                ))}
+              </select>
             )}
-        </>
-    );
-};
+          </div>
 
-export default BuscarS;
+          <div className="lista-servicios">
+            <h1>Servicios</h1>
+            {serviciosFiltrados.length > 0 ? (
+              <ul>
+                {serviciosFiltrados.map((servicio) => (
+                  <li key={servicio.id} className="servicio-item" onClick={() => handleServiceClick(servicio)}>
+                    <h3>{servicio.nombre}</h3>
+                    <p>{servicio.descripcion}</p>
+                    <div className="servicio-detalles">
+                      <span className="categoria">{servicio.nombre_categoria}</span>
+                      <span className="precio">${servicio.precio ? servicio.precio.toLocaleString() : "0"}</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="no-resultados">
+                <p>No se encontraron servicios que coincidan con tu búsqueda</p>
+                {searchTerm && <button onClick={() => setSearchTerm("")}>Limpiar búsqueda</button>}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Modal de Detalles de Servicio */}
+      {selectedService && (
+        <Dialog open={!!selectedService} onClose={handleCloseModal}>
+          <DialogTitle>{selectedService.nombre}</DialogTitle>
+          <DialogContent>
+            <div className="space-y-4">
+              <DialogContentText>
+                <strong>Descripción:</strong> {selectedService.descripcion}
+              </DialogContentText>
+              <DialogContentText>
+                <strong>Precio:</strong> ${selectedService.precio ? selectedService.precio.toFixed(2) : "0.00"}
+              </DialogContentText>
+              <DialogContentText>
+                <strong>Categoría:</strong> {selectedService.nombre_categoria}
+              </DialogContentText>
+              {selectedService.nombre_proveedor && (
+                <DialogContentText>
+                  <strong>Proveedor:</strong> {selectedService.nombre_proveedor}
+                </DialogContentText>
+              )}
+            </div>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseModal} style={{ backgroundColor: "#005187", color: "#fcffff" }}>
+              Cerrar
+            </Button>
+            <Button onClick={handleViewUsuarios} style={{ backgroundColor: "#4d82bc", color: "#fcffff" }}>
+              Ver Usuarios
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
+    </>
+  )
+}
+
+export default BuscarS

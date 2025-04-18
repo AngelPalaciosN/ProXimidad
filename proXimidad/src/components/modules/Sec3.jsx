@@ -6,7 +6,7 @@ import { Star, Award, Briefcase, CheckCircle, TrendingUp, Shield, Target } from 
 // import Image from "next/image"
 import "../../scss/component-styles/Sec3.scss"
 
-export default function Sec3() {
+export default function Sec3({ handleAbrirFormulario }) {
   const [activeStep, setActiveStep] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
   const sectionRef = useRef(null)
@@ -293,7 +293,10 @@ export default function Sec3() {
           <Col xs={12}>
             <div className={`simple-cta ${isVisible ? "animate" : ""}`}>
               <h3>Comienza tu camino al éxito profesional hoy</h3>
-              <button className="cta-button">
+              <button 
+                className="cta-button" 
+                onClick={() => handleAbrirFormulario('registrar')}
+              >
                 Registrarse Ahora
                 <TrendingUp size={16} className="ms-2" />
               </button>
