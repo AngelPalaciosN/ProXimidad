@@ -17,6 +17,7 @@
     "@mui/system": "^6.1.8",
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
+    "framer-motion": "^12.7.4",
     "lucide-react": "^0.462.0",
     "proximidad": "file:",
     "react": "^18.3.1",
