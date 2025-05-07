@@ -19,6 +19,9 @@ from django.urls import path
 from proxiApp.views import servicios_list, usuarios_list, agregar_favorito, eliminar_favorito
 from proxiApp.auth_views import register, login, generar_codigo, verificar_codigo
 from django.views.decorators.csrf import csrf_exempt
+from django.conf.urls.static import static
+from django.conf import settings
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,4 +37,4 @@ urlpatterns = [
     path('login/', csrf_exempt(login), name='login'),
     path('generar-codigo/', csrf_exempt(generar_codigo), name='generar-codigo'),
     path('verificar-codigo/', csrf_exempt(verificar_codigo), name='verificar-codigo'),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

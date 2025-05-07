@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { validateForm } from "./validar" // Corrected import case
+import { validateImage } from "./validarImagen" // Import the new image validation
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../../Auth"
 import "../../scss/component-styles/Registrar.scss"
@@ -15,6 +16,7 @@ import PhoneIcon from "@mui/icons-material/Phone"
 import HomeIcon from "@mui/icons-material/Home"
 import BadgeIcon from "@mui/icons-material/Badge"
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"
+import PhotoIcon from "@mui/icons-material/Photo" // Added for image upload
 import { motion } from "framer-motion"
 
 const Registrar = ({ onClose, onFormularioChange }) => {
@@ -25,10 +27,12 @@ const Registrar = ({ onClose, onFormularioChange }) => {
     direccion: "",
     cedula: "",
     tipo_usuario: "proveedor",
+    imagen: null, // Added field for the image file
   })
 
   const [errors, setErrors] = useState({})
   const [currentStep, setCurrentStep] = useState(1)
+  const [imagePreview, setImagePreview] = useState(null) // Added for image preview
   const navigate = useNavigate()
 
   // Get auth context
@@ -51,6 +55,46 @@ const Registrar = ({ onClose, onFormularioChange }) => {
     }
   }
 
+  // Specific handler for image file upload
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    
+    // Validate if the file is a JPG
+    const imageError = validateImage(file);
+    
+    if (imageError) {
+      setErrors(prev => ({ ...prev, imagen: imageError }));
+      e.target.value = ''; // Reset the file input
+      return;
+    }
+    
+    // Clear any previous error
+    if (errors.imagen) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.imagen;
+        return newErrors;
+      });
+    }
+    
+    // Update form data with the valid image
+    setFormData(prev => ({
+      ...prev,
+      imagen: file
+    }));
+    
+    // Create preview URL for the image
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setImagePreview(null);
+    }
+  }
+
   const validateStep = (step) => {
     let fieldsToValidate = {};
     let isValid = true;
@@ -59,6 +103,13 @@ const Registrar = ({ onClose, onFormularioChange }) => {
       fieldsToValidate = { nombre_completo: formData.nombre_completo, correo_electronico: formData.correo_electronico };
     } else if (step === 2) {
       fieldsToValidate = { telefono: formData.telefono, direccion: formData.direccion, cedula: formData.cedula };
+    } else if (step === 3 && formData.imagen) {
+      // Also validate image if present in step 3
+      const imageError = validateImage(formData.imagen);
+      if (imageError) {
+        setErrors(prev => ({ ...prev, imagen: imageError }));
+        isValid = false;
+      }
     }
     
     // Call the main validation function but only consider errors for the current step's fields
@@ -113,12 +164,35 @@ const Registrar = ({ onClose, onFormularioChange }) => {
 
     // Final validation of all fields before submitting
     const validationResult = validateForm(formData); 
+    
+    // Also validate image if present
+    if (formData.imagen) {
+      const imageError = validateImage(formData.imagen);
+      if (imageError) {
+        setErrors(prev => ({ ...prev, imagen: imageError }));
+        return;
+      }
+    }
+    
     if (!validationResult.isValid) {
       setErrors(validationResult.errors); // Show all errors on final submit attempt
-      return
+      return;
     }
 
-    const result = await register(formData)
+    // Create FormData object to handle file upload
+    const formDataToSend = new FormData();
+    
+    // Append all form fields
+    Object.keys(formData).forEach(key => {
+      if (key === 'imagen' && formData[key]) {
+        // Asegurar que se envíe el archivo con el nombre correcto
+        formDataToSend.append('imagen', formData[key], formData[key].name);
+      } else if (key !== 'imagen') {
+        formDataToSend.append(key, formData[key]);
+      }
+    });
+
+    const result = await register(formDataToSend);
 
     if (result.success) {
       Swal.fire({
@@ -331,7 +405,7 @@ const Registrar = ({ onClose, onFormularioChange }) => {
             </motion.div>
           )}
 
-          {/* Step 3: Account Type */}
+          {/* Step 3: Account Type and Image Upload */}
           {currentStep === 3 && (
             <motion.div className="form-step" variants={containerVariants} initial="hidden" animate="visible" key="step3">
               <motion.div className="form-group" variants={itemVariants}>
@@ -375,6 +449,33 @@ const Registrar = ({ onClose, onFormularioChange }) => {
                     </ul>
                   </div>
                 )}
+              </motion.div>
+
+              {/* Enhanced Image Upload with Preview and JPG validation */}
+              <motion.div className="form-group" variants={itemVariants}>
+                <label htmlFor="imagen">Foto de Perfil (JPG solamente)</label>
+                <div className="input-file-container">
+                  <div className="input-with-icon">
+                    <PhotoIcon className="input-icon" />
+                    <input
+                      id="imagen"
+                      type="file"
+                      name="imagen"
+                      accept="image/jpeg" // Only allow JPG/JPEG
+                      onChange={handleImageChange}
+                      disabled={loading}
+                      className={errors.imagen ? "error-input" : ""}
+                    />
+                  </div>
+                  {errors.imagen && <span className="error-message">{errors.imagen}</span>}
+                  
+                  {/* Image Preview */}
+                  {imagePreview && (
+                    <div className="image-preview">
+                      <img src={imagePreview} alt="Vista previa" />
+                    </div>
+                  )}
+                </div>
               </motion.div>
 
               <div className="form-buttons"> 

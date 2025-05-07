@@ -65,3 +65,23 @@ export const validateNombreCompleto = (nombre) => {
       isValid: !Object.values(errors).some(error => error !== '')
     };
   };
+
+
+  // Función para validar que la imagen sea JPG
+export const validateImage = (file) => {
+  // Si no hay archivo, es válido porque la imagen es opcional
+  if (!file) return '';
+  
+  // Verificar el tipo de archivo
+  if (!file.type || !file.type.startsWith('image/jpeg')) {
+    return 'Solo se permiten imágenes en formato JPG/JPEG';
+  }
+  
+  // Verificar tamaño (opcional, limitando a 5MB)
+  const maxSize = 5 * 1024 * 1024; // 5MB
+  if (file.size > maxSize) {
+    return 'La imagen no debe exceder los 5MB';
+  }
+  
+  return '';
+};

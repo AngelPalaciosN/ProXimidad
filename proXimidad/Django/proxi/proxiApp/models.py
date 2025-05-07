@@ -170,13 +170,23 @@ class Servicios(models.Model):
 class Usuario(models.Model):
     id = models.BigAutoField(primary_key=True)
     nombre_completo = models.CharField(max_length=100)
-    correo_electronico = models.CharField(unique=True, max_length=100)
+    correo_electronico = models.EmailField(unique=True, max_length=100)
     telefono = models.CharField(max_length=15)
     direccion = models.CharField(max_length=200)
     cedula = models.CharField(max_length=100)
     codigo_verificacion = models.IntegerField()
-    tipo_usuario = models.CharField(max_length=50)
+    
+    TIPO_USUARIO_CHOICES = [
+        ('admin', 'Administrador'),
+        ('cliente', 'Cliente'),
+        ('vendedor', 'Vendedor'),
+    ]
+    tipo_usuario = models.CharField(max_length=50, choices=TIPO_USUARIO_CHOICES)
+    
+    imagen = models.ImageField(upload_to='image_u/', null=True, blank=True)
 
+    def __str__(self):
+        return self.nombre_d
     class Meta:
         managed = False
         db_table = 'usuario'
