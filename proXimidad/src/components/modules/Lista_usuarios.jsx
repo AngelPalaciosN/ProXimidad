@@ -493,8 +493,8 @@ const UsuarioList = () => {
                     onClick={() => handleUserClick(usuario)}
                   >
                     <div className="usuario-header">
-                      <div className="usuario-avatar">
-                        <img src={usuario.avatar || "/placeholder.svg?height=80&width=80"} alt={usuario.nombre_completo} />
+                    <div className="usuario-avatar">
+                        <img src={usuario.imagen ? `${baseUrl}${usuario.imagen}` : "/placeholder.svg?height=80&width=80"} alt={usuario.nombre_completo} />
                       </div>
                       <div className="usuario-info">
                         <h3>{usuario.nombre_completo}</h3>
@@ -617,7 +617,7 @@ const UsuarioList = () => {
             
             <div className="modal-header">
               <div className="modal-avatar">
-                <img src={selectedUser.avatar || "/placeholder.svg?height=120&width=120"} alt={selectedUser.nombre_completo} />
+                <img src={selectedUser.imagen ? `${baseUrl}${selectedUser.imagen}` : "/placeholder.svg?height=120&width=120"} alt={selectedUser.nombre_completo} />
               </div>
               <div className="modal-title">
                 <h2>{selectedUser.nombre_completo}</h2>

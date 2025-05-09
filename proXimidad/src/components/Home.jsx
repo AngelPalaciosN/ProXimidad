@@ -21,7 +21,7 @@ function Home (){
 
     return (
     <>
-       <Header handleAbrirFormulario={handleAbrirFormulario} /> 
+      <Header handleAbrirFormulario={handleAbrirFormulario} />
        <Sec1 handleAbrirFormulario={handleAbrirFormulario} /> 
        <Sec2/>
        <Sec3 handleAbrirFormulario={handleAbrirFormulario}/>

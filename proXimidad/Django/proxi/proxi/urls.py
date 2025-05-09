@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from proxiApp.views import servicios_list, usuarios_list, agregar_favorito, eliminar_favorito
+from proxiApp.views import servicios_list, usuarios_list, agregar_favorito, eliminar_favorito, create_usuario
 from proxiApp.auth_views import register, login, generar_codigo, verificar_codigo
 from django.views.decorators.csrf import csrf_exempt
 from django.conf.urls.static import static
@@ -29,6 +29,7 @@ urlpatterns = [
     # API endpoints
     path('servicios/', servicios_list, name='servicios-list'),
     path('usuarios/', usuarios_list, name='usuarios-list'),
+    path('usuarios/', create_usuario, name='create-usuario'),
     path('favoritos/', agregar_favorito, name='agregar-favorito'),
     path('favoritos/eliminar/<int:usuario_id>/<int:favorito_id>/', eliminar_favorito, name='eliminar-favorito'),
     
@@ -37,4 +38,7 @@ urlpatterns = [
     path('login/', csrf_exempt(login), name='login'),
     path('generar-codigo/', csrf_exempt(generar_codigo), name='generar-codigo'),
     path('verificar-codigo/', csrf_exempt(verificar_codigo), name='verificar-codigo'),
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

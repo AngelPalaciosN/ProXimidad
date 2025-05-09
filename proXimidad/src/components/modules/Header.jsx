@@ -5,8 +5,6 @@ import { FaSearch } from 'react-icons/fa';
 import { Menu, X } from 'lucide-react';
 import { useAuth } from '../../Auth';
 import '../../scss/component-styles/Header.scss';
-// Remove unused import if not needed
-// import CrudP from './components/modules/Crud-p';
 
 const Header = ({ handleAbrirFormulario }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,7 +17,7 @@ const Header = ({ handleAbrirFormulario }) => {
   const handleCloseMenuAndModal = () => {
     setIsOpen(false);
   };
-  
+
   const handleLogout = () => {
     logout();
     handleCloseMenuAndModal();
@@ -57,7 +55,14 @@ const Header = ({ handleAbrirFormulario }) => {
         <Button 
           variant="outline-light" 
           className="login-button ms-lg-3" 
-          onClick={() => { handleAbrirFormulario('iniciarSesion'); handleCloseMenuAndModal(); }}
+          onClick={() => {
+            if (typeof handleAbrirFormulario === 'function') {
+              handleAbrirFormulario('iniciarSesion'); 
+            } else {
+              console.error('handleAbrirFormulario no está definida');
+            }
+            handleCloseMenuAndModal();
+          }}
         >
           Iniciar Sesión
         </Button>

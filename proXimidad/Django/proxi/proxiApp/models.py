@@ -174,19 +174,22 @@ class Usuario(models.Model):
     telefono = models.CharField(max_length=15)
     direccion = models.CharField(max_length=200)
     cedula = models.CharField(max_length=100)
-    codigo_verificacion = models.IntegerField()
+    codigo_verificacion = models.IntegerField(blank=True, null=True)  # Make this optional
     
     TIPO_USUARIO_CHOICES = [
         ('admin', 'Administrador'),
         ('cliente', 'Cliente'),
         ('vendedor', 'Vendedor'),
+        ('proveedor', 'Proveedor'),  # Add proveedor type
+        ('arrendador', 'Arrendador'),  # Add arrendador type
     ]
     tipo_usuario = models.CharField(max_length=50, choices=TIPO_USUARIO_CHOICES)
     
-    imagen = models.ImageField(upload_to='image_u/', null=True, blank=True)
+    imagen = models.ImageField(upload_to='usuarios/', blank=True, null=True)
 
     def __str__(self):
-        return self.nombre_d
+        return self.nombre_completo  # Fixed from nombre_d to nombre_completo
+
     class Meta:
         managed = False
         db_table = 'usuario'

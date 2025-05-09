@@ -1,8 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { validateForm } from "./validar" // Corrected import case
-import { validateImage } from "./validarImagen" // Import the new image validation
+import { validateForm, validateImage } from "./validar" // Added validateImage import
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../../Auth"
 import "../../scss/component-styles/Registrar.scss"

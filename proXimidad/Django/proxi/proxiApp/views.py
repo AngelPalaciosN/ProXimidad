@@ -40,3 +40,11 @@ def eliminar_favorito(request, usuario_id, favorito_id):
         return Response(status=status.HTTP_204_NO_CONTENT)
     except Favoritos.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['POST'])
+def create_usuario(request):
+    serializer = UsuarioSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
