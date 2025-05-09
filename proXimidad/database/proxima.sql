@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.2
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 06-12-2024 a las 04:44:16
--- Versión del servidor: 11.4.3-MariaDB
--- Versión de PHP: 8.2.12
+-- Host: localhost:3306
+-- Generation Time: May 09, 2025 at 01:57 AM
+-- Server version: 8.4.3
+-- PHP Version: 8.3.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,47 +18,47 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `proximidad`
+-- Database: `proxima`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `auth_group`
+-- Table structure for table `auth_group`
 --
 
 CREATE TABLE `auth_group` (
-  `id` int(11) NOT NULL,
-  `name` varchar(150) NOT NULL
+  `id` int NOT NULL,
+  `name` varchar(150) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `auth_group_permissions`
+-- Table structure for table `auth_group_permissions`
 --
 
 CREATE TABLE `auth_group_permissions` (
-  `id` bigint(20) NOT NULL,
-  `group_id` int(11) NOT NULL,
-  `permission_id` int(11) NOT NULL
+  `id` bigint NOT NULL,
+  `group_id` int NOT NULL,
+  `permission_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `auth_permission`
+-- Table structure for table `auth_permission`
 --
 
 CREATE TABLE `auth_permission` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `content_type_id` int(11) NOT NULL,
-  `codename` varchar(100) NOT NULL
+  `id` int NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `content_type_id` int NOT NULL,
+  `codename` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `auth_permission`
+-- Dumping data for table `auth_permission`
 --
 
 INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALUES
@@ -110,61 +110,79 @@ INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALU
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `auth_user`
+-- Table structure for table `auth_user`
 --
 
 CREATE TABLE `auth_user` (
-  `id` int(11) NOT NULL,
-  `password` varchar(128) NOT NULL,
+  `id` int NOT NULL,
+  `password` varchar(128) COLLATE utf8mb4_general_ci NOT NULL,
   `last_login` datetime(6) DEFAULT NULL,
   `is_superuser` tinyint(1) NOT NULL,
-  `username` varchar(150) NOT NULL,
-  `first_name` varchar(150) NOT NULL,
-  `last_name` varchar(150) NOT NULL,
-  `email` varchar(254) NOT NULL,
+  `username` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `first_name` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `last_name` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(254) COLLATE utf8mb4_general_ci NOT NULL,
   `is_staff` tinyint(1) NOT NULL,
   `is_active` tinyint(1) NOT NULL,
   `date_joined` datetime(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `auth_user`
+--
+
+INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `username`, `first_name`, `last_name`, `email`, `is_staff`, `is_active`, `date_joined`) VALUES
+(1, 'pbkdf2_sha256$720000$eNd4H5Y75c16KoeSSSkUjy$x1kyg+gtmZGah6KmdQ2/sqaupQOv6wJIugZN6mOvLog=', NULL, 0, 'prueba', '', '', 'prueba@gmail.com', 0, 1, '2025-05-09 00:23:32.508647'),
+(2, 'pbkdf2_sha256$720000$NYBqdjnmvmHormToWESLYv$q1wCEJINu6lZ12GTn5x5t9Aw8xzH5BRxzlxFK7NyY5M=', NULL, 0, 'prueba2', '', '', 'prueba2@gmail.com', 0, 1, '2025-05-09 00:26:52.501444'),
+(3, 'pbkdf2_sha256$720000$i42eG7hsEPSRVy7nZ6cmr5$JMFBY4pLEmYHtSfv9MHnsU1fenbFu0hfzfd9h72K4jU=', NULL, 0, 'pruebarr', '', '', 'pruebarr@gmail.com', 0, 1, '2025-05-09 00:41:51.881995'),
+(5, 'pbkdf2_sha256$720000$SmpKX5NO5TfJmUwlaKAAhV$plqOfkIE3iWmO/EbwqYlHk0U+qsirV3hxzOxc3NrSf0=', NULL, 0, 'pruebat', '', '', 'pruebat@gmail.com', 0, 1, '2025-05-09 00:54:36.225681'),
+(6, 'pbkdf2_sha256$720000$4QrJxtYxSEhsonPTI188Bk$x/cKoYi93ce3Tug5178E1CNFjcocHMOC2tXc14m21B0=', NULL, 0, 'brandonadrian707', '', '', 'brandonadrian707@gmail.com', 0, 1, '2025-05-09 00:56:44.675470'),
+(7, 'pbkdf2_sha256$720000$cPuGovDgwyMyNfUnSHfQE8$Eiun1Vr9B7FNmBxsath0Lx9bL/sIU10a/go5E7t+cGo=', NULL, 0, 'pruebaz', '', '', 'pruebaz@gmail.com', 0, 1, '2025-05-09 00:58:01.929674'),
+(8, 'pbkdf2_sha256$720000$kIraByz4Izr2sWMoAac0J9$dt9KTD/qu2zZPNMs8FIKLHNL8gzKafe7IGdSDj4TPxo=', NULL, 0, 'pruebari', '', '', 'pruebari@gmail.com', 0, 1, '2025-05-09 01:07:42.819811'),
+(9, 'pbkdf2_sha256$720000$YNdwP79JRud1r7oTl9aMXG$Zyd3x153bMCzsg1HIW7UUca6VDVefcynl3e+Y9nfS9Y=', NULL, 0, 'user_7973', '', '', '', 0, 1, '2025-05-09 01:11:19.958714'),
+(12, 'pbkdf2_sha256$720000$VSmuzdNwWWzymjRXSpV4i3$kGLWk12ID2eMzvkwsgPIF3Hg0SD9UHFGwqhnJZRmqzM=', NULL, 0, 'pruebaa', '', '', 'pruebaa@gmail.com', 0, 1, '2025-05-09 01:14:28.006485'),
+(13, 'pbkdf2_sha256$720000$P7flzBMbY0QIGxWgqZCuRR$2hxhMXw1xDl81xRLk7I0pqxHmsNdPQQK6o6iuaIsBsI=', NULL, 0, 'pruebaaff', '', '', 'pruebaaff@gmail.com', 0, 1, '2025-05-09 01:15:22.504088'),
+(14, 'pbkdf2_sha256$720000$9mwAxydrqPVzDzo6b9rvrG$iB3tljQnr8HQANbVUUkIqi9FJg6hflOG0O5oumpxt4k=', NULL, 0, 'prue@gmail.com', 'pruebath', '', 'prue@gmail.com', 0, 1, '2025-05-09 01:34:31.817897'),
+(15, 'pbkdf2_sha256$720000$3hL4Epi88CTERJT2OW1jNL$2/wZksvvVO/ovdxETFIBeyOk0+tiqaNl7QsVa5HH61I=', NULL, 0, 'Workspacealan02@gmail.com', 'Alan Vergoglio', '', 'Workspacealan02@gmail.com', 0, 1, '2025-05-09 01:46:21.501397');
+
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `auth_user_groups`
+-- Table structure for table `auth_user_groups`
 --
 
 CREATE TABLE `auth_user_groups` (
-  `id` bigint(20) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `group_id` int(11) NOT NULL
+  `id` bigint NOT NULL,
+  `user_id` int NOT NULL,
+  `group_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `auth_user_user_permissions`
+-- Table structure for table `auth_user_user_permissions`
 --
 
 CREATE TABLE `auth_user_user_permissions` (
-  `id` bigint(20) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `permission_id` int(11) NOT NULL
+  `id` bigint NOT NULL,
+  `user_id` int NOT NULL,
+  `permission_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `categoria`
+-- Table structure for table `categoria`
 --
 
 CREATE TABLE `categoria` (
-  `categoria_id` bigint(20) NOT NULL,
-  `nombre_categoria` varchar(100) NOT NULL,
-  `descripcion_categoria` longtext DEFAULT NULL
+  `categoria_id` bigint NOT NULL,
+  `nombre_categoria` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `descripcion_categoria` longtext COLLATE utf8mb4_general_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `categoria`
+-- Dumping data for table `categoria`
 --
 
 INSERT INTO `categoria` (`categoria_id`, `nombre_categoria`, `descripcion_categoria`) VALUES
@@ -176,18 +194,18 @@ INSERT INTO `categoria` (`categoria_id`, `nombre_categoria`, `descripcion_catego
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `comentarios`
+-- Table structure for table `comentarios`
 --
 
 CREATE TABLE `comentarios` (
-  `comentario_id` bigint(20) NOT NULL,
-  `mensaje` longtext NOT NULL,
-  `servicio_fk` bigint(20) NOT NULL,
-  `usuario_fk` bigint(20) NOT NULL
+  `comentario_id` bigint NOT NULL,
+  `mensaje` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `servicio_fk` bigint NOT NULL,
+  `usuario_fk` bigint NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `comentarios`
+-- Dumping data for table `comentarios`
 --
 
 INSERT INTO `comentarios` (`comentario_id`, `mensaje`, `servicio_fk`, `usuario_fk`) VALUES
@@ -196,34 +214,34 @@ INSERT INTO `comentarios` (`comentario_id`, `mensaje`, `servicio_fk`, `usuario_f
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `django_admin_log`
+-- Table structure for table `django_admin_log`
 --
 
 CREATE TABLE `django_admin_log` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `action_time` datetime(6) NOT NULL,
-  `object_id` longtext DEFAULT NULL,
-  `object_repr` varchar(200) NOT NULL,
-  `action_flag` smallint(5) UNSIGNED NOT NULL CHECK (`action_flag` >= 0),
-  `change_message` longtext NOT NULL,
-  `content_type_id` int(11) DEFAULT NULL,
-  `user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `object_id` longtext COLLATE utf8mb4_general_ci,
+  `object_repr` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `action_flag` smallint UNSIGNED NOT NULL,
+  `change_message` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `content_type_id` int DEFAULT NULL,
+  `user_id` int NOT NULL
+) ;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `django_content_type`
+-- Table structure for table `django_content_type`
 --
 
 CREATE TABLE `django_content_type` (
-  `id` int(11) NOT NULL,
-  `app_label` varchar(100) NOT NULL,
-  `model` varchar(100) NOT NULL
+  `id` int NOT NULL,
+  `app_label` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `model` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `django_content_type`
+-- Dumping data for table `django_content_type`
 --
 
 INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
@@ -242,18 +260,18 @@ INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `django_migrations`
+-- Table structure for table `django_migrations`
 --
 
 CREATE TABLE `django_migrations` (
-  `id` bigint(20) NOT NULL,
-  `app` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `id` bigint NOT NULL,
+  `app` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `applied` datetime(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `django_migrations`
+-- Dumping data for table `django_migrations`
 --
 
 INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
@@ -280,45 +298,52 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `django_session`
+-- Table structure for table `django_session`
 --
 
 CREATE TABLE `django_session` (
-  `session_key` varchar(40) NOT NULL,
-  `session_data` longtext NOT NULL,
+  `session_key` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
+  `session_data` longtext COLLATE utf8mb4_general_ci NOT NULL,
   `expire_date` datetime(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `favoritos`
+-- Table structure for table `favoritos`
 --
 
 CREATE TABLE `favoritos` (
-  `id` bigint(20) NOT NULL,
-  `favorito_id` bigint(20) NOT NULL,
-  `usuario_id` bigint(20) NOT NULL
+  `id` bigint NOT NULL,
+  `favorito_id` bigint NOT NULL,
+  `usuario_id` bigint NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `favoritos`
+--
+
+INSERT INTO `favoritos` (`id`, `favorito_id`, `usuario_id`) VALUES
+(2, 19, 12);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `servicios`
+-- Table structure for table `servicios`
 --
 
 CREATE TABLE `servicios` (
-  `id` bigint(20) NOT NULL,
-  `nombre_servicio` varchar(100) NOT NULL,
-  `descripcion` longtext NOT NULL,
+  `id` bigint NOT NULL,
+  `nombre_servicio` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `descripcion` longtext COLLATE utf8mb4_general_ci NOT NULL,
   `precio_base` decimal(10,2) NOT NULL,
-  `imagen_url` varchar(255) DEFAULT NULL,
-  `categoria_id` bigint(20) DEFAULT NULL,
-  `proveedor_id` bigint(20) DEFAULT NULL
+  `imagen_url` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `categoria_id` bigint DEFAULT NULL,
+  `proveedor_id` bigint DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `servicios`
+-- Dumping data for table `servicios`
 --
 
 INSERT INTO `servicios` (`id`, `nombre_servicio`, `descripcion`, `precio_base`, `imagen_url`, `categoria_id`, `proveedor_id`) VALUES
@@ -330,42 +355,54 @@ INSERT INTO `servicios` (`id`, `nombre_servicio`, `descripcion`, `precio_base`, 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuario`
+-- Table structure for table `usuario`
 --
 
 CREATE TABLE `usuario` (
-  `id` bigint(20) NOT NULL,
-  `nombre_completo` varchar(100) NOT NULL,
-  `correo_electronico` varchar(100) NOT NULL,
-  `telefono` varchar(15) NOT NULL,
-  `direccion` varchar(200) NOT NULL,
-  `cedula` varchar(100) NOT NULL,
-  `codigo_verificacion` int(11) NOT NULL,
-  `tipo_usuario` varchar(50) NOT NULL
+  `id` bigint NOT NULL,
+  `nombre_completo` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `correo_electronico` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `telefono` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  `direccion` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `cedula` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `codigo_verificacion` int NOT NULL,
+  `tipo_usuario` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `imagen` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `usuario`
+-- Dumping data for table `usuario`
 --
 
-INSERT INTO `usuario` (`id`, `nombre_completo`, `correo_electronico`, `telefono`, `direccion`, `cedula`, `codigo_verificacion`, `tipo_usuario`) VALUES
-(1, 'Angel David', 'palaciosangeldavidn@gmail.com', '3014365377', 'CL 73 # 46 - 69', '1023628818', 123, 'proveedor'),
-(3, 'Juan jose cardenas', 'j@gmail.com', '6042338188', 'CL 73 # 46 - 69', '1023628816', 123, 'proveedor'),
-(4, 'John jairo', 'mario.gonzalez@example.com', '3014365377', 'CL 73 # 46 - 69', '7168066066', 775892, 'arrendador');
+INSERT INTO `usuario` (`id`, `nombre_completo`, `correo_electronico`, `telefono`, `direccion`, `cedula`, `codigo_verificacion`, `tipo_usuario`, `imagen`) VALUES
+(1, 'Angel David', 'palaciosangeldavidn@gmail.com', '3014365377', 'CL 73 # 46 - 69', '1023628818', 123, 'proveedor', NULL),
+(3, 'Juan jose cardenas', 'j@gmail.com', '6042338188', 'CL 73 # 46 - 69', '1023628816', 123, 'proveedor', NULL),
+(4, 'John jairo', 'mario.gonzalez@example.com', '3014365377', 'CL 73 # 46 - 69', '7168066066', 775892, 'arrendador', NULL),
+(5, 'prueba', 'prueba@gmail.com', '3014365377', 'Calle 73 #46-69', '1023628818', 492608, 'proveedor', ''),
+(6, 'pruebar', 'prueba2@gmail.com', '3014365377', 'Calle 73 #46-69', '1023698818', 144948, 'proveedor', ''),
+(7, 'pruebarr', 'pruebarr@gmail.com', '3014365377', 'Calle 73 #46-69', '1056288185', 509825, 'proveedor', ''),
+(9, 'pruebarrr', 'pruebat@gmail.com', '2312312312', 'Calle 73 #56-76', '1231231235', 966833, 'proveedor', ''),
+(10, 'pruebarrrr', 'brandonadrian707@gmail.com', '2131231231', 'Calle 73 #46-69', '1231231231', 257785, 'proveedor', ''),
+(11, 'pruebarrrr', 'pruebaz@gmail.com', '2131232312', 'Calle 73 #46-69', '1231231231', 249467, 'proveedor', ''),
+(12, 'pruebarrrt', 'pruebari@gmail.com', '1231231232', '324324', '2343243244', 693770, 'proveedor', ''),
+(16, 'pruebaa', 'pruebaa@gmail.com', '3432432434', '13123', '1231231231', 614317, 'proveedor', ''),
+(17, 'pruebaaff', 'pruebaaff@gmail.com', '3432432434', '13123', '1231231231', 350928, 'proveedor', ''),
+(18, 'pruebath', 'prue@gmail.com', '1231231233', '12312', '2312312312', 389426, 'proveedor', 'usuarios/down-4_Mbd7s3p.jpg'),
+(19, 'Alan Vergoglio', 'Workspacealan02@gmail.com', '1223456789', 'Calle 100C Sur # 48 C 33', '1036602639', 993098, 'proveedor', 'usuarios/Alan_Toro_Prime.jpeg');
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `auth_group`
+-- Indexes for table `auth_group`
 --
 ALTER TABLE `auth_group`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name` (`name`);
 
 --
--- Indices de la tabla `auth_group_permissions`
+-- Indexes for table `auth_group_permissions`
 --
 ALTER TABLE `auth_group_permissions`
   ADD PRIMARY KEY (`id`),
@@ -373,21 +410,21 @@ ALTER TABLE `auth_group_permissions`
   ADD KEY `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` (`permission_id`);
 
 --
--- Indices de la tabla `auth_permission`
+-- Indexes for table `auth_permission`
 --
 ALTER TABLE `auth_permission`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`);
 
 --
--- Indices de la tabla `auth_user`
+-- Indexes for table `auth_user`
 --
 ALTER TABLE `auth_user`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`);
 
 --
--- Indices de la tabla `auth_user_groups`
+-- Indexes for table `auth_user_groups`
 --
 ALTER TABLE `auth_user_groups`
   ADD PRIMARY KEY (`id`),
@@ -395,7 +432,7 @@ ALTER TABLE `auth_user_groups`
   ADD KEY `auth_user_groups_group_id_97559544_fk_auth_group_id` (`group_id`);
 
 --
--- Indices de la tabla `auth_user_user_permissions`
+-- Indexes for table `auth_user_user_permissions`
 --
 ALTER TABLE `auth_user_user_permissions`
   ADD PRIMARY KEY (`id`),
@@ -403,13 +440,13 @@ ALTER TABLE `auth_user_user_permissions`
   ADD KEY `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` (`permission_id`);
 
 --
--- Indices de la tabla `categoria`
+-- Indexes for table `categoria`
 --
 ALTER TABLE `categoria`
   ADD PRIMARY KEY (`categoria_id`);
 
 --
--- Indices de la tabla `comentarios`
+-- Indexes for table `comentarios`
 --
 ALTER TABLE `comentarios`
   ADD PRIMARY KEY (`comentario_id`),
@@ -417,7 +454,7 @@ ALTER TABLE `comentarios`
   ADD KEY `comentarios_usuario_fk_9ba7d8e7_fk_usuario_id` (`usuario_fk`);
 
 --
--- Indices de la tabla `django_admin_log`
+-- Indexes for table `django_admin_log`
 --
 ALTER TABLE `django_admin_log`
   ADD PRIMARY KEY (`id`),
@@ -425,27 +462,27 @@ ALTER TABLE `django_admin_log`
   ADD KEY `django_admin_log_user_id_c564eba6_fk_auth_user_id` (`user_id`);
 
 --
--- Indices de la tabla `django_content_type`
+-- Indexes for table `django_content_type`
 --
 ALTER TABLE `django_content_type`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`);
 
 --
--- Indices de la tabla `django_migrations`
+-- Indexes for table `django_migrations`
 --
 ALTER TABLE `django_migrations`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `django_session`
+-- Indexes for table `django_session`
 --
 ALTER TABLE `django_session`
   ADD PRIMARY KEY (`session_key`),
   ADD KEY `django_session_expire_date_a5c62663` (`expire_date`);
 
 --
--- Indices de la tabla `favoritos`
+-- Indexes for table `favoritos`
 --
 ALTER TABLE `favoritos`
   ADD PRIMARY KEY (`id`),
@@ -453,7 +490,7 @@ ALTER TABLE `favoritos`
   ADD KEY `favoritos_favorito_id_90999b62_fk_usuario_id` (`favorito_id`);
 
 --
--- Indices de la tabla `servicios`
+-- Indexes for table `servicios`
 --
 ALTER TABLE `servicios`
   ADD PRIMARY KEY (`id`),
@@ -461,154 +498,154 @@ ALTER TABLE `servicios`
   ADD KEY `servicios_proveedor_id_611ef217_fk_usuario_id` (`proveedor_id`);
 
 --
--- Indices de la tabla `usuario`
+-- Indexes for table `usuario`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `correo_electronico` (`correo_electronico`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `auth_group`
+-- AUTO_INCREMENT for table `auth_group`
 --
 ALTER TABLE `auth_group`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `auth_group_permissions`
+-- AUTO_INCREMENT for table `auth_group_permissions`
 --
 ALTER TABLE `auth_group_permissions`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `auth_permission`
+-- AUTO_INCREMENT for table `auth_permission`
 --
 ALTER TABLE `auth_permission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
--- AUTO_INCREMENT de la tabla `auth_user`
+-- AUTO_INCREMENT for table `auth_user`
 --
 ALTER TABLE `auth_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
--- AUTO_INCREMENT de la tabla `auth_user_groups`
+-- AUTO_INCREMENT for table `auth_user_groups`
 --
 ALTER TABLE `auth_user_groups`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `auth_user_user_permissions`
+-- AUTO_INCREMENT for table `auth_user_user_permissions`
 --
 ALTER TABLE `auth_user_user_permissions`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `categoria`
+-- AUTO_INCREMENT for table `categoria`
 --
 ALTER TABLE `categoria`
-  MODIFY `categoria_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `categoria_id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT de la tabla `comentarios`
+-- AUTO_INCREMENT for table `comentarios`
 --
 ALTER TABLE `comentarios`
-  MODIFY `comentario_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `comentario_id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT de la tabla `django_admin_log`
+-- AUTO_INCREMENT for table `django_admin_log`
 --
 ALTER TABLE `django_admin_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `django_content_type`
+-- AUTO_INCREMENT for table `django_content_type`
 --
 ALTER TABLE `django_content_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT de la tabla `django_migrations`
+-- AUTO_INCREMENT for table `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
--- AUTO_INCREMENT de la tabla `favoritos`
+-- AUTO_INCREMENT for table `favoritos`
 --
 ALTER TABLE `favoritos`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de la tabla `servicios`
+-- AUTO_INCREMENT for table `servicios`
 --
 ALTER TABLE `servicios`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT de la tabla `usuario`
+-- AUTO_INCREMENT for table `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
--- Restricciones para tablas volcadas
+-- Constraints for dumped tables
 --
 
 --
--- Filtros para la tabla `auth_group_permissions`
+-- Constraints for table `auth_group_permissions`
 --
 ALTER TABLE `auth_group_permissions`
   ADD CONSTRAINT `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
   ADD CONSTRAINT `auth_group_permissions_group_id_b120cbf9_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`);
 
 --
--- Filtros para la tabla `auth_permission`
+-- Constraints for table `auth_permission`
 --
 ALTER TABLE `auth_permission`
   ADD CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`);
 
 --
--- Filtros para la tabla `auth_user_groups`
+-- Constraints for table `auth_user_groups`
 --
 ALTER TABLE `auth_user_groups`
   ADD CONSTRAINT `auth_user_groups_group_id_97559544_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
   ADD CONSTRAINT `auth_user_groups_user_id_6a12ed8b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`);
 
 --
--- Filtros para la tabla `auth_user_user_permissions`
+-- Constraints for table `auth_user_user_permissions`
 --
 ALTER TABLE `auth_user_user_permissions`
   ADD CONSTRAINT `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
   ADD CONSTRAINT `auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`);
 
 --
--- Filtros para la tabla `comentarios`
+-- Constraints for table `comentarios`
 --
 ALTER TABLE `comentarios`
   ADD CONSTRAINT `comentarios_servicio_fk_af9736b6_fk_servicios_id` FOREIGN KEY (`servicio_fk`) REFERENCES `servicios` (`id`),
   ADD CONSTRAINT `comentarios_usuario_fk_9ba7d8e7_fk_usuario_id` FOREIGN KEY (`usuario_fk`) REFERENCES `usuario` (`id`);
 
 --
--- Filtros para la tabla `django_admin_log`
+-- Constraints for table `django_admin_log`
 --
 ALTER TABLE `django_admin_log`
   ADD CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   ADD CONSTRAINT `django_admin_log_user_id_c564eba6_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`);
 
 --
--- Filtros para la tabla `favoritos`
+-- Constraints for table `favoritos`
 --
 ALTER TABLE `favoritos`
   ADD CONSTRAINT `favoritos_favorito_id_90999b62_fk_usuario_id` FOREIGN KEY (`favorito_id`) REFERENCES `usuario` (`id`),
   ADD CONSTRAINT `favoritos_usuario_id_b6cf59b1_fk_usuario_id` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`id`);
 
 --
--- Filtros para la tabla `servicios`
+-- Constraints for table `servicios`
 --
 ALTER TABLE `servicios`
   ADD CONSTRAINT `servicios_categoria_id_ab82091d_fk_categoria_categoria_id` FOREIGN KEY (`categoria_id`) REFERENCES `categoria` (`categoria_id`),
