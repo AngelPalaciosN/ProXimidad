@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { validateForm } from "./Validar"
-import { useAuth } from "../../Auth"
+import axios from 'axios';
 import "../../scss/component-styles/Registrar.scss"
 import Swal from "sweetalert2"
 import CloseIcon from "@mui/icons-material/Close"
@@ -25,50 +25,72 @@ const Editar_p = ({ onClose, user }) => {
     direccion: "",
     cedula: "",
     tipo_usuario: "proveedor",
-    avatar: "",
-  })
+    avatar: null,
+  });
 
-  const [errors, setErrors] = useState({})
-  const [currentStep, setCurrentStep] = useState(1)
-  const [avatarPreview, setAvatarPreview] = useState("")
-  const [isChanged, setIsChanged] = useState(false)
+  const [errors, setErrors] = useState({});
+  const [currentStep, setCurrentStep] = useState(1);
+  const [avatarPreview, setAvatarPreview] = useState(null);
+  const [isChanged, setIsChanged] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Get auth context
-  const { updateProfile, loading, error } = useAuth()
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-  // Initialize form with user data
+  // Fetch user data from Django API
   useEffect(() => {
-    if (user) {
-      setFormData({
-        nombre_completo: user.nombre_completo || "",
-        correo_electronico: user.correo_electronico || "",
-        telefono: user.telefono || "",
-        direccion: user.direccion || "",
-        cedula: user.cedula || "",
-        tipo_usuario: user.tipo_usuario || "proveedor",
-        avatar: user.avatar || "",
-      })
-      setAvatarPreview(user.avatar || "")
-    }
-  }, [user])
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/usuarios`);
+        if (response.status === 200 && response.data.length > 0) {
+          // Assuming the API returns a list of users, find the user with the matching email
+          const userData = response.data.find((u) => u.correo_electronico === user.correo_electronico);
+
+          if (userData) {
+            setFormData({
+              nombre_completo: userData.nombre_completo || "",
+              correo_electronico: userData.correo_electronico || "",
+              telefono: userData.telefono || "",
+              direccion: userData.direccion || "",
+              cedula: userData.cedula || "",
+              tipo_usuario: userData.tipo_usuario || "proveedor",
+              avatar: userData.imagen || null,
+            });
+            setAvatarPreview(userData.imagen || null);
+          } else {
+            setError("Usuario no encontrado en la base de datos");
+          }
+        } else {
+          setError("Error al cargar los datos del usuario");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setError("Error al cargar los datos del usuario");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [user, API_BASE_URL]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-    }))
+    }));
 
-    setIsChanged(true)
+    setIsChanged(true);
 
     // Clear errors when user types
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
         [name]: null,
-      }))
+      }));
     }
-  }
+  };
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0]
@@ -127,21 +149,21 @@ const Editar_p = ({ onClose, user }) => {
       return false
     }
 
-    return true
-  }
+    return true;
+  };
 
   const handleNextStep = () => {
     if (validateStep(currentStep)) {
-      setCurrentStep(currentStep + 1)
+      setCurrentStep(currentStep + 1);
     }
-  }
+  };
 
   const handlePrevStep = () => {
-    setCurrentStep(currentStep - 1)
-  }
+    setCurrentStep(currentStep - 1);
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!isChanged) {
       Swal.fire({
@@ -149,46 +171,99 @@ const Editar_p = ({ onClose, user }) => {
         text: "No se han detectado cambios en tu perfil",
         icon: "info",
         confirmButtonColor: "#005187",
-      })
-      return
+      });
+      return;
     }
 
-    const validationResult = validateForm(formData)
+    const validationResult = validateForm(formData);
     if (!validationResult.isValid) {
-      setErrors(validationResult.errors)
-      return
+      setErrors(validationResult.errors);
+      return;
     }
 
-    const result = await updateProfile(formData)
+    Swal.fire({
+      title: "¿Confirmar cambios?",
+      text: "¿Estás seguro de que quieres actualizar tu perfil?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#005187",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, actualizar",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setLoading(true);
+        try {
+          const apiUrl = `${API_BASE_URL}/create-usuario/`;
 
-    if (result && result.success) {
-      Swal.fire({
-        title: "¡Perfil actualizado!",
-        html: `
-          <p>Tu perfil ha sido actualizado correctamente.</p>
-          <p>Los cambios se verán reflejados inmediatamente.</p>
-        `,
-        icon: "success",
-        confirmButtonText: "Continuar",
-        confirmButtonColor: "#005187",
-        customClass: {
-          container: "custom-swal-container",
-          popup: "custom-swal-popup",
-          title: "custom-swal-title",
-          confirmButton: "custom-swal-button",
-        },
-      })
-      onClose()
-    } else {
-      Swal.fire({
-        title: "Error",
-        text: result?.error || "No se pudo actualizar el perfil",
-        icon: "error",
-        confirmButtonText: "Intentar de nuevo",
-        confirmButtonColor: "#005187",
-      })
-    }
-  }
+          // Convert avatarPreview to File object
+          let avatarFile = null;
+          if (avatarPreview && avatarPreview.startsWith('data:image')) {
+            const response = await fetch(avatarPreview);
+            const blob = await response.blob();
+            avatarFile = new File([blob], "avatar.jpg", { type: blob.type });
+          }
+
+          const formDataToSend = new FormData();
+          formDataToSend.append('nombre_completo', formData.nombre_completo);
+          formDataToSend.append('correo_electronico', formData.correo_electronico);
+          formDataToSend.append('telefono', formData.telefono);
+          formDataToSend.append('direccion', formData.direccion);
+          formDataToSend.append('cedula', formData.cedula);
+          formDataToSend.append('tipo_usuario', formData.tipo_usuario);
+          if (avatarFile) {
+            formDataToSend.append('imagen', avatarFile);
+          }
+
+          const response = await axios.post(apiUrl, formDataToSend, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+
+          if (response.status === 201) {
+            Swal.fire({
+              title: "¡Perfil actualizado!",
+              html: `
+                <p>Tu perfil ha sido actualizado correctamente.</p>
+                <p>Los cambios se verán reflejados inmediatamente.</p>
+              `,
+              icon: "success",
+              confirmButtonText: "Continuar",
+              confirmButtonColor: "#005187",
+              customClass: {
+                container: "custom-swal-container",
+                popup: "custom-swal-popup",
+                title: "custom-swal-title",
+                confirmButton: "custom-swal-button",
+              },
+            });
+            onClose();
+          } else {
+            Swal.fire({
+              title: "Error",
+              text: response.data?.error || "No se pudo actualizar el perfil",
+              icon: "error",
+              confirmButtonText: "Intentar de nuevo",
+              confirmButtonColor: "#005187",
+            });
+          }
+        } catch (error) {
+          console.error("Update profile error:", error.response || error.message || error);
+          setError(error.response?.data?.error || "Error al actualizar el perfil");
+          Swal.fire({
+            title: "Error",
+            text: error.response?.data?.error || "No se pudo actualizar el perfil",
+            icon: "error",
+            confirmButtonText: "Intentar de nuevo",
+            confirmButtonColor: "#005187",
+          });
+        } finally {
+          setLoading(false);
+        }
+      }
+    });
+  };
 
   const handleClose = () => {
     if (isChanged) {
@@ -203,13 +278,13 @@ const Editar_p = ({ onClose, user }) => {
         cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
-          onClose()
+          onClose();
         }
-      })
+      });
     } else {
-      onClose()
+      onClose();
     }
-  }
+  };
 
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -459,7 +534,7 @@ const Editar_p = ({ onClose, user }) => {
         </form>
       </motion.div>
     </section>
-  )
-}
+  );
+};
 
 export default Editar_p

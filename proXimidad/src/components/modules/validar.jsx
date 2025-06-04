@@ -51,13 +51,13 @@ export const validateNombreCompleto = (nombre) => {
     return '';
   };
   
-  export const validateForm = (formData) => {
+export const validateForm = (formData) => {
     const errors = {
-      nombre_completo: validateNombreCompleto(formData.nombre_completo),
-      correo_electronico: validateEmail(formData.correo_electronico),
-      telefono: validateTelefono(formData.telefono),
-      direccion: validateDireccion(formData.direccion),
-      cedula: validateCedula(formData.cedula)
+      nombre_completo: formData.nombre_completo ? validateNombreCompleto(formData.nombre_completo) : '',
+      correo_electronico: formData.correo_electronico ? validateEmail(formData.correo_electronico) : '',
+      telefono: formData.telefono ? validateTelefono(formData.telefono) : '',
+      direccion: formData.direccion ? validateDireccion(formData.direccion) : '',
+      cedula: formData.cedula ? validateCedula(formData.cedula) : ''
     };
   
     return {

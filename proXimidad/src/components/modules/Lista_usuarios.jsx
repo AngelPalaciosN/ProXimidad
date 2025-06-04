@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import React from "react"
 import axios from "axios"
 import Header from "./Header"
 import { useAuth } from "../../Auth"
@@ -11,12 +11,11 @@ import {
 } from "react-icons/fa"
 import Swal from "sweetalert2"
 import "../../scss/component-styles/Listaust.scss"
+import { useUserContext } from '../../context/UserContext';
 
 const UsuarioList = () => {
-  const [usuarios, setUsuarios] = useState([])
+  const { usuarios, loading, error, fetchUsuarios } = useUserContext();
   const [favoritos, setFavoritos] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [tipoFiltro, setTipoFiltro] = useState("todos")
   const [sortOrder, setSortOrder] = useState("asc")
@@ -29,128 +28,10 @@ const UsuarioList = () => {
   // Usar la variable de entorno de Vite
   const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000"
 
-  // Datos de demostración mejorados
-  const mockUsuarios = [
-    {
-      id: 1,
-      nombre_completo: "Juan Pérez",
-      correo_electronico: "juan.perez@ejemplo.com",
-      telefono: "+506 8888-1111",
-      direccion: "San José, Costa Rica",
-      tipo_usuario: "proveedor",
-      especialidad: "Desarrollo Web",
-      calificacion: 4.8,
-      proyectos_completados: 27,
-      avatar: "https://randomuser.me/api/portraits/men/1.jpg"
-    },
-    {
-      id: 2,
-      nombre_completo: "María González",
-      correo_electronico: "maria.gonzalez@ejemplo.com",
-      telefono: "+506 8888-2222",
-      direccion: "Heredia, Costa Rica",
-      tipo_usuario: "proveedor",
-      especialidad: "Diseño Gráfico",
-      calificacion: 4.9,
-      proyectos_completados: 34,
-      avatar: "https://randomuser.me/api/portraits/women/2.jpg"
-    },
-    {
-      id: 3,
-      nombre_completo: "Carlos Rodríguez",
-      correo_electronico: "carlos.rodriguez@ejemplo.com",
-      telefono: "+506 8888-3333",
-      direccion: "Alajuela, Costa Rica",
-      tipo_usuario: "arrendador",
-      especialidad: null,
-      calificacion: null,
-      proyectos_completados: 0,
-      avatar: "https://randomuser.me/api/portraits/men/3.jpg"
-    },
-    {
-      id: 4,
-      nombre_completo: "Ana Martínez",
-      correo_electronico: "ana.martinez@ejemplo.com",
-      telefono: "+506 8888-4444",
-      direccion: "Cartago, Costa Rica",
-      tipo_usuario: "proveedor",
-      especialidad: "Marketing Digital",
-      calificacion: 4.7,
-      proyectos_completados: 19,
-      avatar: "https://randomuser.me/api/portraits/women/4.jpg"
-    },
-    {
-      id: 5,
-      nombre_completo: "Roberto Sánchez",
-      correo_electronico: "roberto.sanchez@ejemplo.com",
-      telefono: "+506 8888-5555",
-      direccion: "Limón, Costa Rica",
-      tipo_usuario: "arrendador",
-      especialidad: null,
-      calificacion: null,
-      proyectos_completados: 0,
-      avatar: "https://randomuser.me/api/portraits/men/5.jpg"
-    },
-    {
-      id: 6,
-      nombre_completo: "Laura Jiménez",
-      correo_electronico: "laura.jimenez@ejemplo.com",
-      telefono: "+506 8888-6666",
-      direccion: "Puntarenas, Costa Rica",
-      tipo_usuario: "proveedor",
-      especialidad: "Fotografía",
-      calificacion: 4.5,
-      proyectos_completados: 15,
-      avatar: "https://randomuser.me/api/portraits/women/6.jpg"
-    },
-    {
-      id: 7,
-      nombre_completo: "Miguel Castro",
-      correo_electronico: "miguel.castro@ejemplo.com",
-      telefono: "+506 8888-7777",
-      direccion: "Guanacaste, Costa Rica",
-      tipo_usuario: "proveedor",
-      especialidad: "Consultoría de Negocios",
-      calificacion: 4.9,
-      proyectos_completados: 42,
-      avatar: "https://randomuser.me/api/portraits/men/7.jpg"
-    },
-    {
-      id: 8,
-      nombre_completo: "Sofía Vargas",
-      correo_electronico: "sofia.vargas@ejemplo.com",
-      telefono: "+506 8888-8888",
-      direccion: "San José, Costa Rica",
-      tipo_usuario: "arrendador",
-      especialidad: null,
-      calificacion: null,
-      proyectos_completados: 0,
-      avatar: "https://randomuser.me/api/portraits/women/8.jpg"
-    }
-  ]
-
-  const fetchUsuarios = useCallback(async () => {
-    try {
-      // Intentar obtener datos de la API
-      let usuariosData = []
-
-      try {
-        const response = await axios.get(`${baseUrl}/usuarios/`)
-        usuariosData = response.data
-      } catch (apiError) {
-        console.warn("No se pudo conectar a la API, usando datos de demostración", apiError)
-        // Usar datos de demostración mejorados
-        usuariosData = mockUsuarios
-      }
-
-      setUsuarios(usuariosData)
-    } catch (err) {
-      console.error("Error fetching users:", err)
-      setError("No se pudieron cargar los usuarios")
-    } finally {
-      setLoading(false)
-    }
-  }, [baseUrl])
+  useEffect(() => {
+    fetchUsuarios()
+    fetchFavoritos()
+  }, [fetchUsuarios])
 
   const fetchFavoritos = useCallback(async () => {
     if (user && user.usuario_id) {
@@ -169,11 +50,6 @@ const UsuarioList = () => {
       }
     }
   }, [user, baseUrl])
-
-  useEffect(() => {
-    fetchUsuarios()
-    fetchFavoritos()
-  }, [fetchUsuarios, fetchFavoritos])
 
   const handleAddToFavorites = async (usuarioId, event) => {
     // Evitar que el clic se propague al elemento padre

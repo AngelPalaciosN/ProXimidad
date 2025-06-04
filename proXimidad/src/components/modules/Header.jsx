@@ -3,22 +3,32 @@
 import { useState, useRef, useEffect } from "react"
 import { Container, Navbar, Nav, Button } from "react-bootstrap"
 import { Menu, X } from "lucide-react"
-import Link from "next/link"
+import { Link } from "react-router-dom"
 import { useAuth } from "../../Auth"
 import Editar_p from "./Editar_p"
+import Usuarios from "./Lista_usuarios"
+import Buscar from "./BuscarS"
+import { useNavigate } from 'react-router-dom';
+import "../../scss/component-styles/Header.scss"
 
-import "../../styles/components/_header.scss"
-
-export default function Header() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
-  const [showEditProfile, setShowEditProfile] = useState(false)
-  const userMenuRef = useRef(null)
-  const { user, logout } = useAuth()
+export default function Header({ handleAbrirFormulario }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [showEditar_p, setShowEditar_p] = useState(false);
+  const userMenuRef = useRef(null);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const { logout } = useAuth();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen)
   }
+
+  const openRegistrarForm = () => {
+    setIsOpen(false);
+    handleAbrirFormulario('registrar');
+  };
 
   // Close user menu when clicking outside
   useEffect(() => {
@@ -38,26 +48,20 @@ export default function Header() {
     setIsUserMenuOpen(!isUserMenuOpen)
   }
 
-  const handleEditProfile = () => {
-    setShowEditProfile(true)
-    setIsUserMenuOpen(false)
-  }
-
   const handleLogout = () => {
-    logout()
-    setIsUserMenuOpen(false)
-  }
+    logout();
+    setIsUserMenuOpen(false);
+    navigate('/');
+  };
 
   return (
     <header className="header">
       <Container>
         <Navbar expand="lg" variant="dark" className="p-0">
-          <Navbar.Brand href="/" className="d-flex align-items-center">
-            <div className="logo-container">
-              <span className="logo-x">X</span>
-            </div>
+          <Link to="/" className="navbar-brand d-flex align-items-center">
+            <img src="/Proximidad.svg" alt="ProXimidad Logo" className="logo" />
             <span className="ms-2 brand-text">proXimidad</span>
-          </Navbar.Brand>
+          </Link>
 
           <div className="d-lg-none">
             <Button
@@ -72,21 +76,25 @@ export default function Header() {
 
           <Navbar.Collapse id="basic-navbar-nav" className={isOpen ? "show" : ""}>
             <Nav className="ms-auto nav-buttons">
-              <Link href="#servicios" className="nav-link" onClick={() => setIsOpen(false)}>
-                Servicios
+              <Link to="/" className="nav-link" onClick={() => setIsOpen(false)}>
+                Contactanos
               </Link>
-              <Link href="#nosotros" className="nav-link" onClick={() => setIsOpen(false)}>
-                Nosotros
-              </Link>
-              <Link href="#contacto" className="nav-link" onClick={() => setIsOpen(false)}>
-                Contacto
-              </Link>
+              {user && (
+                <>
+                  <Link to="/servicios" className="nav-link" onClick={() => setIsOpen(false)}>
+                    Servicios
+                  </Link>
+                  <Link to="/usuarios" className="nav-link" onClick={() => setIsOpen(false)}>
+                    Proveedores
+                  </Link>
+                </>
+              )}
               {user ? (
                 <div className="user-menu-container" ref={userMenuRef}>
                   <button className="user-menu-trigger" onClick={toggleUserMenu} aria-label="User menu">
                     <div className="user-avatar">
                       <img
-                        src={user.avatar || "/placeholder.svg?height=32&width=32"}
+                        src={user.imagen ? `${baseUrl}${user.imagen}` : "/placeholder.svg?height=32&width=32"}
                         alt={user.nombre_completo || "Usuario"}
                       />
                     </div>
@@ -107,12 +115,12 @@ export default function Header() {
                   {isUserMenuOpen && (
                     <div className="user-dropdown">
                       <div className="user-dropdown-header">
-                        <div className="user-dropdown-avatar">
-                          <img
-                            src={user.avatar || "/placeholder.svg?height=48&width=48"}
-                            alt={user.nombre_completo || "Usuario"}
-                          />
-                        </div>
+                      <div className="user-dropdown-avatar">
+                        <img
+                          src={user.imagen ? `${baseUrl}${user.imagen}` : "/placeholder.svg?height=48&width=48"}
+                          alt={user.nombre_completo || "Usuario"}
+                        />
+                      </div>
                         <div className="user-dropdown-info">
                           <h4>{user.nombre_completo || "Usuario"}</h4>
                           <p>{user.correo_electronico}</p>
@@ -123,7 +131,7 @@ export default function Header() {
                       </div>
 
                       <div className="user-dropdown-menu">
-                        <button className="dropdown-item" onClick={handleEditProfile}>
+                        <button className="dropdown-item" onClick={() => { setIsUserMenuOpen(false); handleAbrirFormulario('editarPerfil'); }}>
                           <svg
                             width="16"
                             height="16"
@@ -205,7 +213,7 @@ export default function Header() {
                   )}
                 </div>
               ) : (
-                <Button variant="outline-light" className="login-button ms-lg-3" onClick={() => setIsOpen(false)}>
+                <Button variant="outline-light" className="login-button ms-lg-3" onClick={openRegistrarForm}>
                   Iniciar Sesión
                 </Button>
               )}
@@ -213,23 +221,27 @@ export default function Header() {
           </Navbar.Collapse>
         </Navbar>
 
-        {/* Mobile Menu Overlay */}
-        <div className={`mobile-menu-overlay ${isOpen ? "active" : ""}`}>
-          <Nav className="mobile-nav-links">
-            <Link href="#servicios" className="mobile-nav-link" onClick={() => setIsOpen(false)}>
-              Servicios
-            </Link>
-            <Link href="#nosotros" className="mobile-nav-link" onClick={() => setIsOpen(false)}>
-              Nosotros
-            </Link>
-            <Link href="#contacto" className="mobile-nav-link" onClick={() => setIsOpen(false)}>
-              Contacto
-            </Link>
-            <Button variant="outline-light" className="mobile-login-button" onClick={() => setIsOpen(false)}>
-              Iniciar Sesión
-            </Button>
-          </Nav>
-        </div>
+          {/* Mobile Menu Overlay */}
+          <div className={`mobile-menu-overlay ${isOpen ? "active" : ""}`}>
+            <Nav className="mobile-nav-links">
+              <Link to="/" className="mobile-nav-link" onClick={() => setIsOpen(false)}>
+                Contactanos
+              </Link>
+              {user && (
+                <>
+                  <Link to="/servicios" className="mobile-nav-link" onClick={() => setIsOpen(false)}>
+                    Servicios
+                  </Link>
+                  <Link to="/usuarios" className="mobile-nav-link" onClick={() => setIsOpen(false)}>
+                    Proveedores
+                  </Link>
+                </>
+              )}
+              <Link to="/Iniciar" variant="outline-light" className="mobile-login-button" onClick={() => setIsOpen(false)}>
+                Iniciar Sesión
+              </Link>
+            </Nav>
+          </div>
         {showEditar_p && <Editar_p onClose={() => setShowEditar_p(false)} user={user} />}
       </Container>
     </header>

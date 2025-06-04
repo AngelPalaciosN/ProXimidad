@@ -17,6 +17,7 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
+      plugins: [],
       onwarn(warning, warn) {
         if (warning.code === 'DEPRECATED_FEATURE') return;
         if (warning.message.includes('Global built-in functions are deprecated')) return;
@@ -27,12 +28,19 @@ export default defineConfig({
       }
     }
   },
+  define: {
+    process: {
+      env: {
+        NODE_ENV: JSON.stringify("development")
+      }
+    }
+  },
   server: {
     host: '0.0.0.0',
     port: 5173,
     strictPort: true,
     hmr: {
-      host: '192.168.1.100',
+      host: '192.168.1.101',
       port: 5173
     }
   }
