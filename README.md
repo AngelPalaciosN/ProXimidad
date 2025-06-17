@@ -95,7 +95,7 @@ cd frontend/
 npm install
 npm start
 Accede en: http://localhost:5173/
-
+```
 ---
 
 ## 📚 Documentación Técnica
