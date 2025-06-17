@@ -94,3 +94,19 @@ python manage.py runserver
 cd frontend/
 npm install
 npm start
+Accede en: http://localhost:5173/
+
+---
+
+## 📚 Documentación Técnica
+
+Toda la documentación oficial y recursos están disponibles en Notion:  
+
+🔗 **[Proximidad - Notion del Proyecto](https://www.notion.so/ProXimidad-1deb978d13fc807c9688f78069bc8ae8)**
+
+Incluye:  
+- 📊 Matriz de requisitos  
+- 📐 Diagramas UML  
+- 🖥️ Presentación de avances para docentes  
+- Otros recursos y entregables académicos  
+
