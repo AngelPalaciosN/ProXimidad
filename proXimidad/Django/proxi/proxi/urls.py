@@ -29,7 +29,7 @@ urlpatterns = [
     # API endpoints
     path('servicios/', servicios_list, name='servicios-list'),
     path('usuarios/', usuarios_list, name='usuarios-list'),
-    path('usuarios/', create_usuario, name='create-usuario'),
+    path('usuarios/create/', create_usuario, name='create-usuario'),
     path('favoritos/', agregar_favorito, name='agregar-favorito'),
     path('favoritos/eliminar/<int:usuario_id>/<int:favorito_id>/', eliminar_favorito, name='eliminar-favorito'),
     

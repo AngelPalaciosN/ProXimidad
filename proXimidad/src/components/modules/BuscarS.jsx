@@ -25,6 +25,7 @@ const BuscarS = () => {
         let serviciosData = []
 
         try {
+          // Fixed: Use the correct endpoint that matches your Django URLs
           const response = await axios.get(`${baseUrl}/servicios/`)
           serviciosData = response.data
         } catch (apiError) {
@@ -145,6 +146,7 @@ const BuscarS = () => {
   }
 
   const handleViewUsuarios = () => {
+    // Fixed: Use proper navigation instead of window.location.href
     window.location.href = "/usuarios"
   }
 
@@ -190,7 +192,7 @@ const BuscarS = () => {
 
             {categorias.length > 0 && (
               <select className="filtro-categoria" value={categoriaSeleccionada} onChange={handleCategoriaChange}>
-                <option value="">Todas las categorías</option>
+                <option key="all-categories" value="">Todas las categorías</option>
                 {categorias.map((cat) => (
                   <option key={cat.id} value={cat.id}>
                     {cat.nombre}

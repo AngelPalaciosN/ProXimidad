@@ -7,18 +7,21 @@ import Buscars from './components/modules/BuscarS';
 import IniciarSe from './components/modules/Iniciar';
 import './scss/style.scss';
 import { AuthProvider } from './Auth';
+import { UserProvider } from './context/UserContext'; // Import UserProvider
 
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/usuarios" element={<ListaUsuarios />} />
-          <Route path="/servicios" element={<Buscars />} />
-          <Route path="/Iniciar" element={<IniciarSe />} />
-        </Routes>
-      </BrowserRouter>
+      <UserProvider> {/* Wrap BrowserRouter with UserProvider */}
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/usuarios" element={<ListaUsuarios />} />
+            <Route path="/servicios" element={<Buscars />} />
+            <Route path="/Iniciar" element={<IniciarSe />} />
+          </Routes>
+        </BrowserRouter>
+      </UserProvider>
     </AuthProvider>
   );
 }

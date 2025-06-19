@@ -85,7 +85,7 @@ export default function Header({ handleAbrirFormulario }) {
                     Servicios
                   </Link>
                   <Link to="/usuarios" className="nav-link" onClick={() => setIsOpen(false)}>
-                    Proveedores
+                    Usuarios
                   </Link>
                 </>
               )}
@@ -233,7 +233,7 @@ export default function Header({ handleAbrirFormulario }) {
                     Servicios
                   </Link>
                   <Link to="/usuarios" className="mobile-nav-link" onClick={() => setIsOpen(false)}>
-                    Proveedores
+                    Usuarios
                   </Link>
                 </>
               )}

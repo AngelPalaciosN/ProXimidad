@@ -15,7 +15,7 @@ export const UserProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`${API_BASE_URL}/usuarios_list/`);
+      const response = await axios.get(`${API_BASE_URL}/usuarios/`);
       if (response.status === 200) {
         setUsuarios(response.data);
       } else {
