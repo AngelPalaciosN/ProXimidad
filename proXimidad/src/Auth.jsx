@@ -43,11 +43,10 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post(apiUrl, credentials);
       
-      if (response.data && response.data.user) {
-        setUser(response.data.user);
-        localStorage.setItem('user_data', JSON.stringify(response.data.user));
-        localStorage.setItem('access_token', response.data.access_token);
-        return { success: true, user: response.data.user };
+      if (response.data && response.data.usuario) {
+        setUser(response.data.usuario);
+        localStorage.setItem('user_data', JSON.stringify(response.data.usuario));
+        return { success: true, user: response.data.usuario };
       }
     } catch (err) {
       console.error('Login error:', err.response || err.message || err);
@@ -62,15 +61,14 @@ export const AuthProvider = ({ children }) => {
   const loginWithCode = async (credentials) => {
     setLoading(true);
     setError(null);
-    const apiUrl = `${API_BASE_URL}/verificar-codigo/`;
+    const apiUrl = `${API_BASE_URL}/login/`;
     try {
       const response = await axios.post(apiUrl, credentials);
       
-      if (response.data && response.data.user) {
-        setUser(response.data.user);
-        localStorage.setItem('user_data', JSON.stringify(response.data.user));
-        localStorage.setItem('access_token', response.data.access_token);
-        return { success: true, user: response.data.user };
+      if (response.data && response.data.usuario) {
+        setUser(response.data.usuario);
+        localStorage.setItem('user_data', JSON.stringify(response.data.usuario));
+        return { success: true, user: response.data.usuario };
       }
     } catch (err) {
       console.error('Verification error:', err.response || err.message || err);
@@ -102,7 +100,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     setLoading(true);
     setError(null);
-    const apiUrl = `${API_BASE_URL}/register/`;
+    const apiUrl = `${API_BASE_URL}/crear-usuario/`;
     try {
       const response = await axios.post(apiUrl, userData);
       return { 

@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import axios from "axios"
 import Header from "./Header"
 import { useAuth } from "../../Auth"
@@ -10,7 +10,6 @@ import {
   FaMapMarkerAlt, FaBriefcase, FaSortAmountDown, FaSortAmountUp 
 } from "react-icons/fa"
 import Swal from "sweetalert2"
-import "../../scss/component-styles/Listaust.scss"
 import { useUserContext } from '../../context/UserContext';
 
 const UsuarioList = () => {
@@ -34,17 +33,10 @@ const UsuarioList = () => {
   }, [fetchUsuarios])
 
   const fetchFavoritos = useCallback(async () => {
-    if (user && user.usuario_id) {
+    if (user && user.id) {
       try {
-        // Intentar obtener favoritos de la API
-        try {
-          const response = await axios.get(`${baseUrl}/favoritos/usuario/${user.usuario_id}/`)
-          setFavoritos(response.data.map((fav) => fav.favorito))
-        } catch (apiError) {
-          console.warn("No se pudo conectar a la API para favoritos, usando datos de demostración", apiError)
-          // Datos de demostración para favoritos
-          setFavoritos([1, 4, 7]) // IDs de usuarios favoritos de demostración
-        }
+        // Por ahora usamos datos de demostración ya que no tenemos endpoint para listar favoritos por usuario
+        setFavoritos([1, 4, 7]) // IDs de usuarios favoritos de demostración
       } catch (err) {
         console.error("Error fetching favorites:", err)
       }
@@ -57,7 +49,7 @@ const UsuarioList = () => {
       event.stopPropagation()
     }
     
-    if (!user || !user.usuario_id) {
+    if (!user || !user.id) {
       Swal.fire({
         title: "Inicia sesión",
         text: "Debes iniciar sesión para añadir favoritos",
@@ -81,7 +73,7 @@ const UsuarioList = () => {
         try {
           // Intentar añadir a favoritos en la API
           try {
-            await axios.post(`${baseUrl}/favoritos/`, { usuario: user.usuario_id, favorito: usuarioId })
+            await axios.post(`${baseUrl}/favoritos/`, { usuario_id: user.id, favorito_id: usuarioId })
           } catch (apiError) {
             console.warn("No se pudo conectar a la API para añadir favorito", apiError)
           }

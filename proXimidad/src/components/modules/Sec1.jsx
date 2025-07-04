@@ -3,7 +3,6 @@ import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import { ArrowRight, Send, MessageSquare } from "lucide-react";
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import '../../scss/component-styles/Sec1.scss';
 
 export default function Sec1({ handleAbrirFormulario }) {
   const [displayText, setDisplayText] = useState("");
@@ -11,8 +10,8 @@ export default function Sec1({ handleAbrirFormulario }) {
   const [usuarios, setUsuarios] = useState([]);
   const [servicios, setServicios] = useState([]);
   const [formData, setFormData] = useState({
-    usuario: "",
-    servicio: "",
+    usuario_fk: "",
+    servicio_fk: "",
     mensaje: "",
   });
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -68,7 +67,7 @@ export default function Sec1({ handleAbrirFormulario }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/proX/comentarios/crear/`;
+    const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/comentarios/crear/`;
     Swal.fire({
       title: '¿Enviar comentario?',
       text: "¿Estás seguro de que quieres enviar este comentario?",
@@ -84,8 +83,8 @@ export default function Sec1({ handleAbrirFormulario }) {
           await axios.post(apiUrl, formData);
           Swal.fire('Enviado!', 'Tu comentario ha sido enviado.', 'success');
           setFormData({
-            usuario: "",
-            servicio: "",
+            usuario_fk: "",
+            servicio_fk: "",
             mensaje: "",
           });
           setIsFormVisible(false);
@@ -141,23 +140,23 @@ export default function Sec1({ handleAbrirFormulario }) {
                 <div className="comment-form-container" ref={formRef}>
                   <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3">
-                      <Form.Label>Nombre</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="usuario"
-                        value={formData.usuario}
-                        onChange={handleInputChange}
-                        placeholder="Tu nombre"
-                        required
-                      />
+                      <Form.Label>Usuario</Form.Label>
+                      <Form.Select name="usuario_fk" value={formData.usuario_fk} onChange={handleInputChange} required>
+                        <option value="">Selecciona un usuario</option>
+                        {usuarios.map(usuario => (
+                          <option key={usuario.id} value={usuario.id}> 
+                            {usuario.nombre_completo}
+                          </option>
+                        ))}
+                      </Form.Select>
                     </Form.Group>
                     <Form.Group className="mb-3">
                       <Form.Label>Servicio Relacionado</Form.Label>
-                      <Form.Select name="servicio" value={formData.servicio} onChange={handleInputChange} required>
+                      <Form.Select name="servicio_fk" value={formData.servicio_fk} onChange={handleInputChange} required>
                         <option value="">Selecciona un servicio</option>
                         {servicios.map(servicio => (
                           <option key={servicio.id} value={servicio.id}> 
-                            {servicio.nombre}
+                            {servicio.nombre_servicio}
                           </option>
                         ))}
                       </Form.Select>

@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react"
 import { Container, Row, Col } from "react-bootstrap"
 import { Star, Award, Briefcase, CheckCircle, TrendingUp, Shield, Target } from "lucide-react"
 // import Image from "next/image"
-import "../../scss/component-styles/Sec3.scss"
 
 export default function Sec3({ handleAbrirFormulario }) {
   const [activeStep, setActiveStep] = useState(0)

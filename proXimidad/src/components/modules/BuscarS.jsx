@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import Header from "./Header"
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material"
-import "../../scss/component-styles/Buscars.scss"
 
 const BuscarS = () => {
   const [servicios, setServicios] = useState([])

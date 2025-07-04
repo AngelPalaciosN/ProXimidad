@@ -5,7 +5,6 @@ import Home from './components/Home';
 import ListaUsuarios from './components/modules/Lista_usuarios';
 import Buscars from './components/modules/BuscarS';
 import IniciarSe from './components/modules/Iniciar';
-import './scss/style.scss';
 import { AuthProvider } from './Auth';
 import { UserProvider } from './context/UserContext'; // Import UserProvider
 

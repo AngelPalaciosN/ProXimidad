@@ -1,9 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { validateForm } from "./Validar"
+import { validateForm } from "./validar"
 import axios from 'axios';
-import "../../scss/component-styles/Registrar.scss"
 import Swal from "sweetalert2"
 import CloseIcon from "@mui/icons-material/Close"
 import IconButton from "@mui/material/IconButton"

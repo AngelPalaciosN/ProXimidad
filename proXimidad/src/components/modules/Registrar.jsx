@@ -1,10 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { validateForm, validateImage } from "./validar" // Added validateImage import
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../../Auth"
-import "../../scss/component-styles/Registrar.scss"
 import Swal from "sweetalert2"
 import CloseIcon from "@mui/icons-material/Close"
 import IconButton from "@mui/material/IconButton"

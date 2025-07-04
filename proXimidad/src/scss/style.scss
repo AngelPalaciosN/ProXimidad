@@ -6,6 +6,17 @@
   $body-bg: $background-color,
 );
 
+// Importar todos los estilos de componentes
+@import 'component-styles/Header.scss';
+@import 'component-styles/Footer.scss';
+@import 'component-styles/Sec1.scss';
+@import 'component-styles/Sec2.scss';
+@import 'component-styles/Sec3.scss';
+@import 'component-styles/Registrar.scss';
+@import 'component-styles/Buscars.scss';
+@import 'component-styles/Crud-p.scss';
+@import 'component-styles/Listaust.scss';
+
 // Importar la fuente Quicksand
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
 

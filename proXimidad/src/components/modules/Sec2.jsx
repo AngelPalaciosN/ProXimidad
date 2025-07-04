@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Carousel, Card, Image } from "react-bootstrap";
 import { CheckCircle, Clock, Shield, Briefcase } from "lucide-react";
 import axios from 'axios';
-import '../../scss/component-styles/Sec2.scss';
 
 export default function Sec2() {
   const [fetchedServicios, setFetchedServicios] = useState([]);

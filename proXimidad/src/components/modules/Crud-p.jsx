@@ -1,6 +1,5 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import '../../scss/component-styles/Crud-p.scss'; // Import SCSS file
 
 export default function CrudP() {
   // Placeholder content

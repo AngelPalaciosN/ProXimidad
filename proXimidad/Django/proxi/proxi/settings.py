@@ -36,6 +36,7 @@ ALLOWED_HOSTS = [
     '10.1.104.226',
     '192.168.1.100',
     '192.168.1.101',
+    '192.168.1.102',  # Nueva IP agregada
 ]
 
 
@@ -136,6 +137,8 @@ CORS_ALLOWED_ORIGINS = [
     'http://192.168.1.100:5173',
     'http://192.168.1.101:8000',
     'http://192.168.1.101:5173',
+    'http://192.168.1.102:5173',  # Nueva IP agregada
+    'http://192.168.1.102:8000',  # Nueva IP agregada
 ]
 
 
@@ -164,3 +167,59 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Configuraciones adicionales para mejor rendimiento y seguridad
+
+# Logging configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'django.log',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'proxiApp': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+# Configuración de cache (opcional, para mejorar rendimiento)
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+        'TIMEOUT': 300,  # 5 minutos
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000,
+        }
+    }
+}
+
+# Configuraciones de archivos multimedia
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
+
+# Configuraciones de timezone
+USE_TZ = True
+TIME_ZONE = 'America/Costa_Rica'  # Ajusta según tu zona horaria
+
+# Configuraciones de internacionalización
+LANGUAGE_CODE = 'es-es'
+USE_I18N = True
+USE_L10N = True

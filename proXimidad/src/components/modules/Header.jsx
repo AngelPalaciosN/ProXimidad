@@ -9,7 +9,6 @@ import Editar_p from "./Editar_p"
 import Usuarios from "./Lista_usuarios"
 import Buscar from "./BuscarS"
 import { useNavigate } from 'react-router-dom';
-import "../../scss/component-styles/Header.scss"
 
 export default function Header({ handleAbrirFormulario }) {
   const [isOpen, setIsOpen] = useState(false);

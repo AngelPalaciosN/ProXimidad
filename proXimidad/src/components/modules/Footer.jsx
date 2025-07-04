@@ -1,6 +1,5 @@
 "use client"
 
-import "../../scss/component-styles/Footer.scss"
 import { Container, Row, Col, Form, Button } from "react-bootstrap"
 import { Facebook, Twitter, Instagram, Linkedin, Send, MapPin, Phone, Mail } from "lucide-react"
 // import Link from "next/link"

@@ -8,7 +8,6 @@ import EmailIcon from "@mui/icons-material/Email"
 import LockIcon from "@mui/icons-material/Lock"
 import { useAuth } from "../../Auth"
 import { useNavigate } from "react-router-dom"
-import "../../scss/component-styles/Registrar.scss"
 import { motion } from "framer-motion"
 import Swal from "sweetalert2"
 
