@@ -7,15 +7,25 @@ class CategoriaSerializer(serializers.ModelSerializer):
         fields = ['categoria_id', 'nombre_categoria', 'descripcion_categoria']
 
 class UsuarioSerializer(serializers.ModelSerializer):
+    imagen_url = serializers.SerializerMethodField()
+    
     class Meta:
         model = Usuario
         fields = [
             'id', 'nombre_completo', 'correo_electronico', 'telefono', 
-            'direccion', 'cedula', 'tipo_usuario', 'imagen', 'codigo_verificacion'
+            'direccion', 'cedula', 'tipo_usuario', 'imagen', 'imagen_url', 'codigo_verificacion'
         ]
         extra_kwargs = {
             'codigo_verificacion': {'write_only': True, 'required': False}
         }
+    
+    def get_imagen_url(self, obj):
+        """Devuelve la URL relativa de la imagen del usuario para evitar duplicación"""
+        if obj.imagen:
+            # Devolver solo la URL relativa, no absoluta
+            # El frontend concatenará con su VITE_API_BASE_URL
+            return obj.imagen.url  # Esto devuelve: /media/usuarios/imagen.jpg
+        return None
     
     def validate_correo_electronico(self, value):
         """Validar formato de correo electrónico"""
@@ -34,14 +44,22 @@ class UsuarioSerializer(serializers.ModelSerializer):
 class ServiciosSerializer(serializers.ModelSerializer):
     categoria_nombre = serializers.CharField(source='categoria.nombre_categoria', read_only=True)
     proveedor_nombre = serializers.CharField(source='proveedor.nombre_completo', read_only=True)
+    imagen_completa_url = serializers.SerializerMethodField()
     
     class Meta:
         model = Servicios
         fields = [
             'id', 'nombre_servicio', 'descripcion', 'precio_base', 
-            'imagen_url', 'categoria', 'categoria_nombre', 
+            'imagen_url', 'imagen', 'imagen_completa_url', 'categoria', 'categoria_nombre', 
             'proveedor', 'proveedor_nombre'
         ]
+    
+    def get_imagen_completa_url(self, obj):
+        """Devuelve la URL de la imagen, priorizando el campo imagen sobre imagen_url"""
+        if obj.imagen:
+            # Devolver solo la URL relativa para evitar duplicación con VITE_API_BASE_URL
+            return obj.imagen.url  # Esto devuelve: /media/servicios/imagenes/imagen.jpg
+        return obj.imagen_url  # Si no hay imagen, devolver imagen_url (puede ser externa)
 
 class ComentariosSerializer(serializers.ModelSerializer):
     usuario_nombre = serializers.CharField(source='usuario_fk.nombre_completo', read_only=True)

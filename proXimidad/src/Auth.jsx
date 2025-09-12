@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
   const loginWithPassword = async (credentials) => {
     setLoading(true);
     setError(null);
-    const apiUrl = `${API_BASE_URL}/login/`;
+    const apiUrl = `${API_BASE_URL}/api/login/`;
     try {
       const response = await axios.post(apiUrl, credentials);
       
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }) => {
   const loginWithCode = async (credentials) => {
     setLoading(true);
     setError(null);
-    const apiUrl = `${API_BASE_URL}/login/`;
+    const apiUrl = `${API_BASE_URL}/api/login/`;
     try {
       const response = await axios.post(apiUrl, credentials);
       
@@ -83,7 +83,7 @@ export const AuthProvider = ({ children }) => {
   const generateCode = async (email) => {
     setLoading(true);
     setError(null);
-    const apiUrl = `${API_BASE_URL}/generar-codigo/`;
+    const apiUrl = `${API_BASE_URL}/api/generar-codigo/`;
     try {
       const response = await axios.post(apiUrl, { correo_electronico: email });
       return { success: true, message: response.data.message };
@@ -100,7 +100,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     setLoading(true);
     setError(null);
-    const apiUrl = `${API_BASE_URL}/crear-usuario/`;
+    const apiUrl = `${API_BASE_URL}/api/crear-usuario/`;
     try {
       const response = await axios.post(apiUrl, userData);
       return { 

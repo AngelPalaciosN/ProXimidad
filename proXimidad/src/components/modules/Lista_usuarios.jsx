@@ -18,6 +18,15 @@ const UsuarioList = () => {
   const [searchTerm, setSearchTerm] = useState("")
   const [tipoFiltro, setTipoFiltro] = useState("todos")
   const [sortOrder, setSortOrder] = useState("asc")
+  const [formularioVisible, setFormularioVisible] = useState(null)
+
+  const handleAbrirFormulario = (formulario) => {
+    setFormularioVisible(formulario);
+  };
+
+  const handleCerrarFormulario = () => {
+    setFormularioVisible(null);
+  };
   const [activeTab, setActiveTab] = useState("todos")
   const [selectedUser, setSelectedUser] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
@@ -27,6 +36,13 @@ const UsuarioList = () => {
   // Usar la variable de entorno de Vite
   const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000"
 
+  // Helper function para URLs de imágenes
+  const getImageUrl = (imageUrl) => {
+    if (!imageUrl) return null;
+    if (imageUrl.startsWith('http')) return imageUrl; // URL externa
+    return `${baseUrl}${imageUrl}`; // URL relativa desde el servidor
+  };
+
   useEffect(() => {
     fetchUsuarios()
     fetchFavoritos()
@@ -35,10 +51,14 @@ const UsuarioList = () => {
   const fetchFavoritos = useCallback(async () => {
     if (user && user.id) {
       try {
-        // Por ahora usamos datos de demostración ya que no tenemos endpoint para listar favoritos por usuario
-        setFavoritos([1, 4, 7]) // IDs de usuarios favoritos de demostración
+        const response = await axios.get(`${baseUrl}/api/favoritos/${user.id}/`);
+        // Extraer solo los IDs de los usuarios favoritos
+        const favoritosIds = response.data.map(favorito => favorito.favorito_id);
+        setFavoritos(favoritosIds);
       } catch (err) {
-        console.error("Error fetching favorites:", err)
+        console.error("Error fetching favorites:", err);
+        // Si hay error, usar array vacío en lugar de datos de demostración
+        setFavoritos([]);
       }
     }
   }, [user, baseUrl])
@@ -72,14 +92,11 @@ const UsuarioList = () => {
       if (result.isConfirmed) {
         try {
           // Intentar añadir a favoritos en la API
-          try {
-            await axios.post(`${baseUrl}/favoritos/`, { usuario_id: user.id, favorito_id: usuarioId })
-          } catch (apiError) {
-            console.warn("No se pudo conectar a la API para añadir favorito", apiError)
-          }
-
-          // Actualizar estado local de favoritos
-          setFavoritos([...favoritos, usuarioId])
+          await axios.post(`${baseUrl}/api/favoritos/`, { usuario_id: user.id, favorito_id: usuarioId })
+          
+          // Recargar favoritos desde el servidor
+          await fetchFavoritos()
+          
           Swal.fire({
             title: "¡Añadido!",
             text: "El usuario ha sido añadido a tus favoritos",
@@ -93,7 +110,7 @@ const UsuarioList = () => {
           console.error("Error adding to favorites:", err)
           Swal.fire({
             title: "Error",
-            text: "No se pudo añadir el usuario a favoritos",
+            text: err.response?.data?.error || "No se pudo añadir el usuario a favoritos",
             icon: "error",
             confirmButtonColor: "#005187"
           })
@@ -108,7 +125,7 @@ const UsuarioList = () => {
       event.stopPropagation()
     }
     
-    if (!user || !user.usuario_id) {
+    if (!user || !user.id) {
       Swal.fire({
         title: "Inicia sesión",
         text: "Debes iniciar sesión para eliminar favoritos",
@@ -131,14 +148,11 @@ const UsuarioList = () => {
       if (result.isConfirmed) {
         try {
           // Intentar eliminar de favoritos en la API
-          try {
-            await axios.delete(`${baseUrl}/favoritos/eliminar/${user.usuario_id}/${usuarioId}/`)
-          } catch (apiError) {
-            console.warn("No se pudo conectar a la API para eliminar favorito", apiError)
-          }
-
-          // Actualizar estado local de favoritos
-          setFavoritos(favoritos.filter((fav) => fav !== usuarioId))
+          await axios.delete(`${baseUrl}/api/favoritos/eliminar/${user.id}/${usuarioId}/`)
+          
+          // Recargar favoritos desde el servidor
+          await fetchFavoritos()
+          
           Swal.fire({
             title: "¡Eliminado!",
             text: "El usuario ha sido eliminado de tus favoritos",
@@ -152,7 +166,7 @@ const UsuarioList = () => {
           console.error("Error removing from favorites:", err)
           Swal.fire({
             title: "Error",
-            text: "No se pudo eliminar el usuario de favoritos",
+            text: err.response?.data?.error || "No se pudo eliminar el usuario de favoritos",
             icon: "error",
             confirmButtonColor: "#005187"
           })
@@ -279,7 +293,7 @@ const UsuarioList = () => {
 
   return (
     <>
-      <Header />
+      <Header handleAbrirFormulario={handleAbrirFormulario} />
       <div className="usuarios-container">
         <div className="usuarios-header">
           <h1>Directorio de Usuarios</h1>
@@ -362,7 +376,7 @@ const UsuarioList = () => {
                   >
                     <div className="usuario-header">
                     <div className="usuario-avatar">
-                        <img src={usuario.imagen ? `${baseUrl}${usuario.imagen}` : "/placeholder.svg?height=80&width=80"} alt={usuario.nombre_completo} />
+                        <img src={getImageUrl(usuario.imagen) || "/placeholder.svg?height=80&width=80"} alt={usuario.nombre_completo} />
                       </div>
                       <div className="usuario-info">
                         <h3>{usuario.nombre_completo}</h3>
@@ -485,7 +499,7 @@ const UsuarioList = () => {
             
             <div className="modal-header">
               <div className="modal-avatar">
-                <img src={selectedUser.imagen ? `${baseUrl}${selectedUser.imagen}` : "/placeholder.svg?height=120&width=120"} alt={selectedUser.nombre_completo} />
+                <img src={getImageUrl(selectedUser.imagen) || "/placeholder.svg?height=120&width=120"} alt={selectedUser.nombre_completo} />
               </div>
               <div className="modal-title">
                 <h2>{selectedUser.nombre_completo}</h2>
