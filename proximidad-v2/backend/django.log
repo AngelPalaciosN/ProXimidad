@@ -1,0 +1,827 @@
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\proximidad_app\apps.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\proximidad_app\__init__.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\core\settings.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\core\settings.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\proximidad_app\__init__.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\core\settings.py changed, reloading.
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\core\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Not Found: /api
+"GET /api HTTP/1.1" 404 2314
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2338
+"GET /api/usuarios HTTP/1.1" 301 0
+"GET /api/usuarios/ HTTP/1.1" 200 12447
+"GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 200 3426
+"GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 200 121457
+"GET /static/rest_framework/css/default.css HTTP/1.1" 200 1152
+"GET /static/rest_framework/css/prettify.css HTTP/1.1" 200 817
+"GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 200 3796
+"GET /static/rest_framework/js/csrf.js HTTP/1.1" 200 1793
+"GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 200 13632
+"GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 200 39680
+"GET /static/rest_framework/js/default.js HTTP/1.1" 200 1268
+"GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 200 59
+"GET /static/rest_framework/img/grid.png HTTP/1.1" 200 1458
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/servicios/ HTTP/1.1" 200 1940
+- Broken pipe from ('127.0.0.1', 54790)
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\core\settings.py changed, reloading.
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\core\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"OPTIONS /api/generar-codigo/ HTTP/1.1" 200 0
+"POST /api/generar-codigo/ HTTP/1.1" 200 43
+"POST /api/generar-codigo/ HTTP/1.1" 200 43
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\proximidad_app\views.py changed, reloading.
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\proximidad_app\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\proximidad_app\views.py changed, reloading.
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\proximidad_app\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Código de verificación generado para palaciosangeldavidn@gmail.com: 851572
+"POST /api/generar-codigo/ HTTP/1.1" 200 43
+"OPTIONS /api/login/ HTTP/1.1" 200 0
+"POST /api/login/ HTTP/1.1" 200 248
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+Not Found: /apiusuarios/Alan_Toro_Prime.jpeg
+"GET /apiusuarios/Alan_Toro_Prime.jpeg HTTP/1.1" 404 2401
+Not Found: /apiusuarios/down-4_Mbd7s3p.jpg
+"GET /apiusuarios/down-4_Mbd7s3p.jpg HTTP/1.1" 404 2395
+Not Found: /apiusuarios/OIP_Ujs09al.jpg
+"GET /apiusuarios/OIP_Ujs09al.jpg HTTP/1.1" 404 2386
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\proximidad_app\views.py changed, reloading.
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\proximidad_app\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+Watching for file changes with StatReloader
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3043
+Bad Request: /api/crear-usuario/
+"POST /api/crear-usuario/ HTTP/1.1" 400 49
+Bad Request: /api/crear-usuario/
+"POST /api/crear-usuario/ HTTP/1.1" 400 34
+Method Not Allowed: /api/crear-usuario/
+"GET /api/crear-usuario/ HTTP/1.1" 405 5605
+"GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 304 0
+"GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 304 0
+"GET /static/rest_framework/css/prettify.css HTTP/1.1" 304 0
+"GET /static/rest_framework/css/default.css HTTP/1.1" 304 0
+"GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 304 0
+"GET /static/rest_framework/js/csrf.js HTTP/1.1" 304 0
+"GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 304 0
+"GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 304 0
+"GET /static/rest_framework/js/default.js HTTP/1.1" 304 0
+"GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 304 0
+"GET /static/rest_framework/img/grid.png HTTP/1.1" 304 0
+Method Not Allowed: /api/crear-usuario/
+"GET /api/crear-usuario/ HTTP/1.1" 405 5605
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\proximidad_app\models.py changed, reloading.
+Watching for file changes with StatReloader
+Method Not Allowed: /api/crear-usuario/
+"GET /api/crear-usuario/ HTTP/1.1" 405 42
+Error al crear usuario: (1048, "Column 'codigo_verificacion' cannot be null")
+Internal Server Error: /api/crear-usuario/
+"POST /api/crear-usuario/ HTTP/1.1" 500 38
+Error al crear usuario: (1048, "Column 'codigo_verificacion' cannot be null")
+Internal Server Error: /api/crear-usuario/
+"POST /api/crear-usuario/ HTTP/1.1" 500 38
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\proximidad_app\models.py changed, reloading.
+Watching for file changes with StatReloader
+"POST /api/crear-usuario/ HTTP/1.1" 201 191
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\proximidad_app\models.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET /api/usuarios/ HTTP/1.1" 200 3082
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3082
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3082
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3082
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3082
+"GET /api/usuarios/ HTTP/1.1" 200 3082
+"POST /api/crear-usuario/ HTTP/1.1" 201 222
+Código de verificación generado para alonso@gmail.com: 137789
+"POST /api/generar-codigo/ HTTP/1.1" 200 43
+"POST /api/login/ HTTP/1.1" 200 260
+Not Found: /api/media/usuarios/Proximidad.jpg
+"GET /api/media/usuarios/Proximidad.jpg HTTP/1.1" 404 4219
+Not Found: /api/media/usuarios/Proximidad.jpg
+"GET /api/media/usuarios/Proximidad.jpg HTTP/1.1" 404 4219
+"GET /api/usuarios/ HTTP/1.1" 200 3305
+"GET /api/usuarios/ HTTP/1.1" 200 3305
+Not Found: /api/media/usuarios/Alan_Toro_Prime.jpeg
+"GET /api/media/usuarios/Alan_Toro_Prime.jpeg HTTP/1.1" 404 4237
+Not Found: /api/media/usuarios/Proximidad.jpg
+"GET /api/media/usuarios/Proximidad.jpg HTTP/1.1" 404 4219
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\proximidad_app\urls.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\proximidad_app\serializer.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\proximidad_app\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\proximidad_app\views.py changed, reloading.
+Watching for file changes with StatReloader
+"GET /api/usuarios/ HTTP/1.1" 200 3453
+"GET /api/usuarios/ HTTP/1.1" 200 3453
+"GET /api/usuarios/ HTTP/1.1" 200 3453
+"GET /api/usuarios/ HTTP/1.1" 200 3453
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\proximidad_app\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\proximidad_app\urls.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\proximidad_app\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET /api/usuarios/ HTTP/1.1" 200 3453
+"GET /api/usuarios/ HTTP/1.1" 200 3453
+"GET /api/usuarios/ HTTP/1.1" 200 3453
+"GET /api/usuarios/ HTTP/1.1" 200 3453
+Not Found: /media/usuarios/Alan_Toro_Prime.jpeg
+"GET /media/usuarios/Alan_Toro_Prime.jpeg HTTP/1.1" 404 2670
+"GET /media/usuarios/Proximidad.jpg HTTP/1.1" 200 656
+"GET /api/usuarios/ HTTP/1.1" 200 3453
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3453
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3453
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3453
+"GET /api/servicios/ HTTP/1.1" 200 1940
+Código de verificación generado para alonso@gmail.com: 895144
+"POST /api/generar-codigo/ HTTP/1.1" 200 43
+"POST /api/login/ HTTP/1.1" 200 264
+Not Found: /media/usuarios/Alan_Toro_Prime.jpeg
+"GET /media/usuarios/Alan_Toro_Prime.jpeg HTTP/1.1" 404 2670
+Error al obtener favoritos: Invalid field name(s) given in select_related: 'favorito'. Choices are: favorito_id, usuario_id
+Internal Server Error: /api/favoritos/22/
+"GET /api/usuarios/ HTTP/1.1" 200 3453
+"GET /api/favoritos/22/ HTTP/1.1" 500 38
+"GET /api/usuarios/ HTTP/1.1" 200 3453
+Error al obtener favoritos: Invalid field name(s) given in select_related: 'favorito'. Choices are: favorito_id, usuario_id
+Internal Server Error: /api/favoritos/22/
+"GET /api/favoritos/22/ HTTP/1.1" 500 38
+Not Found: /media/usuarios/Alan_Toro_Prime.jpeg
+"GET /media/usuarios/Alan_Toro_Prime.jpeg HTTP/1.1" 404 2670
+"OPTIONS /api/favoritos/ HTTP/1.1" 200 0
+"POST /api/favoritos/ HTTP/1.1" 201 154
+"OPTIONS /api/favoritos/eliminar/22/19/ HTTP/1.1" 200 0
+"DELETE /api/favoritos/eliminar/22/19/ HTTP/1.1" 200 46
+"GET /api/usuarios/ HTTP/1.1" 200 3453
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3453
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3453
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/usuarios/ HTTP/1.1" 200 3453
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"POST /api/crear-usuario/ HTTP/1.1" 201 240
+Código de verificación generado para aaaa@gmail.com: 571374
+"POST /api/generar-codigo/ HTTP/1.1" 200 43
+"POST /api/login/ HTTP/1.1" 200 257
+"GET /api/servicios/ HTTP/1.1" 200 1940
+"GET /api/servicios/ HTTP/1.1" 200 1940
+Error al obtener favoritos: Invalid field name(s) given in select_related: 'favorito'. Choices are: favorito_id, usuario_id
+"GET /api/usuarios/ HTTP/1.1" 200 3694
+Internal Server Error: /api/favoritos/23/
+"GET /api/usuarios/ HTTP/1.1" 200 3694
+"GET /api/favoritos/23/ HTTP/1.1" 500 38
+Not Found: /media/usuarios/Alan_Toro_Prime.jpeg
+Error al obtener favoritos: Invalid field name(s) given in select_related: 'favorito'. Choices are: favorito_id, usuario_id
+"GET /media/usuarios/Alan_Toro_Prime.jpeg HTTP/1.1" 404 2670
+"GET /media/usuarios/JC450PRO.jpg HTTP/1.1" 200 66552
+Internal Server Error: /api/favoritos/23/
+"GET /api/favoritos/23/ HTTP/1.1" 500 38
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\proximidad_app\models.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Not Found: /servicios/
+"GET /servicios/ HTTP/1.1" 404 2335
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+Watching for file changes with StatReloader
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"OPTIONS /api/generar-codigo/ HTTP/1.1" 200 0
+Código de verificación generado para alonso@gmail.com: 208335
+"POST /api/generar-codigo/ HTTP/1.1" 200 43
+Not Found: /api
+"GET /api HTTP/1.1" 404 2314
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2338
+Código de verificación generado para alonso@gmail.com: 241500
+"POST /api/generar-codigo/ HTTP/1.1" 200 43
+Not Found: /api
+"GET /api HTTP/1.1" 404 2314
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"OPTIONS /api/generar-codigo/ HTTP/1.1" 200 0
+Código de verificación generado para aaaa@gmail.com: 783691
+"POST /api/generar-codigo/ HTTP/1.1" 200 43
+"OPTIONS /api/login/ HTTP/1.1" 200 0
+"POST /api/login/ HTTP/1.1" 200 257
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+Error al obtener favoritos: Invalid field name(s) given in select_related: 'favorito'. Choices are: favorito_id, usuario_id
+Internal Server Error: /api/favoritos/23/
+"GET /api/usuarios/ HTTP/1.1" 200 4848
+"GET /api/favoritos/23/ HTTP/1.1" 500 38
+Error al obtener favoritos: Invalid field name(s) given in select_related: 'favorito'. Choices are: favorito_id, usuario_id
+Internal Server Error: /api/favoritos/23/
+"GET /api/favoritos/23/ HTTP/1.1" 500 38
+"GET /media/usuarios/JC450PRO.jpg HTTP/1.1" 304 0
+"GET /media/usuarios/Proximidad.jpg HTTP/1.1" 304 0
+Not Found: /media/usuarios/Alan_Toro_Prime.jpeg
+"GET /media/usuarios/Alan_Toro_Prime.jpeg HTTP/1.1" 404 2670
+"GET /api/categorias/ HTTP/1.1" 200 1492
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/categorias/ HTTP/1.1" 200 1492
+"GET /api/servicios/ HTTP/1.1" 200 6137
+"GET /api/servicios/? HTTP/1.1" 200 6137
+"GET /api/servicios/?categoria=5 HTTP/1.1" 200 1453
+Watching for file changes with StatReloader
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/ HTTP/1.1" 200 11148
+Watching for file changes with StatReloader
+Invalid HTTP_HOST header: '192.168.1.61:8000'. You may need to add '192.168.1.61' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.61:8000'. You may need to add '192.168.1.61' to ALLOWED_HOSTS.
+Invalid HTTP_HOST header: '192.168.1.61:8000'. You may need to add '192.168.1.61' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.61:8000'. You may need to add '192.168.1.61' to ALLOWED_HOSTS.
+Bad Request: /servicios/
+Bad Request: /usuarios/
+"GET //servicios/ HTTP/1.1" 400 75047
+"GET //usuarios/ HTTP/1.1" 400 75036
+Invalid HTTP_HOST header: '192.168.1.61:8000'. You may need to add '192.168.1.61' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.61:8000'. You may need to add '192.168.1.61' to ALLOWED_HOSTS.
+Bad Request: /servicios/
+Invalid HTTP_HOST header: '192.168.1.61:8000'. You may need to add '192.168.1.61' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.61:8000'. You may need to add '192.168.1.61' to ALLOWED_HOSTS.
+"GET //servicios/ HTTP/1.1" 400 75047
+Invalid HTTP_HOST header: '192.168.1.61:8000'. You may need to add '192.168.1.61' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.61:8000'. You may need to add '192.168.1.61' to ALLOWED_HOSTS.
+Bad Request: /usuarios/
+"GET //usuarios/ HTTP/1.1" 400 75036
+Invalid HTTP_HOST header: '192.168.1.61:8000'. You may need to add '192.168.1.61' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.61:8000'. You may need to add '192.168.1.61' to ALLOWED_HOSTS.
+Bad Request: /servicios/
+"GET //servicios/ HTTP/1.1" 400 75047
+Invalid HTTP_HOST header: '192.168.1.61:8000'. You may need to add '192.168.1.61' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.61:8000'. You may need to add '192.168.1.61' to ALLOWED_HOSTS.
+Bad Request: /usuarios/
+"GET //usuarios/ HTTP/1.1" 400 75036
+Invalid HTTP_HOST header: '192.168.1.61:8000'. You may need to add '192.168.1.61' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.61:8000'. You may need to add '192.168.1.61' to ALLOWED_HOSTS.
+Bad Request: /servicios/
+"GET //servicios/ HTTP/1.1" 400 75047
+Bad Request: /usuarios/
+"GET //usuarios/ HTTP/1.1" 400 75036
+Invalid HTTP_HOST header: '192.168.1.61:8000'. You may need to add '192.168.1.61' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.61:8000'. You may need to add '192.168.1.61' to ALLOWED_HOSTS.
+Bad Request: /usuarios/
+"GET //usuarios/ HTTP/1.1" 400 75036
+Invalid HTTP_HOST header: '192.168.1.61:8000'. You may need to add '192.168.1.61' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.61:8000'. You may need to add '192.168.1.61' to ALLOWED_HOSTS.
+Bad Request: /usuarios/
+"GET //usuarios/ HTTP/1.1" 400 75036
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\core\settings.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\core\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /servicios/
+Not Found: /usuarios/
+"GET //servicios/ HTTP/1.1" 404 2338
+"GET //usuarios/ HTTP/1.1" 404 2335
+Not Found: /servicios/
+Not Found: /usuarios/
+"GET //servicios/ HTTP/1.1" 404 2338
+"GET //usuarios/ HTTP/1.1" 404 2335
+Not Found: /servicios/
+"GET //servicios/ HTTP/1.1" 404 2338
+Not Found: /usuarios/
+"GET //usuarios/ HTTP/1.1" 404 2335
+Not Found: /servicios/
+"GET //servicios/ HTTP/1.1" 404 2338
+Not Found: /usuarios/
+"GET //usuarios/ HTTP/1.1" 404 2335
+Not Found: /usuarios/
+"GET //usuarios/ HTTP/1.1" 404 2335
+Not Found: /usuarios/
+"GET //usuarios/ HTTP/1.1" 404 2335
+Not Found: /usuarios/
+Not Found: /servicios/
+"GET /usuarios/ HTTP/1.1" 404 2335
+"GET /servicios/ HTTP/1.1" 404 2338
+Not Found: /servicios/
+"GET /servicios/ HTTP/1.1" 404 2338
+Not Found: /usuarios/
+Not Found: /servicios/
+"GET /usuarios/ HTTP/1.1" 404 2335
+"GET /servicios/ HTTP/1.1" 404 2338
+Not Found: /usuarios/
+"GET /usuarios/ HTTP/1.1" 404 2335
+Not Found: /servicios/
+"GET /servicios/ HTTP/1.1" 404 2338
+Not Found: /usuarios/
+"GET /usuarios/ HTTP/1.1" 404 2335
+Not Found: /usuarios/
+"GET /usuarios/ HTTP/1.1" 404 2335
+Not Found: /usuarios/
+"GET /usuarios/ HTTP/1.1" 404 2335
+Not Found: /usuarios/
+"GET /usuarios/ HTTP/1.1" 404 2335
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2341
+"GET /api/usuarios/ HTTP/1.1" 200 5212
+"GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 200 3426
+"GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 200 39680
+"GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 200 121457
+"GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 200 13632
+"GET /static/rest_framework/css/prettify.css HTTP/1.1" 200 817
+"GET /static/rest_framework/js/default.js HTTP/1.1" 200 1268
+"GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 200 3796
+"GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 200 59
+"GET /static/rest_framework/css/default.css HTTP/1.1" 200 1152
+"GET /static/rest_framework/js/csrf.js HTTP/1.1" 200 1793
+"GET /static/rest_framework/img/grid.png HTTP/1.1" 200 1458
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"POST /api/crear-usuario/ HTTP/1.1" 201 393
+"OPTIONS /api/generar-codigo/ HTTP/1.1" 200 0
+Código de verificación generado para palaciosangeldavidn@gmail.com: 112728
+"POST /api/generar-codigo/ HTTP/1.1" 200 43
+"OPTIONS /api/login/ HTTP/1.1" 200 0
+"POST /api/login/ HTTP/1.1" 200 407
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/ HTTP/1.1" 200 11148
+Código de verificación generado para palaciosangeldavidn@gmail.com: 201084
+"POST /api/generar-codigo/ HTTP/1.1" 200 43
+"POST /api/login/ HTTP/1.1" 200 407
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/? HTTP/1.1" 200 11148
+C:\Users\Angel David Palacios\Documents\GitHub\ProXimidad\proximidad-v2\backend\proximidad_app\urls.py changed, reloading.
+Watching for file changes with StatReloader
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/? HTTP/1.1" 200 11148
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/?categoria=6 HTTP/1.1" 200 1491
+"GET /api/servicios/?categoria=2 HTTP/1.1" 200 929
+"GET /api/servicios/? HTTP/1.1" 200 11148
+"GET /api/servicios/?busqueda=plome HTTP/1.1" 200 942
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/? HTTP/1.1" 200 11148
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/? HTTP/1.1" 200 11148
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/? HTTP/1.1" 200 11148
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/? HTTP/1.1" 200 11148
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/? HTTP/1.1" 200 11148
+Watching for file changes with StatReloader
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/? HTTP/1.1" 200 11148
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/? HTTP/1.1" 200 11148
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/? HTTP/1.1" 200 11148
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/? HTTP/1.1" 200 11148
+Watching for file changes with StatReloader
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/? HTTP/1.1" 200 11148
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/? HTTP/1.1" 200 11148
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+Not Found: /api/v1/servicios/
+Not Found: /api/v1/categorias/
+"GET /api/v1/servicios/?page_size=12 HTTP/1.1" 404 8039
+"GET /api/v1/categorias/ HTTP/1.1" 404 8029
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+Not Found: /api/v1/categorias/
+Not Found: /api/v1/servicios/
+"GET /api/v1/categorias/ HTTP/1.1" 404 8029
+"GET /api/v1/servicios/?page_size=12 HTTP/1.1" 404 8039
+Not Found: /api/v1/categorias/
+Not Found: /api/v1/servicios/
+"GET /api/v1/categorias/ HTTP/1.1" 404 8029
+"GET /api/v1/servicios/?page_size=12 HTTP/1.1" 404 8039
+Not Found: /api/v1/categorias/
+Not Found: /api/v1/servicios/
+"GET /api/v1/categorias/ HTTP/1.1" 404 8029
+"GET /api/v1/servicios/?page_size=12 HTTP/1.1" 404 8039
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/?page_size=12 HTTP/1.1" 200 11148
+"GET /api/servicios/?page_size=12 HTTP/1.1" 200 11148
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/servicios/?page_size=12 HTTP/1.1" 200 11148
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/?page_size=12 HTTP/1.1" 200 11148
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/?page_size=12 HTTP/1.1" 200 11148
+"GET /api/servicios/?page_size=12 HTTP/1.1" 200 11148
+Error al obtener servicios: Field 'categoria_id' expected a number but got 'Finanzas'.
+Internal Server Error: /api/servicios/
+"GET /api/servicios/?categoria=Finanzas&page=1&page_size=12 HTTP/1.1" 500 38
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/?page_size=12 HTTP/1.1" 200 11148
+Error al obtener servicios: Field 'categoria_id' expected a number but got 'Consultoría'.
+Internal Server Error: /api/servicios/
+"GET /api/servicios/?categoria=Consultor%C3%ADa&page=1&page_size=12 HTTP/1.1" 500 38
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/?page_size=12 HTTP/1.1" 200 11148
+Error al obtener servicios: Field 'categoria_id' expected a number but got 'Aseo'.
+Internal Server Error: /api/servicios/
+"GET /api/servicios/?categoria=Aseo&page=1&page_size=12 HTTP/1.1" 500 38
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/?page_size=12 HTTP/1.1" 200 11148
+"GET /api/servicios/?page_size=12 HTTP/1.1" 200 11148
+Error al obtener servicios: Field 'categoria_id' expected a number but got 'Aseo'.
+Internal Server Error: /api/servicios/
+"GET /api/servicios/?categoria=Aseo&page=1&page_size=12 HTTP/1.1" 500 38
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/?page_size=12 HTTP/1.1" 200 11148
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/usuarios/ HTTP/1.1" 200 395
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"GET /api/servicios/ HTTP/1.1" 200 11148
+"OPTIONS /api/generar-codigo/ HTTP/1.1" 200 0
+Código de verificación generado para palaciosangeldavidn@gmail.com: 325787
+"POST /api/generar-codigo/ HTTP/1.1" 200 43
+"OPTIONS /api/login/ HTTP/1.1" 200 0
+"POST /api/login/ HTTP/1.1" 200 407
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/categorias/ HTTP/1.1" 200 2368
+"GET /api/servicios/?page_size=12 HTTP/1.1" 200 11148
+"GET /api/servicios/?page_size=12 HTTP/1.1" 200 11148
