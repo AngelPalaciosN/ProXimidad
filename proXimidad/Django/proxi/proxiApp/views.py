@@ -15,6 +15,11 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+def handle_api_error(e, operation="operación"):
+    """Función utilitaria para manejar errores de API"""
+    logger.error(f"Error en {operation}: {str(e)}")
+    return Response({'error': f'Error interno del servidor en {operation}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 # Create your views here.
 
 @api_view(['GET'])
@@ -22,11 +27,10 @@ def servicios_list(request):
     """Lista todos los servicios con información del proveedor"""
     try:
         servicios = Servicios.objects.select_related('proveedor', 'categoria').all()
-        serializer = ServiciosSerializer(servicios, many=True)
+        serializer = ServiciosSerializer(servicios, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception as e:
-        logger.error(f"Error al obtener servicios: {str(e)}")
-        return Response({'error': 'Error interno del servidor'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return handle_api_error(e, "obtener servicios")
 
 
 @api_view(['GET'])
@@ -39,11 +43,10 @@ def usuarios_list(request):
         if tipo_usuario:
             usuarios = usuarios.filter(tipo_usuario=tipo_usuario)
             
-        serializer = UsuarioSerializer(usuarios, many=True)
+        serializer = UsuarioSerializer(usuarios, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception as e:
-        logger.error(f"Error al obtener usuarios: {str(e)}")
-        return Response({'error': 'Error interno del servidor'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return handle_api_error(e, "obtener usuarios")
 
 @api_view(['GET'])
 def categorias_list(request):
@@ -53,8 +56,7 @@ def categorias_list(request):
         serializer = CategoriaSerializer(categorias, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception as e:
-        logger.error(f"Error al obtener categorías: {str(e)}")
-        return Response({'error': 'Error interno del servidor'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return handle_api_error(e, "obtener categorías")
 
 @api_view(['GET'])
 def comentarios_list(request):
@@ -64,8 +66,7 @@ def comentarios_list(request):
         serializer = ComentariosSerializer(comentarios, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception as e:
-        logger.error(f"Error al obtener comentarios: {str(e)}")
-        return Response({'error': 'Error interno del servidor'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return handle_api_error(e, "obtener comentarios")
 
 @api_view(['POST'])
 def agregar_favorito(request):
@@ -91,6 +92,17 @@ def eliminar_favorito(request, usuario_id, favorito_id):
         return Response({'message': 'Favorito eliminado correctamente'}, status=status.HTTP_200_OK)
     except Exception as e:
         logger.error(f"Error al eliminar favorito: {str(e)}")
+        return Response({'error': 'Error interno del servidor'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+def listar_favoritos(request, usuario_id):
+    """Lista los favoritos de un usuario específico"""
+    try:
+        favoritos = Favoritos.objects.filter(usuario_id=usuario_id).select_related('favorito_id')
+        serializer = FavoritosSerializer(favoritos, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Exception as e:
+        logger.error(f"Error al listar favoritos: {str(e)}")
         return Response({'error': 'Error interno del servidor'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['POST'])
@@ -140,10 +152,23 @@ def generar_codigo(request):
         usuario.codigo_verificacion = codigo
         usuario.save()
         
+        # Mostrar el código en la consola del servidor para debugging
+        print(f"=== CÓDIGO DE VERIFICACIÓN GENERADO ===")
+        print(f"Usuario: {usuario.nombre_completo}")
+        print(f"Email: {email}")
+        print(f"Código: {codigo}")
+        print(f"=====================================")
+        
+        # También registrar en los logs
+        logger.info(f"Código de verificación generado - Usuario: {email}, Código: {codigo}")
+        
         # En un entorno real, aquí enviarías el código por email
         # send_email_with_code(email, codigo)
         
-        return Response({'message': 'Código generado exitosamente'}, status=status.HTTP_200_OK)
+        return Response({
+            'message': 'Código generado exitosamente', 
+            'codigo': codigo  # Solo para desarrollo, remover en producción
+        }, status=status.HTTP_200_OK)
     except Usuario.DoesNotExist:
         return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
@@ -193,16 +218,17 @@ def buscar_servicios(request):
 
 
 @api_view(['GET'])
+@api_view(['GET'])
 def usuario_detail(request, usuario_id):
     """Obtiene los detalles de un usuario específico"""
     try:
         usuario = get_object_or_404(Usuario, id=usuario_id)
-        serializer = UsuarioSerializer(usuario)
+        serializer = UsuarioSerializer(usuario, context={'request': request})
         
         # Si es un proveedor, incluir sus servicios
         if usuario.tipo_usuario == 'proveedor':
             servicios = Servicios.objects.filter(proveedor=usuario)
-            servicios_data = ServiciosSerializer(servicios, many=True).data
+            servicios_data = ServiciosSerializer(servicios, many=True, context={'request': request}).data
             
             response_data = serializer.data
             response_data['servicios'] = servicios_data
@@ -270,7 +296,7 @@ def login_usuario(request):
                 # No podemos actualizar el estado porque no existe ese campo
                 pass
             
-            serializer = UsuarioSerializer(usuario)
+            serializer = UsuarioSerializer(usuario, context={'request': request})
             return Response({
                 'message': 'Login exitoso',
                 'usuario': serializer.data

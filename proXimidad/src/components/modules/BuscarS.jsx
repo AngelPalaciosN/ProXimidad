@@ -13,6 +13,11 @@ const BuscarS = () => {
   const [searchTerm, setSearchTerm] = useState("")
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("")
   const [selectedService, setSelectedService] = useState(null)
+  const [formularioVisible, setFormularioVisible] = useState(null)
+
+  const handleAbrirFormulario = (formulario) => {
+    setFormularioVisible(formulario);
+  };
 
   // Usar la variable de entorno de Vite
   const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000"
@@ -25,7 +30,7 @@ const BuscarS = () => {
 
         try {
           // Fixed: Use the correct endpoint that matches your Django URLs
-          const response = await axios.get(`${baseUrl}/servicios/`)
+          const response = await axios.get(`${baseUrl}/api/servicios/`)
           serviciosData = response.data
         } catch (apiError) {
           console.warn("No se pudo conectar a la API, usando datos de demostración", apiError)
@@ -177,7 +182,7 @@ const BuscarS = () => {
 
   return (
     <>
-      <Header />
+      <Header handleAbrirFormulario={handleAbrirFormulario} />
       <div className="container-fluid" id="main-servicios">
         <div className="container">
           <div className="filtros">
