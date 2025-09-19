@@ -825,3 +825,238 @@ Código de verificación generado para palaciosangeldavidn@gmail.com: 325787
 "GET /api/categorias/ HTTP/1.1" 200 2368
 "GET /api/servicios/?page_size=12 HTTP/1.1" 200 11148
 "GET /api/servicios/?page_size=12 HTTP/1.1" 200 11148
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Bad Request: /api/usuarios/
+"GET /api/usuarios/ HTTP/1.1" 400 75061
+Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Bad Request: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 400 74751
+Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Bad Request: /api/usuarios/
+Bad Request: /api/servicios/
+"GET /api/usuarios/ HTTP/1.1" 400 74967
+"GET /api/servicios/ HTTP/1.1" 400 74979
+Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Bad Request: /api/usuarios/
+Bad Request: /api/servicios/
+"GET /api/usuarios/ HTTP/1.1" 400 74967
+"GET /api/servicios/ HTTP/1.1" 400 74979
+Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Bad Request: /api/usuarios/
+Bad Request: /api/servicios/
+"GET /api/usuarios/ HTTP/1.1" 400 74967
+"GET /api/servicios/ HTTP/1.1" 400 74979
+Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Bad Request: /api/usuarios/
+"GET /api/usuarios/ HTTP/1.1" 400 74967
+Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Bad Request: /api/servicios/
+"GET /api/servicios/ HTTP/1.1" 400 74979
+Bad Request: /api/usuarios/
+"GET /api/usuarios/ HTTP/1.1" 400 74967
+Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Bad Request: /api/usuarios/
+"GET /api/usuarios/ HTTP/1.1" 400 74967
+Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\utils\deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.106:8000'. You may need to add '192.168.1.106' to ALLOWED_HOSTS.
+Bad Request: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 400 74751
+C:\Users\SENA\Documents\GitHub\ProXimidad\ProXimidad\proximidad-v2\backend\core\settings.py changed, reloading.
+Watching for file changes with StatReloader
+"GET /api/servicios/ HTTP/1.1" 200 26
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/servicios/ HTTP/1.1" 200 26
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/servicios/ HTTP/1.1" 200 26
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/servicios/ HTTP/1.1" 200 26
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/usuarios/ HTTP/1.1" 200 2
+Not Found: /
+"GET / HTTP/1.1" 404 2291
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2342
+Not Found: /api
+"GET /api HTTP/1.1" 404 2318
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/servicios/ HTTP/1.1" 200 26
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/servicios/ HTTP/1.1" 200 26
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/servicios/ HTTP/1.1" 200 26
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/servicios/ HTTP/1.1" 200 26
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/usuarios/ HTTP/1.1" 200 2
+Not Found: /api
+"GET /api HTTP/1.1" 404 2318
+Watching for file changes with StatReloader
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/servicios/ HTTP/1.1" 200 26
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/servicios/ HTTP/1.1" 200 26
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/servicios/ HTTP/1.1" 200 26
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/servicios/ HTTP/1.1" 200 26
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/servicios/ HTTP/1.1" 200 26
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/servicios/ HTTP/1.1" 200 26
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/servicios/ HTTP/1.1" 200 26
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/servicios/ HTTP/1.1" 200 26
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"GET /api/usuarios/ HTTP/1.1" 200 2
+"POST /api/crear-usuario/ HTTP/1.1" 201 353
+"OPTIONS /api/generar-codigo/ HTTP/1.1" 200 0
+Código de verificación generado para angel@gmail.com: 578869
+"POST /api/generar-codigo/ HTTP/1.1" 200 43
+"OPTIONS /api/login/ HTTP/1.1" 200 0
+"POST /api/login/ HTTP/1.1" 200 366
+"GET /api/servicios/ HTTP/1.1" 200 26
+"GET /api/servicios/ HTTP/1.1" 200 26
+"GET /api/servicios/ HTTP/1.1" 200 26
+"GET /api/usuarios/ HTTP/1.1" 200 355
+"GET /api/servicios/ HTTP/1.1" 200 26
+"GET /api/usuarios/ HTTP/1.1" 200 355

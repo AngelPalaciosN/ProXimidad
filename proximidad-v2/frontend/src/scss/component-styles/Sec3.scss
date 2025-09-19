@@ -1,0 +1,648 @@
+@use '../variables' as *;
+@use '../responsive' as *;
+
+.sec3 {
+  background-color: $background-color;
+  padding: 4rem 0;
+  overflow: hidden;
+  
+  .section-title {
+    font-weight: 700;
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background-color: $primary-color;
+    }
+  }
+  
+  .section-subtitle {
+    color: $quartiry-color;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+  
+  // Timeline styles - Simplified
+  .career-path-container {
+    margin-bottom: 2rem;
+  }
+  
+  .timeline-container {
+    padding: 1.5rem 0;
+    position: relative;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    
+    &::-webkit-scrollbar {
+      height: 4px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: $primary-color;
+    }
+  }
+  
+  .timeline-track {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    margin: 0 auto;
+    padding: 0 10px;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background-color: #e0e0e0;
+      transform: translateY(-50%);
+      z-index: 1;
+    }
+  }
+  
+  .timeline-progress {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 4px;
+    background-color: $primary-color;
+    transform: translateY(-50%);
+    z-index: 2;
+    transition: width 0.5s ease-in-out;
+    width: 0;
+  }
+  
+  .timeline-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 3;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 10px;
+    
+    .step-marker {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: white;
+      border: 3px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.75rem;
+      transition: all 0.3s ease;
+      
+      .step-icon-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #a09d9d;
+        transition: all 0.3s ease;
+        
+        .step-icon {
+          width: 22px;
+          height: 22px;
+        }
+      }
+    }
+    
+    .step-label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #a09d9d;
+      text-align: center;
+      max-width: 80px;
+      transition: all 0.3s ease;
+      opacity: 0.7;
+    }
+    
+    &.active {
+      .step-marker {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px rgba($primary-color, 0.2);
+        transform: scale(1.1);
+        
+        .step-icon-container {
+          color: $primary-color;
+        }
+      }
+      
+      .step-label {
+        color: $primary-color;
+        font-weight: 600;
+        opacity: 1;
+      }
+    }
+    
+    &.completed {
+      .step-marker {
+        border-color: $primary-color;
+        background-color: $primary-color;
+        
+        .step-icon-container {
+          color: white;
+        }
+      }
+      
+      .step-label {
+        color: $primary-color;
+        opacity: 0.9;
+      }
+    }
+    
+    &:hover:not(.active) {
+      .step-marker {
+        border-color: #c0c0c0;
+        transform: scale(1.05);
+      }
+      
+      .step-label {
+        opacity: 1;
+      }
+    }
+  }
+  
+  // Career stage detail styles - Simplified
+  .career-stage-detail {
+    margin-top: 2rem;
+  }
+  
+  .career-stage-card {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    height: 100%;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.5s ease;
+    
+    &.animate {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .stage-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      
+      h3 {
+        font-weight: 700;
+        color: $primary-color;
+        margin: 0;
+        margin-bottom: 0.5rem;
+      }
+      
+      .stage-level {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background-color: rgba($primary-color, 0.1);
+        padding: 0.4rem 0.8rem;
+        border-radius: 50px;
+        color: $primary-color;
+        font-weight: 600;
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+      }
+    }
+    
+    .stage-description {
+      color: $quartiry-color;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    
+    .stage-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      
+      .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        flex: 1;
+        min-width: 100px;
+        
+        svg {
+          color: $primary-color;
+        }
+        
+        .stat-content {
+          display: flex;
+          flex-direction: column;
+          
+          .stat-value {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: $primary-color;
+          }
+          
+          .stat-label {
+            font-size: 0.75rem;
+            color: $quartiry-color;
+          }
+        }
+      }
+    }
+    
+    .stage-benefits {
+      margin-bottom: 1rem;
+      
+      h4 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: $text-dark;
+      }
+      
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        
+        li {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 0.5rem;
+          
+          svg {
+            color: $primary-color;
+            min-width: 16px;
+          }
+          
+          span {
+            font-size: 0.9rem;
+            color: $quartiry-color;
+          }
+        }
+      }
+    }
+  }
+  
+  // Career visualization styles - Simplified
+  .career-visualization {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    height: 100%;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.5s ease;
+    transition-delay: 0.1s;
+    
+    &.animate {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .visualization-header {
+      margin-bottom: 1.5rem;
+      
+      h3 {
+        font-weight: 700;
+        color: $primary-color;
+        margin-bottom: 0.5rem;
+        font-size: 1.2rem;
+      }
+      
+      p {
+        color: $quartiry-color;
+        margin: 0;
+        font-size: 0.9rem;
+      }
+    }
+    
+    .profile-evolution {
+      .profile-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 1.25rem;
+        
+        .profile-header {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin-bottom: 1.25rem;
+          flex-wrap: wrap;
+          
+          .profile-avatar {
+            position: relative;
+            
+            &::after {
+              content: '';
+              position: absolute;
+              bottom: 0;
+              right: 0;
+              width: 10px;
+              height: 10px;
+              background-color: #4CAF50;
+              border-radius: 50%;
+              border: 2px solid white;
+            }
+          }
+          
+          .profile-info {
+            flex: 1;
+            min-width: 150px;
+            
+            h4 {
+              font-size: 1rem;
+              font-weight: 600;
+              margin-bottom: 0.5rem;
+              color: $text-dark;
+            }
+            
+            .profile-badges {
+              display: flex;
+              gap: 0.4rem;
+              flex-wrap: wrap;
+              
+              .badge-icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 22px;
+                height: 22px;
+                border-radius: 50%;
+                background-color: rgba($primary-color, 0.1);
+                color: $primary-color;
+                
+                svg {
+                  width: 12px;
+                  height: 12px;
+                }
+              }
+            }
+          }
+        }
+        
+        .profile-metrics {
+          margin-bottom: 1.25rem;
+          
+          .metric {
+            margin-bottom: 0.75rem;
+            
+            .metric-label {
+              display: flex;
+              justify-content: space-between;
+              font-size: 0.8rem;
+              color: $quartiry-color;
+              margin-bottom: 0.4rem;
+            }
+            
+            .metric-bar {
+              height: 6px;
+              background-color: #e0e0e0;
+              border-radius: 3px;
+              overflow: hidden;
+              margin-bottom: 0.2rem;
+              
+              .metric-progress {
+                height: 100%;
+                background-color: $primary-color;
+                border-radius: 3px;
+                transition: width 0.5s ease-in-out;
+              }
+            }
+            
+            .metric-value {
+              text-align: right;
+              font-size: 0.8rem;
+              color: $primary-color;
+              font-weight: 600;
+            }
+          }
+        }
+        
+        .profile-potential {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 0.75rem;
+          background-color: rgba($primary-color, 0.05);
+          border-radius: 8px;
+          
+          .potential-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: rgba($primary-color, 0.1);
+            color: $primary-color;
+          }
+          
+          .potential-info {
+            .potential-label {
+              font-size: 0.8rem;
+              color: $quartiry-color;
+              margin-bottom: 0.2rem;
+            }
+            
+            .potential-value {
+              font-weight: 700;
+              color: $primary-color;
+              font-size: 0.9rem;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  // Simplified CTA
+  .simple-cta-container {
+    margin-top: 3rem;
+  }
+  
+  .simple-cta {
+    background-color: $primary-color;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.5s ease;
+    
+    &.animate {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    h3 {
+      color: white;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      font-size: 1.3rem;
+    }
+    
+    .cta-button {
+      background-color: white;
+      color: $primary-color;
+      border: none;
+      border-radius: 50px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+  
+  // Responsive styles
+  @include media-breakpoint-down(lg) {
+    padding: 3rem 0;
+    
+    .timeline-track {
+      min-width: 600px;
+    }
+  }
+  
+  @include media-breakpoint-down(md) {
+    padding: 2.5rem 0;
+    
+    .timeline-track {
+      min-width: 700px;
+    }
+    
+    .timeline-step {
+      .step-marker {
+        width: 40px;
+        height: 40px;
+        
+        .step-icon-container {
+          .step-icon {
+            width: 18px;
+            height: 18px;
+          }
+        }
+      }
+      
+      .step-label {
+        font-size: 0.75rem;
+        max-width: 70px;
+      }
+    }
+    
+    .career-stage-card {
+      margin-bottom: 1.5rem;
+      
+      .stage-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .stage-stats {
+        flex-direction: column;
+        
+        .stat-item {
+          width: 100%;
+        }
+      }
+    }
+    
+    .simple-cta {
+      padding: 1.5rem;
+      
+      h3 {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+      }
+      
+      .cta-button {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  }
+  
+  @media (max-width: 375px) {
+    padding: 2rem 0;
+    
+    .section-title {
+      font-size: 1.5rem;
+    }
+    
+    .section-subtitle {
+      font-size: 0.9rem;
+    }
+    
+    .timeline-step {
+      .step-marker {
+        width: 36px;
+        height: 36px;
+        
+        .step-icon-container {
+          .step-icon {
+            width: 16px;
+            height: 16px;
+          }
+        }
+      }
+      
+      .step-label {
+        font-size: 0.7rem;
+        max-width: 60px;
+      }
+    }
+    
+    .career-stage-card,
+    .career-visualization {
+      padding: 1rem;
+    }
+    
+    .stage-header h3 {
+      font-size: 1.1rem;
+    }
+    
+    .simple-cta {
+      padding: 1.25rem;
+      
+      h3 {
+        font-size: 1rem;
+      }
+      
+      .cta-button {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}

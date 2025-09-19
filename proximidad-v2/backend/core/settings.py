@@ -38,7 +38,8 @@ ALLOWED_HOSTS = [
     '192.168.1.100',
     '192.168.1.101',
     '192.168.1.102',
-    '192.168.1.61',  # Nueva IP agregada
+    '192.168.1.61',
+    '192.168.1.106',  # Nueva IP agregada
 ]
 
 
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'django_filters',
     'proximidad_app',
     'rest_framework_simplejwt',
 ]
@@ -142,7 +144,8 @@ CORS_ALLOWED_ORIGINS = [
     'http://192.168.1.61:5173',  # Agregada para tu IP actual
     'http://192.168.1.102:5173',  # Nueva IP agregada
     'http://192.168.1.102:8000',
-    'http://192.168.1.61:8000',  # Nueva IP agregada
+    'http://192.168.1.61:8000',
+    'http://192.168.1.106:5173',  # Nueva IP agregada
 ]
 
 
@@ -162,6 +165,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
