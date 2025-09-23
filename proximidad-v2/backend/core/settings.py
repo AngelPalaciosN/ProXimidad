@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
-import os
+from decouple import config, Csv
+from datetime import timedelta
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,24 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+4!lyxyrot*7as_9&mg=o5bd@k@+^l$+3zo@9b6yno#v4ohp3z'
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-+4!lyxyrot*7as_9&mg=o5bd@k@+^l$+3zo@9b6yno#v4ohp3z')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = [
-    '192.168.207.112',
-    'localhost',
-    '127.0.0.1',
-    '192.168.1.56',
-    '192.168.1.100',
-    '10.1.104.226',
-    '192.168.1.100',
-    '192.168.1.101',
-    '192.168.1.102',
-    '192.168.1.61',
-    '192.168.1.106',  # Nueva IP agregada
-]
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
 
 
 # Application definition
@@ -96,12 +85,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'proxima',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': config('DATABASE_ENGINE', default='django.db.backends.mysql'),
+        'NAME': config('DATABASE_NAME', default='proxima'),
+        'USER': config('DATABASE_USER', default='root'),
+        'PASSWORD': config('DATABASE_PASSWORD', default='root'),
+        'HOST': config('DATABASE_HOST', default='localhost'),
+        'PORT': config('DATABASE_PORT', default='3306'),
     }
 }
 
@@ -130,42 +119,75 @@ REST_FRAMEWORK = {
     ),
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173", 
-    "http://192.168.207.112:5173", 
-    "http://192.168.207.112:8000",
-    'http://localhost:8000',
-    'http://192.168.1.56:5173',
-    'http://192.168.1.100:5173',
-    'http://10.1.104.226:8000',
-    'http://192.168.1.100:5173',
-    'http://192.168.1.101:8000',
-    'http://192.168.1.101:5173',
-    'http://192.168.1.61:5173',  # Agregada para tu IP actual
-    'http://192.168.1.102:5173',  # Nueva IP agregada
-    'http://192.168.1.102:8000',
-    'http://192.168.1.61:8000',
-    'http://192.168.1.106:5173',  # Nueva IP agregada
+# Simple JWT Configuration
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=config('JWT_ACCESS_TOKEN_LIFETIME', default=60, cast=int)),
+    'REFRESH_TOKEN_LIFETIME': timedelta(minutes=config('JWT_REFRESH_TOKEN_LIFETIME', default=1440, cast=int)),
+    'SIGNING_KEY': config('JWT_SECRET_KEY', default=SECRET_KEY),
+}
+
+# ========================================
+# CONFIGURACIÓN COMPLETA DE CORS (MODO DESARROLLO)
+# ========================================
+# Permitir TODOS los orígenes durante desarrollo
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+# Lista específica de orígenes (comentada durante desarrollo)
+# CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:3000,http://127.0.0.1:3000,http://192.168.1.101:3000', cast=Csv())
+
+# Métodos HTTP permitidos
+CORS_ALLOWED_METHODS = [
+    'DELETE',
+    'GET', 
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
 ]
+
+# Headers permitidos
+CORS_ALLOWED_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+# Headers expuestos al frontend
+CORS_EXPOSE_HEADERS = config('CORS_EXPOSE_HEADERS', 
+    default='', cast=Csv()
+)
+
+# Preflight cache
+CORS_PREFLIGHT_MAX_AGE = config('CORS_PREFLIGHT_MAX_AGE', default=86400, cast=int)
+
+# URLs que pueden hacer requests cross-origin
+CORS_URLS_REGEX = config('CORS_URLS_REGEX', default=r'^/api/.*$')
 
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = config('LANGUAGE_CODE', default='es-es')
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = config('TIME_ZONE', default='America/Costa_Rica')
 
-USE_I18N = True
+USE_I18N = config('USE_I18N', default=True, cast=bool)
 
-USE_TZ = True
+USE_TZ = config('USE_TZ', default=True, cast=bool)
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = config('STATIC_URL', default='/static/')
+STATIC_ROOT = os.path.join(BASE_DIR, config('STATIC_ROOT', default='staticfiles'))
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -173,35 +195,47 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = config('MEDIA_URL', default='/media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, config('MEDIA_ROOT', default='media'))
 
 # Configuraciones adicionales para mejor rendimiento y seguridad
 
 # Logging configuration
+LOG_LEVEL = config('LOG_LEVEL', default='INFO')
+LOG_TO_FILE = config('LOG_TO_FILE', default=True, cast=bool)
+
+# Configurar handlers dinámicamente
+LOGGING_HANDLERS = {
+    'console': {
+        'level': LOG_LEVEL,
+        'class': 'logging.StreamHandler',
+    },
+}
+
+# Agregar handler de archivo solo si está habilitado
+if LOG_TO_FILE:
+    LOGGING_HANDLERS['file'] = {
+        'level': LOG_LEVEL,
+        'class': 'logging.FileHandler',
+        'filename': BASE_DIR / 'django.log',
+    }
+
+# Configurar qué handlers usar
+HANDLER_LIST = ['file', 'console'] if LOG_TO_FILE else ['console']
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'django.log',
-        },
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-        },
-    },
+    'handlers': LOGGING_HANDLERS,
     'loggers': {
         'django': {
-            'handlers': ['file', 'console'],
-            'level': 'INFO',
+            'handlers': HANDLER_LIST,
+            'level': LOG_LEVEL,
             'propagate': True,
         },
         'proximidad_app': {
-            'handlers': ['file', 'console'],
-            'level': 'DEBUG',
+            'handlers': HANDLER_LIST,
+            'level': LOG_LEVEL,
             'propagate': True,
         },
     },
@@ -212,22 +246,18 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'unique-snowflake',
-        'TIMEOUT': 300,  # 5 minutos
+        'TIMEOUT': config('CACHE_TIMEOUT', default=300, cast=int),
         'OPTIONS': {
-            'MAX_ENTRIES': 1000,
+            'MAX_ENTRIES': config('CACHE_MAX_ENTRIES', default=1000, cast=int),
         }
     }
 }
 
 # Configuraciones de archivos multimedia
-FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
-DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = config('FILE_UPLOAD_MAX_SIZE', default=5242880, cast=int)
+DATA_UPLOAD_MAX_MEMORY_SIZE = config('FILE_UPLOAD_MAX_SIZE', default=5242880, cast=int)
 
-# Configuraciones de timezone
-USE_TZ = True
-TIME_ZONE = 'America/Costa_Rica'  # Ajusta según tu zona horaria
-
-# Configuraciones de internacionalización
-LANGUAGE_CODE = 'es-es'
-USE_I18N = True
-USE_L10N = True
+# Configuraciones de seguridad
+SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=False, cast=bool)
+SECURE_BROWSER_XSS_FILTER = config('SECURE_BROWSER_XSS_FILTER', default=True, cast=bool)
+SECURE_CONTENT_TYPE_NOSNIFF = config('SECURE_CONTENT_TYPE_NOSNIFF', default=True, cast=bool)

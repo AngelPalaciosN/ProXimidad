@@ -1,6 +1,7 @@
 // AuthContext.js
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
+import { config, buildApiUrl } from './config/env.js';
 
 const AuthContext = createContext();
 
@@ -10,9 +11,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Base URL from environment variable
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   // Check if user is already logged in on component mount
   useEffect(() => {
@@ -39,7 +37,7 @@ export const AuthProvider = ({ children }) => {
   const loginWithPassword = async (credentials) => {
     setLoading(true);
     setError(null);
-    const apiUrl = `${API_BASE_URL}/login/`;
+    const apiUrl = buildApiUrl('/login/');
     try {
       const response = await axios.post(apiUrl, credentials);
       
@@ -61,7 +59,7 @@ export const AuthProvider = ({ children }) => {
   const loginWithCode = async (credentials) => {
     setLoading(true);
     setError(null);
-    const apiUrl = `${API_BASE_URL}/login/`;
+    const apiUrl = buildApiUrl('/login/');
     try {
       const response = await axios.post(apiUrl, credentials);
       
@@ -83,7 +81,7 @@ export const AuthProvider = ({ children }) => {
   const generateCode = async (email) => {
     setLoading(true);
     setError(null);
-    const apiUrl = `${API_BASE_URL}/generar-codigo/`;
+    const apiUrl = buildApiUrl('/generar-codigo/');
     try {
       const response = await axios.post(apiUrl, { correo_electronico: email });
       return { success: true, message: response.data.message };
@@ -100,7 +98,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     setLoading(true);
     setError(null);
-    const apiUrl = `${API_BASE_URL}/crear-usuario/`;
+    const apiUrl = buildApiUrl('/crear-usuario/');
     try {
       const response = await axios.post(apiUrl, userData);
       return { 

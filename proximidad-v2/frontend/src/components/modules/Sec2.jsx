@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Carousel, Card, Image } from "react-bootstrap";
 import { CheckCircle, Clock, Shield, Briefcase } from "lucide-react";
 import axios from 'axios';
+import { config, buildApiUrl } from "../../config/env.js";
 
 export default function Sec2() {
   const [fetchedServicios, setFetchedServicios] = useState([]);
@@ -49,11 +50,13 @@ export default function Sec2() {
   }, []);
 
   useEffect(() => {
-    const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/servicios/`;
     const fetchServicios = async () => {
         try {
-            const response = await axios.get(apiUrl);
-            setFetchedServicios(response.data);
+            const response = await axios.get(buildApiUrl('/servicios/'));
+            // La API devuelve {count: X, servicios: [...]}
+            const serviciosArray = response.data.servicios || [];
+            setFetchedServicios(serviciosArray);
+            console.log('Servicios cargados:', serviciosArray);
         } catch (error) {
             console.error('Error fetching services:', error);
         }
@@ -101,14 +104,14 @@ export default function Sec2() {
                     <div className="carousel-image-container">
                       <Image
                         src={servicio.imagen_url || "/placeholder.svg?height=500&width=800"} 
-                        alt={servicio.nombre}
+                        alt={servicio.nombre_servicio || servicio.nombre}
                         fluid
                         className="d-block w-100 carousel-image"
                       />
                     </div>
                     <Carousel.Caption>
-                      <h3>{servicio.nombre}</h3>
-                      <p>{servicio.descripcion || 'Descripción no disponible.'}</p>
+                      <h3>{servicio.nombre_servicio || servicio.nombre}</h3>
+                      <p>{servicio.descripcion_servicio || servicio.descripcion || 'Descripción no disponible.'}</p>
                     </Carousel.Caption>
                   </Carousel.Item>
                 ))}
@@ -128,8 +131,8 @@ export default function Sec2() {
                         {getIconForService(index)}
                       </div>
                       <div className="service-content">
-                        <Card.Title>{servicio.nombre}</Card.Title>
-                        <Card.Text>{servicio.descripcion || 'Descripción no disponible.'}</Card.Text>
+                        <Card.Title>{servicio.nombre_servicio || servicio.nombre}</Card.Title>
+                        <Card.Text>{servicio.descripcion_servicio || servicio.descripcion || 'Descripción no disponible.'}</Card.Text>
                       </div>
                     </Card.Body>
                   </Card>

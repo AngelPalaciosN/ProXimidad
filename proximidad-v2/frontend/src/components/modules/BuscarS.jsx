@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import Header from "./Header"
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material"
+import { config, buildApiUrl } from "../../config/env.js"
 
 const BuscarS = () => {
   const [servicios, setServicios] = useState([])
@@ -14,9 +15,6 @@ const BuscarS = () => {
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("")
   const [selectedService, setSelectedService] = useState(null)
 
-  // Usar la variable de entorno de Vite
-  const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000"
-
   useEffect(() => {
     const fetchServicios = async () => {
       try {
@@ -25,8 +23,10 @@ const BuscarS = () => {
 
         try {
           // Fixed: Use the correct endpoint that matches your Django URLs
-          const response = await axios.get(`${baseUrl}/servicios/`)
-          serviciosData = response.data
+          const response = await axios.get(buildApiUrl('/servicios/'))
+          // La API devuelve {count: X, servicios: [...]}
+          serviciosData = response.data.servicios || []
+          console.log('Servicios desde API:', serviciosData)
         } catch (apiError) {
           console.warn("No se pudo conectar a la API, usando datos de demostración", apiError)
 
@@ -108,7 +108,7 @@ const BuscarS = () => {
     }
 
     fetchServicios()
-  }, [baseUrl])
+  }, [])
 
   useEffect(() => {
     // Filtrar servicios
