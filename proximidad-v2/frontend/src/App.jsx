@@ -3,7 +3,7 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './components/Home';
 import ListaUsuarios from './components/modules/Lista_usuarios';
-import Buscars from './components/modules/BuscarS';
+import ClientDashboard from './components/modules/ClientDashboard';
 import IniciarSe from './components/modules/Iniciar';
 import { AuthProvider } from './Auth';
 import { UserProvider } from './context/UserContext'; // Import UserProvider
@@ -16,7 +16,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/usuarios" element={<ListaUsuarios />} />
-            <Route path="/servicios" element={<Buscars />} />
+            <Route path="/servicios" element={<ClientDashboard />} />
             <Route path="/Iniciar" element={<IniciarSe />} />
           </Routes>
         </BrowserRouter>
