@@ -42,11 +42,11 @@ export default defineConfig(({ mode }) => {
       }
     },
     server: {
-      host: env.FRONTEND_HOST || '0.0.0.0',
+      host: env.SERVER_HOST || '0.0.0.0',
       port: parseInt(env.FRONTEND_PORT) || 5173,
       strictPort: true,
       hmr: {
-        host: env.FRONTEND_HOST || '192.168.1.106',
+        host: env.SERVER_HOST || '192.168.1.61',
         port: parseInt(env.FRONTEND_PORT) || 5173
       }
     }

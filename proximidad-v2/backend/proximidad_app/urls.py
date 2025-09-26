@@ -16,8 +16,9 @@ urlpatterns = [
     path('comentarios/', views.comentarios_list, name='comentarios_list'),
     path('comentarios/crear/', views.crear_comentario, name='crear_comentario'),
     
-    # Autenticación y usuarios (existentes)
+    # Autenticación y usuarios (exacto como el backend viejo)
     path('generar-codigo/', views.generar_codigo, name='generar_codigo'),
+    path('verificar-codigo/', views.verificar_codigo, name='verificar_codigo'),  # NUEVA RUTA OBLIGATORIA
     path('crear-usuario/', views.create_usuario, name='create_usuario'),
     path('login/', views.login_usuario, name='login_usuario'),
     path('usuarios/<int:usuario_id>/', views.usuario_detail, name='usuario_detail'),

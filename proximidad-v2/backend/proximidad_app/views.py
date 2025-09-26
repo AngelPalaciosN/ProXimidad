@@ -245,12 +245,53 @@ def generar_codigo(request):
         # También usar logger para que aparezca en los logs
         logger.info(f"Código de verificación generado para {email}: {codigo}")
         
-        return Response({'message': 'Código generado exitosamente'}, status=status.HTTP_200_OK)
+        return Response({'message': 'Código de verificación enviado'}, status=status.HTTP_200_OK)
     except Usuario.DoesNotExist:
         return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         logger.error(f"Error al generar código: {str(e)}")
         return Response({'error': 'Error interno del servidor'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+def verificar_codigo(request):
+    """Verifica el código y hace login - EXACTO COMO EL BACKEND VIEJO"""
+    try:
+        email = request.data.get('correo_electronico')
+        codigo = request.data.get('codigo_verificacion')
+
+        if not email or not codigo:
+            return Response({'error': 'Correo y código requeridos'}, status=status.HTTP_400_BAD_REQUEST)
+
+        usuario = Usuario.objects.get(correo_electronico=email)
+
+        if str(usuario.codigo_verificacion) == str(codigo):
+            # Generar respuesta exacta como el backend viejo
+            serializer = UsuarioSerializer(usuario, context={'request': request})
+            response_data = serializer.data
+            # No exponer el código en la respuesta
+            response_data.pop('codigo_verificacion', None)
+            
+            return Response({
+                'user': {
+                    'id': usuario.id,
+                    'nombre_completo': usuario.nombre_completo,
+                    'correo_electronico': usuario.correo_electronico,
+                    'tipo_usuario': usuario.tipo_usuario,
+                    'imagen': usuario.imagen.url if usuario.imagen else None
+                },
+                'usuario': response_data,  # Para compatibilidad adicional
+                'access_token': 'dummy_token'
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Código de verificación inválido'}, status=status.HTTP_401_UNAUTHORIZED)
+            
+    except Usuario.DoesNotExist:
+        return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        logger.error(f"Error en verificación de código: {str(e)}")
+        return Response({'error': 'Error interno del servidor'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 @api_view(['GET'])
 def buscar_servicios(request):
@@ -355,7 +396,7 @@ def actualizar_usuario(request, usuario_id):
 
 @api_view(['POST'])
 def login_usuario(request):
-    """Autenticación básica por correo electrónico"""
+    """Autenticación que REQUIERE código de verificación OBLIGATORIO"""
     try:
         correo = request.data.get('correo_electronico')
         codigo = request.data.get('codigo_verificacion')
@@ -364,18 +405,35 @@ def login_usuario(request):
             return Response({'error': 'El correo electrónico es requerido'}, 
                           status=status.HTTP_400_BAD_REQUEST)
         
+        if not codigo:
+            return Response({'error': 'El código de verificación es requerido. Use /api/generar-codigo/ primero'}, 
+                          status=status.HTTP_400_BAD_REQUEST)
+        
         try:
             usuario = Usuario.objects.get(correo_electronico=correo)
             
-            # Si se proporciona código de verificación, validarlo
-            if codigo and str(usuario.codigo_verificacion) == str(codigo):
-                # No podemos actualizar el estado porque no existe ese campo
-                pass
+            # VALIDACIÓN OBLIGATORIA DEL CÓDIGO
+            if str(usuario.codigo_verificacion) != str(codigo):
+                return Response({'error': 'Código de verificación inválido'}, 
+                              status=status.HTTP_401_UNAUTHORIZED)
             
-            serializer = UsuarioSerializer(usuario)
+            # Limpiar el serializer para respuesta
+            serializer = UsuarioSerializer(usuario, context={'request': request})
+            response_data = serializer.data
+            # No exponer el código de verificación
+            response_data.pop('codigo_verificacion', None)
+            
             return Response({
                 'message': 'Login exitoso',
-                'usuario': serializer.data
+                'usuario': response_data,
+                'user': {
+                    'id': usuario.id,
+                    'nombre_completo': usuario.nombre_completo,
+                    'correo_electronico': usuario.correo_electronico,
+                    'tipo_usuario': usuario.tipo_usuario,
+                    'imagen': usuario.imagen.url if usuario.imagen else None
+                },
+                'access_token': 'dummy_token'
             }, status=status.HTTP_200_OK)
             
         except Usuario.DoesNotExist:

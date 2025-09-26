@@ -35,10 +35,15 @@ const UsuarioList = () => {
   const fetchFavoritos = useCallback(async () => {
     if (user && user.id) {
       try {
-        // Por ahora usamos datos de demostración ya que no tenemos endpoint para listar favoritos por usuario
-        setFavoritos([1, 4, 7]) // IDs de usuarios favoritos de demostración
+        // Llamada real a la API para obtener favoritos
+        const response = await axios.get(`${baseUrl}/favoritos/${user.id}/`)
+        // Extraer solo los IDs de los usuarios favoritos
+        const favoritosIds = response.data.map(favorito => favorito.favorito_id)
+        setFavoritos(favoritosIds)
       } catch (err) {
         console.error("Error fetching favorites:", err)
+        // Si hay error, inicializar con array vacío
+        setFavoritos([])
       }
     }
   }, [user, baseUrl])
@@ -132,7 +137,7 @@ const UsuarioList = () => {
         try {
           // Intentar eliminar de favoritos en la API
           try {
-            await axios.delete(`${baseUrl}/favoritos/eliminar/${user.usuario_id}/${usuarioId}/`)
+            await axios.delete(`${baseUrl}/favoritos/eliminar/${user.id}/${usuarioId}/`)
           } catch (apiError) {
             console.warn("No se pudo conectar a la API para eliminar favorito", apiError)
           }
@@ -362,7 +367,7 @@ const UsuarioList = () => {
                   >
                     <div className="usuario-header">
                     <div className="usuario-avatar">
-                        <img src={usuario.imagen ? `${baseUrl}${usuario.imagen}` : "/placeholder.svg?height=80&width=80"} alt={usuario.nombre_completo} />
+                        <img src={usuario.imagen_url || "/placeholder.svg?height=80&width=80"} alt={usuario.nombre_completo} />
                       </div>
                       <div className="usuario-info">
                         <h3>{usuario.nombre_completo}</h3>
@@ -485,7 +490,7 @@ const UsuarioList = () => {
             
             <div className="modal-header">
               <div className="modal-avatar">
-                <img src={selectedUser.imagen ? `${baseUrl}${selectedUser.imagen}` : "/placeholder.svg?height=120&width=120"} alt={selectedUser.nombre_completo} />
+                <img src={selectedUser.imagen_url || "/placeholder.svg?height=120&width=120"} alt={selectedUser.nombre_completo} />
               </div>
               <div className="modal-title">
                 <h2>{selectedUser.nombre_completo}</h2>
