@@ -16,5 +16,6 @@ urlpatterns = [
     
     # Favoritos
     path('favoritos/', views.agregar_favorito, name='agregar_favorito'),
+    path('favoritos/<int:usuario_id>/', views.listar_favoritos, name='listar_favoritos'),
     path('favoritos/eliminar/<int:usuario_id>/<int:favorito_id>/', views.eliminar_favorito, name='eliminar_favorito'),
 ]

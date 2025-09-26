@@ -42,7 +42,7 @@ export default function Sec1({ handleAbrirFormulario }) {
 
     const fetchServicios = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/servicios/`);
+        const response = await axios.get(`${baseUrl}/api/servicios/`);
         setServicios(response.data);
       } catch (err) {
         console.error('Error fetching services:', err);

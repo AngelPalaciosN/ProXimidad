@@ -338,6 +338,7 @@ CREATE TABLE `servicios` (
   `descripcion` longtext COLLATE utf8mb4_general_ci NOT NULL,
   `precio_base` decimal(10,2) NOT NULL,
   `imagen_url` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `imagen` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `categoria_id` bigint DEFAULT NULL,
   `proveedor_id` bigint DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

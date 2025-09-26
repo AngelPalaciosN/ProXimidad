@@ -20,6 +20,13 @@ export default function Header({ handleAbrirFormulario }) {
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const { logout } = useAuth();
 
+  // Helper function para URLs de imágenes
+  const getImageUrl = (imageUrl) => {
+    if (!imageUrl) return null;
+    if (imageUrl.startsWith('http')) return imageUrl; // URL externa
+    return `${baseUrl}${imageUrl}`; // URL relativa desde el servidor
+  };
+
   const toggleMenu = () => {
     setIsOpen(!isOpen)
   }
@@ -93,7 +100,7 @@ export default function Header({ handleAbrirFormulario }) {
                   <button className="user-menu-trigger" onClick={toggleUserMenu} aria-label="User menu">
                     <div className="user-avatar">
                       <img
-                        src={user.imagen ? `${baseUrl}${user.imagen}` : "/placeholder.svg?height=32&width=32"}
+                        src={getImageUrl(user.imagen) || "/placeholder.svg?height=32&width=32"}
                         alt={user.nombre_completo || "Usuario"}
                       />
                     </div>
@@ -116,7 +123,7 @@ export default function Header({ handleAbrirFormulario }) {
                       <div className="user-dropdown-header">
                       <div className="user-dropdown-avatar">
                         <img
-                          src={user.imagen ? `${baseUrl}${user.imagen}` : "/placeholder.svg?height=48&width=48"}
+                          src={getImageUrl(user.imagen) || "/placeholder.svg?height=48&width=48"}
                           alt={user.nombre_completo || "Usuario"}
                         />
                       </div>
