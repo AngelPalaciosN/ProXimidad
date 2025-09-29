@@ -9,11 +9,15 @@ import Editar_p from "./Editar_p"
 import Usuarios from "./Lista_usuarios"
 import Buscar from "./BuscarS"
 import { useNavigate } from 'react-router-dom';
+import IniciarSesion from "./Iniciar";
+import Registrar from "./Registrar";
 
 export default function Header({ handleAbrirFormulario }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [showEditar_p, setShowEditar_p] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authMode, setAuthMode] = useState('login'); // 'login' o 'registrar'
   const userMenuRef = useRef(null);
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -26,7 +30,24 @@ export default function Header({ handleAbrirFormulario }) {
 
   const openRegistrarForm = () => {
     setIsOpen(false);
-    handleAbrirFormulario('registrar');
+    if (handleAbrirFormulario) {
+      handleAbrirFormulario('registrar');
+    } else {
+      // Usar modal interno si no hay función padre
+      setAuthMode('registrar');
+      setShowAuthModal(true);
+    }
+  };
+
+  const openLoginForm = () => {
+    setIsOpen(false);
+    if (handleAbrirFormulario) {
+      handleAbrirFormulario('iniciarSesion');  // Corregir nombre
+    } else {
+      // Usar modal interno si no hay función padre
+      setAuthMode('login');
+      setShowAuthModal(true);
+    }
   };
 
   // Close user menu when clicking outside
@@ -212,7 +233,7 @@ export default function Header({ handleAbrirFormulario }) {
                   )}
                 </div>
               ) : (
-                <Button variant="outline-light" className="login-button ms-lg-3" onClick={openRegistrarForm}>
+                <Button variant="outline-light" className="login-button ms-lg-3" onClick={openLoginForm}>
                   Iniciar Sesión
                 </Button>
               )}
@@ -236,12 +257,63 @@ export default function Header({ handleAbrirFormulario }) {
                   </Link>
                 </>
               )}
-              <Link to="/Iniciar" variant="outline-light" className="mobile-login-button" onClick={() => setIsOpen(false)}>
+              <button variant="outline-light" className="mobile-login-button" onClick={openLoginForm}>
                 Iniciar Sesión
-              </Link>
+              </button>
             </Nav>
           </div>
         {showEditar_p && <Editar_p onClose={() => setShowEditar_p(false)} user={user} />}
+        
+        {/* Modal de autenticación interno */}
+        {showAuthModal && (
+          <div className="modal-overlay" style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1060
+          }}>
+            <div className="modal-content" style={{
+              backgroundColor: 'white',
+              borderRadius: '8px',
+              padding: '20px',
+              maxWidth: '500px',
+              width: '90%',
+              position: 'relative'
+            }}>
+              <button 
+                onClick={() => setShowAuthModal(false)}
+                style={{
+                  position: 'absolute',
+                  top: '10px',
+                  right: '15px',
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '20px',
+                  cursor: 'pointer'
+                }}
+              >
+                ×
+              </button>
+              {authMode === 'login' ? (
+                <IniciarSesion 
+                  onClose={() => setShowAuthModal(false)}
+                  onFormularioChange={(modo) => setAuthMode(modo)}
+                />
+              ) : (
+                <Registrar 
+                  onClose={() => setShowAuthModal(false)}
+                  onFormularioChange={(modo) => setAuthMode(modo)}
+                />
+              )}
+            </div>
+          </div>
+        )}
       </Container>
     </header>
   )

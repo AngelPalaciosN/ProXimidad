@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Modal, Form, Button, Alert, Row, Col } from "react-bootstrap"
-import { FaCalendarAlt, FaDollarSign, FaFileText, FaUser, FaClock, FaExclamationTriangle } from "react-icons/fa"
+import { FaCalendarAlt, FaDollarSign, FaFileAlt, FaUser, FaClock, FaExclamationTriangle } from "react-icons/fa"
 
 const ServiceRequestModal = ({ show, onHide, service, user }) => {
   const [formData, setFormData] = useState({
@@ -88,7 +88,7 @@ const ServiceRequestModal = ({ show, onHide, service, user }) => {
     <Modal show={show} onHide={onHide} size="lg" centered className="service-request-modal">
       <Modal.Header closeButton>
         <Modal.Title>
-          <FaFileText className="me-2" />
+          <FaFileAlt className="me-2" />
           Solicitar Servicio
         </Modal.Title>
       </Modal.Header>
@@ -138,7 +138,7 @@ const ServiceRequestModal = ({ show, onHide, service, user }) => {
             <Col md={12}>
               <Form.Group className="mb-3">
                 <Form.Label className="fw-bold">
-                  <FaFileText className="me-2" />
+                  <FaFileAlt className="me-2" />
                   Descripción detallada del proyecto *
                 </Form.Label>
                 <Form.Control
@@ -279,7 +279,7 @@ const ServiceRequestModal = ({ show, onHide, service, user }) => {
             </>
           ) : (
             <>
-              <FaFileText className="me-2" />
+              <FaFileAlt className="me-2" />
               Enviar Solicitud
             </>
           )}

@@ -103,10 +103,13 @@ export default function Sec2() {
                   <Carousel.Item key={servicio.id}>
                     <div className="carousel-image-container">
                       <Image
-                        src={servicio.imagen_url || "/placeholder.svg?height=500&width=800"} 
+                        src={servicio.imagen_url || `${config.API_BASE_URL}/media/servicios/default.jpg`} 
                         alt={servicio.nombre_servicio || servicio.nombre}
                         fluid
                         className="d-block w-100 carousel-image"
+                        onError={(e) => {
+                          e.target.src = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=400&h=250&fit=crop";
+                        }}
                       />
                     </div>
                     <Carousel.Caption>

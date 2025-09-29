@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import CloseIcon from "@mui/icons-material/Close"
 import IconButton from "@mui/material/IconButton"
 import CircularProgress from "@mui/material/CircularProgress"
@@ -22,8 +22,38 @@ const Iniciar = ({ onClose, onFormularioChange }) => {
   const [codeRequested, setCodeRequested] = useState(false)
   const [codeTimer, setCodeTimer] = useState(0)
   const navigate = useNavigate()
+  const codeInputRef = useRef(null)
 
   const { loading, error, loginWithCode, generateCode } = useAuth()
+
+  // Auto-focus en el input de código cuando se genere
+  useEffect(() => {
+    if (codeRequested && codeInputRef.current) {
+      // Pequeño delay para asegurar que el input esté visible
+      setTimeout(() => {
+        codeInputRef.current.focus()
+      }, 100)
+    }
+  }, [codeRequested])
+
+  // Función para resetear el estado del modal
+  const resetModalState = () => {
+    setFormData({
+      correo_electronico: "",
+      codigo_verificacion: "",
+    })
+    setErrors({})
+    setCodeRequested(false)
+    setCodeTimer(0)
+  }
+
+  // Función personalizada para cerrar que incluye reset
+  const handleClose = () => {
+    resetModalState()
+    if (onClose) {
+      onClose()
+    }
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -113,7 +143,7 @@ const Iniciar = ({ onClose, onFormularioChange }) => {
         confirmButtonText: "Continuar",
         confirmButtonColor: "#005187",
       })
-      onClose()
+      handleClose()
       navigate("/") // Redirect to home page
     } else {
       setErrors({
@@ -156,7 +186,7 @@ const Iniciar = ({ onClose, onFormularioChange }) => {
       >
         <div className="form-header">
           <h2>Inicio de Sesión</h2>
-          <IconButton className="close-button" onClick={onClose} aria-label="cerrar">
+          <IconButton className="close-button" onClick={handleClose} aria-label="cerrar">
             <CloseIcon />
           </IconButton>
         </div>
@@ -197,6 +227,7 @@ const Iniciar = ({ onClose, onFormularioChange }) => {
                 <div className="input-with-icon">
                   <LockIcon className="input-icon" />
                   <input
+                    ref={codeInputRef}
                     id="codigo_verificacion"
                     type="text"
                     name="codigo_verificacion"

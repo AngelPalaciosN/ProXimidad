@@ -17,7 +17,6 @@ import {
   FaShieldAlt,
 } from "react-icons/fa"
 import ServiceRequestModal from "./ServiceRequestModal"
-import "../scss/component-styles/ServiceDetailModal.scss"
 
 const ServiceDetailModal = ({ show, onHide, service, user, onToggleFavorite, isFavorite }) => {
   const [showRequestModal, setShowRequestModal] = useState(false)

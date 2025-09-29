@@ -107,35 +107,72 @@ def comentarios_list(request):
 
 @api_view(['POST'])
 def agregar_favorito(request):
-    """Añade un usuario a favoritos"""
+    """Añade un usuario o servicio a favoritos"""
     try:
-        # Permitir favoritos sin autenticación por ahora
-        # En producción, se debería requerir autenticación
+        # Debug: Imprimir lo que recibe
+        print(f"🔍 POST favoritos - request.data: {request.data}")
+        print(f"🔍 POST favoritos - request.method: {request.method}")
+        print(f"🔍 POST favoritos - content_type: {request.content_type}")
         
         usuario_id = request.data.get('usuario_id')
         favorito_id = request.data.get('favorito_id')
+        tipo_favorito = request.data.get('tipo', 'usuario')  # Por defecto usuario
         
         if not usuario_id or not favorito_id:
             return Response({'error': 'usuario_id y favorito_id son requeridos'}, status=status.HTTP_400_BAD_REQUEST)
         
-        # Verificar que los usuarios existen
+        if tipo_favorito not in ['usuario', 'servicio']:
+            return Response({'error': 'tipo debe ser "usuario" o "servicio"'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Verificar que el usuario existe
         if not Usuario.objects.filter(id=usuario_id).exists():
             return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
         
-        if not Usuario.objects.filter(id=favorito_id).exists():
-            return Response({'error': 'Usuario favorito no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+        # Verificar que el favorito existe según el tipo
+        if tipo_favorito == 'usuario':
+            if not Usuario.objects.filter(id=favorito_id).exists():
+                return Response({'error': 'Usuario favorito no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+                
+            # Verificar que no se marque a sí mismo
+            if usuario_id == favorito_id:
+                return Response({'error': 'No puedes marcarte a ti mismo como favorito'}, status=status.HTTP_400_BAD_REQUEST)
+                
+            # Verificar si ya existe
+            if Favoritos.objects.filter(usuario_id=usuario_id, favorito_usuario=favorito_id, tipo_favorito='usuario').exists():
+                return Response({'error': 'Este usuario ya está en favoritos'}, status=status.HTTP_400_BAD_REQUEST)
+                
+            # Crear favorito de usuario
+            usuario_obj = Usuario.objects.get(id=usuario_id)
+            favorito_usuario_obj = Usuario.objects.get(id=favorito_id)
+            
+            favorito = Favoritos.objects.create(
+                usuario_id=usuario_obj,
+                favorito_usuario=favorito_usuario_obj,
+                tipo_favorito='usuario'
+            )
+        else:
+            if not Servicios.objects.filter(id=favorito_id).exists():
+                return Response({'error': 'Servicio favorito no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+                
+            # Verificar si ya existe
+            if Favoritos.objects.filter(usuario_id=usuario_id, favorito_servicio=favorito_id, tipo_favorito='servicio').exists():
+                return Response({'error': 'Este servicio ya está en favoritos'}, status=status.HTTP_400_BAD_REQUEST)
+                
+            # Crear favorito de servicio
+            usuario_obj = Usuario.objects.get(id=usuario_id)
+            servicio_obj = Servicios.objects.get(id=favorito_id)
+            
+            favorito = Favoritos.objects.create(
+                usuario_id=usuario_obj,
+                favorito_servicio=servicio_obj,
+                tipo_favorito='servicio'
+            )
         
-        # Crear el favorito
-        favorito_data = {
-            'usuario_id': usuario_id,
-            'favorito_id': favorito_id
-        }
-        
-        serializer = FavoritosSerializer(data=favorito_data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'message': 'Favorito añadido exitosamente', 'data': serializer.data}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({
+            'message': f'{tipo_favorito.capitalize()} añadido a favoritos exitosamente',
+            'favorito_id': favorito.id,
+            'tipo': tipo_favorito
+        }, status=status.HTTP_201_CREATED)
         
     except IntegrityError:
         return Response({'error': 'Este usuario ya está en favoritos'}, status=status.HTTP_400_BAD_REQUEST)
@@ -145,29 +182,61 @@ def agregar_favorito(request):
 
 @api_view(['GET'])
 def obtener_favoritos(request, usuario_id):
-    """Obtiene la lista de favoritos de un usuario"""
+    """Obtiene la lista de favoritos de un usuario (usuarios y servicios)"""
     try:
         # Verificar que el usuario existe
         if not Usuario.objects.filter(id=usuario_id).exists():
             return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
         
-        # Obtener favoritos del usuario
-        favoritos = Favoritos.objects.filter(usuario_id=usuario_id).select_related('favorito')
+        # Obtener tipo de favoritos solicitado
+        tipo_favorito = request.GET.get('tipo', 'usuario')  # Por defecto usuarios
+        
+        # Obtener favoritos del usuario según el tipo
+        favoritos = Favoritos.objects.filter(
+            usuario_id=usuario_id, 
+            tipo_favorito=tipo_favorito
+        ).select_related('favorito_usuario', 'favorito_servicio')
         
         # Serializar los datos
         favoritos_data = []
         for favorito in favoritos:
-            favoritos_data.append({
-                'id': favorito.id,
-                'usuario_id': favorito.usuario_id,
-                'favorito_id': favorito.favorito_id,
-                'favorito_nombre': favorito.favorito.nombre_completo,
-                'favorito_email': favorito.favorito.correo_electronico,
-                'favorito_tipo': favorito.favorito.tipo_usuario,
-                'favorito_imagen_url': favorito.favorito.imagen.url if favorito.favorito.imagen else None
-            })
+            if favorito.tipo_favorito == 'usuario' and favorito.favorito_usuario:
+                favoritos_data.append({
+                    'id': favorito.id,
+                    'tipo': 'usuario',
+                    'usuario_id': favorito.usuario_id.id,
+                    'favorito_id': favorito.favorito_usuario.id,
+                    'favorito_nombre': favorito.favorito_usuario.nombre_completo,
+                    'favorito_email': favorito.favorito_usuario.correo_electronico,
+                    'favorito_tipo': favorito.favorito_usuario.tipo_usuario,
+                    'favorito_imagen_url': favorito.favorito_usuario.imagen_url,
+                    'fecha_agregado': favorito.fecha_agregado
+                })
+            elif favorito.tipo_favorito == 'servicio' and favorito.favorito_servicio:
+                favoritos_data.append({
+                    'id': favorito.id,
+                    'tipo': 'servicio',
+                    'usuario_id': favorito.usuario_id.id,
+                    'favorito_id': favorito.favorito_servicio.id,
+                    'favorito_nombre': favorito.favorito_servicio.nombre_servicio,
+                    'favorito_descripcion': favorito.favorito_servicio.descripcion,
+                    'favorito_precio': str(favorito.favorito_servicio.precio_base),
+                    'favorito_imagen_url': favorito.favorito_servicio.imagen.url if favorito.favorito_servicio.imagen else None,
+                    'fecha_agregado': favorito.fecha_agregado
+                })
         
-        return Response(favoritos_data, status=status.HTTP_200_OK)
+        # Para compatibilidad con frontend existente, devolver solo array si no se especifica formato
+        formato = request.GET.get('formato', 'simple')
+        
+        if formato == 'detallado':
+            return Response({
+                'tipo_favoritos': tipo_favorito,
+                'total': len(favoritos_data),
+                'favoritos': favoritos_data
+            }, status=status.HTTP_200_OK)
+        else:
+            # Formato simple - solo el array (compatibilidad con frontend)
+            return Response(favoritos_data, status=status.HTTP_200_OK)
         
     except Exception as e:
         logger.error(f"Error al obtener favoritos: {str(e)}")
@@ -175,11 +244,34 @@ def obtener_favoritos(request, usuario_id):
 
 @api_view(['DELETE'])
 def eliminar_favorito(request, usuario_id, favorito_id):
-    """Elimina un usuario de favoritos"""
+    """Elimina un usuario o servicio de favoritos"""
     try:
-        favorito = get_object_or_404(Favoritos, usuario_id=usuario_id, favorito_id=favorito_id)
+        # Obtener tipo de favorito desde query params
+        tipo_favorito = request.GET.get('tipo', 'usuario')
+        
+        if tipo_favorito not in ['usuario', 'servicio']:
+            return Response({'error': 'tipo debe ser "usuario" o "servicio"'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Buscar el favorito según el tipo
+        if tipo_favorito == 'usuario':
+            favorito = get_object_or_404(
+                Favoritos, 
+                usuario_id=usuario_id, 
+                favorito_usuario=favorito_id,
+                tipo_favorito='usuario'
+            )
+        else:
+            favorito = get_object_or_404(
+                Favoritos, 
+                usuario_id=usuario_id, 
+                favorito_servicio=favorito_id,
+                tipo_favorito='servicio'
+            )
+        
         favorito.delete()
-        return Response({'message': 'Favorito eliminado correctamente'}, status=status.HTTP_200_OK)
+        return Response({
+            'message': f'{tipo_favorito.capitalize()} eliminado de favoritos correctamente'
+        }, status=status.HTTP_200_OK)
     except Exception as e:
         logger.error(f"Error al eliminar favorito: {str(e)}")
         return Response({'error': 'Error interno del servidor'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

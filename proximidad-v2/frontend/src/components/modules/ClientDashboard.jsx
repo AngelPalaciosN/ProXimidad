@@ -24,9 +24,17 @@ import {
 } from "react-icons/fa"
 import axios from "axios"
 import { config, buildApiUrl } from "../../config/env.js"
+import { useAuth } from "../../Auth"
 import Header from "./Header"
+import ServiceDetailModal from "./ServiceDetailModal"
+import ServiceRequestModal from "./ServiceRequestModal"
 
-const ClientDashboard = ({ user = { nombre_completo: "Usuario Demo" } }) => {
+const ClientDashboard = () => {
+  const { user, loading: authLoading } = useAuth()
+  
+  // Debug: Ver la estructura del usuario
+  console.log("👤 Usuario en ClientDashboard:", user)
+  
   const [activeTab, setActiveTab] = useState("browse")
   const [services, setServices] = useState([])
   const [myRequests, setMyRequests] = useState([])
@@ -225,16 +233,14 @@ const ClientDashboard = ({ user = { nombre_completo: "Usuario Demo" } }) => {
         setServices(serviciosTransformados)
         console.log('Servicios cargados en ClientDashboard:', serviciosTransformados)
         
-        // Datos mock para favoritos y requests hasta que se implementen
+        // Datos mock para requests hasta que se implemente
         setMyRequests(mockRequests)
-        setFavorites([1, 3, 4])
         
       } catch (error) {
         console.error('Error cargando servicios:', error)
         // Fallback a datos mock si falla la API
         setServices(mockServices)
         setMyRequests(mockRequests)
-        setFavorites([1, 3, 4])
       } finally {
         setLoading(false)
       }
@@ -242,6 +248,24 @@ const ClientDashboard = ({ user = { nombre_completo: "Usuario Demo" } }) => {
     
     fetchData()
   }, [])
+
+  // Cargar favoritos cuando el usuario esté disponible
+  useEffect(() => {
+    const fetchFavoritos = async () => {
+      if (user && user.id) {
+        try {
+          const favoritosResponse = await axios.get(buildApiUrl(`/favoritos/${user.id}/?tipo=servicio`))
+          const favoritosIds = favoritosResponse.data.favoritos?.map(fav => fav.id) || []
+          setFavorites(favoritosIds)
+        } catch (error) {
+          console.warn("Error cargando favoritos:", error)
+          setFavorites([])
+        }
+      }
+    }
+    
+    fetchFavoritos()
+  }, [user?.id])
 
   const filteredServices = services.filter((service) => {
     const matchesSearch =
@@ -253,17 +277,52 @@ const ClientDashboard = ({ user = { nombre_completo: "Usuario Demo" } }) => {
   })
 
   const handleRequestService = (service) => {
+    console.log("🔧 Abriendo modal de solicitud para:", service)
     setSelectedService(service)
     setShowRequestModal(true)
+    console.log("🔧 Estado después: showRequestModal =", true, "selectedService =", service.nombre)
   }
 
   const handleViewDetails = (service) => {
+    console.log("👁️ Abriendo modal de detalles para:", service)
     setSelectedService(service)
     setShowDetailModal(true)
+    console.log("👁️ Estado después: showDetailModal =", true, "selectedService =", service.nombre)
   }
 
-  const handleToggleFavorite = (serviceId) => {
-    setFavorites((prev) => (prev.includes(serviceId) ? prev.filter((id) => id !== serviceId) : [...prev, serviceId]))
+  const handleToggleFavorite = async (serviceId) => {
+    // Verificar autenticación
+    if (!user || !user.id) {
+      console.log("Usuario actual:", user)
+      alert("Debes iniciar sesión para añadir favoritos")
+      return
+    }
+
+    const isFavorited = favorites.includes(serviceId)
+    
+    try {
+      if (isFavorited) {
+        // Eliminar de favoritos
+        console.log(`🗑️ Eliminando favorito: user.id=${user.id}, serviceId=${serviceId}`)
+        await axios.delete(buildApiUrl(`/favoritos/eliminar/${user.id}/${serviceId}/?tipo=servicio`))
+        setFavorites((prev) => prev.filter((id) => id !== serviceId))
+      } else {
+        // Añadir a favoritos
+        const payload = { 
+          usuario_id: user.id, 
+          favorito_id: serviceId,
+          tipo: 'servicio'
+        }
+        console.log(`❤️ Añadiendo favorito con payload:`, payload)
+        console.log(`📡 URL completa:`, buildApiUrl('/favoritos/'))
+        await axios.post(buildApiUrl('/favoritos/'), payload)
+        setFavorites((prev) => [...prev, serviceId])
+      }
+    } catch (error) {
+      console.error("Error al gestionar favorito:", error)
+      console.error("Detalles del error:", error.response?.data)
+      alert("Error al actualizar favoritos: " + (error.response?.data?.error || error.message))
+    }
   }
 
   const getStatusBadge = (status) => {
@@ -298,7 +357,7 @@ const ClientDashboard = ({ user = { nombre_completo: "Usuario Demo" } }) => {
 
   const categories = [...new Set(services.map((service) => service.categoria))]
 
-  if (loading) {
+  if (loading || authLoading) {
     return (
       <div className="loading-container">
         <div className="loading-spinner"></div>
@@ -314,7 +373,7 @@ const ClientDashboard = ({ user = { nombre_completo: "Usuario Demo" } }) => {
         <div className="dashboard-header">
           <Row>
             <Col>
-              <h1>¡Bienvenido, {user.nombre_completo}!</h1>
+              <h1>¡Bienvenido, {user?.nombre_completo || 'Usuario'}!</h1>
               <p>Encuentra y solicita los servicios que necesitas</p>
               <div className="stats-row">
                 <div className="stat-item">
@@ -723,7 +782,6 @@ const ClientDashboard = ({ user = { nombre_completo: "Usuario Demo" } }) => {
         </div>
       </Container>
 
-      {/* TODO: Crear estos modales
       <ServiceRequestModal
         show={showRequestModal}
         onHide={() => setShowRequestModal(false)}
@@ -739,7 +797,6 @@ const ClientDashboard = ({ user = { nombre_completo: "Usuario Demo" } }) => {
         onToggleFavorite={handleToggleFavorite}
         isFavorite={selectedService ? favorites.includes(selectedService.id) : false}
       />
-      */}
     </div>
   )
 }

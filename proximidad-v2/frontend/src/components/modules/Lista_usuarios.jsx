@@ -35,10 +35,21 @@ const UsuarioList = () => {
   const fetchFavoritos = useCallback(async () => {
     if (user && user.id) {
       try {
-        // Llamada real a la API para obtener favoritos
-        const response = await axios.get(`${baseUrl}/favoritos/${user.id}/`)
+        // Llamada real a la API para obtener favoritos de usuarios
+        const response = await axios.get(`${baseUrl}/favoritos/${user.id}/?tipo=usuario`)
+        
+        // Debug: Ver qué está devolviendo la API
+        console.log("Response from API:", response.data)
+        console.log("Type of response.data:", typeof response.data)
+        console.log("Is array?", Array.isArray(response.data))
+        
+        // El backend devuelve el array directamente en formato simple
+        const favoritosArray = response.data || []
+        
         // Extraer solo los IDs de los usuarios favoritos
-        const favoritosIds = response.data.map(favorito => favorito.favorito_id)
+        const favoritosIds = Array.isArray(favoritosArray) 
+          ? favoritosArray.map(favorito => favorito.favorito_id)
+          : []
         setFavoritos(favoritosIds)
       } catch (err) {
         console.error("Error fetching favorites:", err)
@@ -78,7 +89,11 @@ const UsuarioList = () => {
         try {
           // Intentar añadir a favoritos en la API
           try {
-            await axios.post(`${baseUrl}/favoritos/`, { usuario_id: user.id, favorito_id: usuarioId })
+            await axios.post(`${baseUrl}/favoritos/`, { 
+              usuario_id: user.id, 
+              favorito_id: usuarioId,
+              tipo: 'usuario'
+            })
           } catch (apiError) {
             console.warn("No se pudo conectar a la API para añadir favorito", apiError)
           }
@@ -137,7 +152,7 @@ const UsuarioList = () => {
         try {
           // Intentar eliminar de favoritos en la API
           try {
-            await axios.delete(`${baseUrl}/favoritos/eliminar/${user.id}/${usuarioId}/`)
+            await axios.delete(`${baseUrl}/favoritos/eliminar/${user.id}/${usuarioId}/?tipo=usuario`)
           } catch (apiError) {
             console.warn("No se pudo conectar a la API para eliminar favorito", apiError)
           }

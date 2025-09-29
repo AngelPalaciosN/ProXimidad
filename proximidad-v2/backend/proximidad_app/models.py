@@ -207,29 +207,101 @@ class Comentarios(models.Model):
 
 
 class Favoritos(models.Model):
+    TIPO_FAVORITO_CHOICES = [
+        ('usuario', 'Usuario'),
+        ('servicio', 'Servicio'),
+    ]
+    
     id = models.BigAutoField(primary_key=True)
-    favorito_id = models.ForeignKey(
-        Usuario,
-        on_delete=models.CASCADE,
-        db_column='favorito_id',
-        related_name='favorito_usuario'
-    )
     usuario_id = models.ForeignKey(
         Usuario,
         on_delete=models.CASCADE,
         db_column='usuario_id',
-        related_name='usuario_favorito'
+        related_name='mis_favoritos'
+    )
+    # Para usuarios favoritos
+    favorito_usuario = models.ForeignKey(
+        Usuario,
+        on_delete=models.CASCADE,
+        null=True, 
+        blank=True,
+        related_name='soy_favorito_de'
+    )
+    # Para servicios favoritos  
+    favorito_servicio = models.ForeignKey(
+        'Servicios',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True, 
+        related_name='favorito_en'
+    )
+    tipo_favorito = models.CharField(
+        max_length=10, 
+        choices=TIPO_FAVORITO_CHOICES,
+        default='usuario'
     )
     fecha_agregado = models.DateTimeField('Fecha agregado', default=timezone.now)
 
     class Meta:
         db_table = 'favoritos'
-        unique_together = (('usuario_id', 'favorito_id'),)
+        constraints = [
+            models.UniqueConstraint(
+                fields=['usuario_id', 'favorito_usuario'],
+                condition=models.Q(tipo_favorito='usuario'),
+                name='unique_usuario_favorito'
+            ),
+            models.UniqueConstraint(
+                fields=['usuario_id', 'favorito_servicio'], 
+                condition=models.Q(tipo_favorito='servicio'),
+                name='unique_servicio_favorito'
+            ),
+            models.CheckConstraint(
+                check=models.Q(
+                    (models.Q(tipo_favorito='usuario') & models.Q(favorito_usuario__isnull=False) & models.Q(favorito_servicio__isnull=True)) |
+                    (models.Q(tipo_favorito='servicio') & models.Q(favorito_servicio__isnull=False) & models.Q(favorito_usuario__isnull=True))
+                ),
+                name='favorito_valido'
+            )
+        ]
         indexes = [
-            models.Index(fields=['usuario_id']),
-            models.Index(fields=['favorito_id']),
+            models.Index(fields=['usuario_id', 'tipo_favorito']),
+            models.Index(fields=['favorito_usuario']),
+            models.Index(fields=['favorito_servicio']),
             models.Index(fields=['fecha_agregado']),
         ]
+    
+    def clean(self):
+        """Validación personalizada"""
+        from django.core.exceptions import ValidationError
+        
+        if self.tipo_favorito == 'usuario' and not self.favorito_usuario:
+            raise ValidationError('Debe especificar el usuario favorito')
+        elif self.tipo_favorito == 'servicio' and not self.favorito_servicio:
+            raise ValidationError('Debe especificar el servicio favorito')
+        
+        if self.tipo_favorito == 'usuario' and self.favorito_servicio:
+            raise ValidationError('No puede tener servicio y usuario favorito al mismo tiempo')
+        elif self.tipo_favorito == 'servicio' and self.favorito_usuario:
+            raise ValidationError('No puede tener usuario y servicio favorito al mismo tiempo')
+            
+        # No puede marcarse a sí mismo como favorito
+        if self.tipo_favorito == 'usuario' and self.usuario_id == self.favorito_usuario:
+            raise ValidationError('No puedes marcarte a ti mismo como favorito')
+        
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
         
     def __str__(self):
-        return f"{self.usuario_id.nombre_completo} -> {self.favorito_id.nombre_completo}"
+        if self.tipo_favorito == 'usuario':
+            return f"{self.usuario_id.nombre_completo} -> Usuario: {self.favorito_usuario.nombre_completo}"
+        else:
+            return f"{self.usuario_id.nombre_completo} -> Servicio: {self.favorito_servicio.nombre_servicio}"
+    
+    @property
+    def favorito_nombre(self):
+        """Obtiene el nombre del favorito independientemente del tipo"""
+        if self.tipo_favorito == 'usuario':
+            return self.favorito_usuario.nombre_completo if self.favorito_usuario else None
+        else:
+            return self.favorito_servicio.nombre_servicio if self.favorito_servicio else None
