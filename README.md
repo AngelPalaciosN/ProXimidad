@@ -105,7 +105,7 @@ Toda la documentación oficial y recursos están disponibles en Notion:
 🔗 **[Proximidad - Notion del Proyecto](https://www.notion.so/ProXimidad-1deb978d13fc807c9688f78069bc8ae8)**
 
 Incluye:  
-- 📊 Matriz de requisitos  **[https://www.notion.so/ProXimidad-94cbd499fcc94dbdaee9176e2ff7ff10?source=copy_link**
+- 📊 Matriz de requisitos  **https://www.notion.so/ProXimidad-94cbd499fcc94dbdaee9176e2ff7ff10?source=copy_link**
 - 📐 Diagramas UML  
 - 🖥️ Presentación de avances para docentes  
 - Otros recursos y entregables académicos  
