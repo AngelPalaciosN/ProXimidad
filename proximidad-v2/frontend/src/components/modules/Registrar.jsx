@@ -25,12 +25,14 @@ const Registrar = ({ onClose, onFormularioChange }) => {
     direccion: "",
     cedula: "",
     tipo_usuario: "proveedor",
-    imagen: null, // Added field for the image file
+    imagen: null, // Foto de perfil
+    banner: null, // Banner de fondo
   })
 
   const [errors, setErrors] = useState({})
   const [currentStep, setCurrentStep] = useState(1)
-  const [imagePreview, setImagePreview] = useState(null) // Added for image preview
+  const [imagePreview, setImagePreview] = useState(null) // Preview imagen perfil
+  const [bannerPreview, setBannerPreview] = useState(null) // Preview banner
   const navigate = useNavigate()
 
   // Get auth context
@@ -90,6 +92,46 @@ const Registrar = ({ onClose, onFormularioChange }) => {
       reader.readAsDataURL(file);
     } else {
       setImagePreview(null);
+    }
+  }
+
+  // Handler for banner file upload
+  const handleBannerChange = (e) => {
+    const file = e.target.files[0];
+    
+    // Validate if the file is a JPG
+    const imageError = validateImage(file);
+    
+    if (imageError) {
+      setErrors(prev => ({ ...prev, banner: imageError }));
+      e.target.value = ''; // Reset the file input
+      return;
+    }
+    
+    // Clear any previous error
+    if (errors.banner) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.banner;
+        return newErrors;
+      });
+    }
+    
+    // Update form data with the valid banner
+    setFormData(prev => ({
+      ...prev,
+      banner: file
+    }));
+    
+    // Create preview URL for the banner
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setBannerPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setBannerPreview(null);
     }
   }
 
@@ -183,9 +225,12 @@ const Registrar = ({ onClose, onFormularioChange }) => {
     // Append all form fields
     Object.keys(formData).forEach(key => {
       if (key === 'imagen' && formData[key]) {
-        // Asegurar que se envíe el archivo con el nombre correcto
+        // Asegurar que se envíe la imagen de perfil con el nombre correcto
         formDataToSend.append('imagen', formData[key], formData[key].name);
-      } else if (key !== 'imagen') {
+      } else if (key === 'banner' && formData[key]) {
+        // Asegurar que se envíe el banner con el nombre correcto
+        formDataToSend.append('banner', formData[key], formData[key].name);
+      } else if (key !== 'imagen' && key !== 'banner') {
         formDataToSend.append(key, formData[key]);
       }
     });
@@ -470,7 +515,35 @@ const Registrar = ({ onClose, onFormularioChange }) => {
                   {/* Image Preview */}
                   {imagePreview && (
                     <div className="image-preview">
-                      <img src={imagePreview} alt="Vista previa" />
+                      <img src={imagePreview} alt="Vista previa foto de perfil" />
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+
+              {/* Banner Upload */}
+              <motion.div className="form-group" variants={itemVariants}>
+                <label htmlFor="banner">Banner de Perfil (JPG solamente) - Opcional</label>
+                <div className="input-file-container">
+                  <div className="input-with-icon">
+                    <PhotoIcon className="input-icon" />
+                    <input
+                      id="banner"
+                      type="file"
+                      name="banner"
+                      accept="image/jpeg" // Only allow JPG/JPEG
+                      onChange={handleBannerChange}
+                      disabled={loading}
+                      className={errors.banner ? "error-input" : ""}
+                    />
+                  </div>
+                  {errors.banner && <span className="error-message">{errors.banner}</span>}
+                  
+                  {/* Banner Preview */}
+                  {bannerPreview && (
+                    <div className="banner-preview">
+                      <img src={bannerPreview} alt="Vista previa banner" />
+                      <p className="preview-note">Banner (se recomienda 1200x400px)</p>
                     </div>
                   )}
                 </div>

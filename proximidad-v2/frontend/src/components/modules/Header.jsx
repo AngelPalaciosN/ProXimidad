@@ -135,18 +135,29 @@ export default function Header({ handleAbrirFormulario }) {
                   {isUserMenuOpen && (
                     <div className="user-dropdown">
                       <div className="user-dropdown-header">
-                      <div className="user-dropdown-avatar">
-                        <img
-                          src={user.imagen_url || "/placeholder.svg?height=48&width=48"}
-                          alt={user.nombre_completo || "Usuario"}
-                        />
-                      </div>
-                        <div className="user-dropdown-info">
-                          <h4>{user.nombre_completo || "Usuario"}</h4>
-                          <p>{user.correo_electronico}</p>
-                          <span className="user-type">
-                            {user.tipo_usuario === "proveedor" ? "Proveedor" : "Arrendador"}
-                          </span>
+                        <div 
+                          className="user-dropdown-background"
+                          style={{
+                            backgroundImage: `url(${user.banner_url || user.imagen_url || "/placeholder-banner.jpg"})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center'
+                          }}
+                        >
+                          <div className="user-dropdown-overlay">
+                            <div className="user-dropdown-info">
+                              <h4>{user.nombre_completo || "Usuario"}</h4>
+                              <p>{user.correo_electronico}</p>
+                              <span className="user-type">
+                                {user.tipo_usuario === "proveedor" ? "Proveedor" : "Arrendador"}
+                              </span>
+                            </div>
+                            <div className="user-profile-avatar">
+                              <img
+                                src={user.imagen_url || "/placeholder-avatar.jpg"}
+                                alt={user.nombre_completo || "Usuario"}
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
 

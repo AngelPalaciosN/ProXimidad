@@ -109,16 +109,16 @@ const ServiceRequestModal = ({ show, onHide, service, user }) => {
               <div className="service-details">
                 <div className="detail-item">
                   <FaUser className="me-2 text-primary" />
-                  <strong>Proveedor:</strong> {service.proveedor.nombre}
-                  <span className="rating ms-2">⭐ {service.proveedor.calificacion}</span>
+                  <strong>Proveedor:</strong> {service.proveedor_info?.nombre || service.proveedor?.nombre || "No especificado"}
+                  <span className="rating ms-2">⭐ {service.calificacion || service.proveedor?.calificacion || 4.5}</span>
                 </div>
                 <div className="detail-item">
                   <FaDollarSign className="me-2 text-success" />
-                  <strong>Precio base:</strong> ${service.precio.toLocaleString()}
+                  <strong>Precio base:</strong> ${service.precio?.toLocaleString() || "Por acordar"}
                 </div>
                 <div className="detail-item">
                   <FaClock className="me-2 text-info" />
-                  <strong>Tiempo de entrega:</strong> {service.tiempo_entrega}
+                  <strong>Tiempo de entrega:</strong> {service.duracion || service.tiempo_entrega || "A acordar"}
                 </div>
               </div>
             </Col>

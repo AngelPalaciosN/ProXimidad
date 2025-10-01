@@ -15,6 +15,7 @@ import {
   FaTools,
   FaAward,
   FaShieldAlt,
+  FaArrowRight,
 } from "react-icons/fa"
 import ServiceRequestModal from "./ServiceRequestModal"
 
@@ -24,15 +25,32 @@ const ServiceDetailModal = ({ show, onHide, service, user, onToggleFavorite, isF
 
   if (!service) return null
 
-  // Datos hardcodeados adicionales para el servicio
+  const handleProviderClick = (providerInfo) => {
+    if (providerInfo?.id) {
+      // Crear evento para abrir perfil del proveedor
+      const event = new CustomEvent('openUserProfile', {
+        detail: { userId: providerInfo.id }
+      })
+      window.dispatchEvent(event)
+      onHide() // Cerrar el modal actual
+    }
+  }
+
+  const handleImageError = (e) => {
+    e.target.src = "/placeholder.svg"
+  }
+
+  // Usar datos reales del servicio con fallbacks seguros y galería extendida
   const serviceDetails = {
     ...service,
-    galeria: [
-      service.imagen,
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=600&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&h=400&fit=crop",
-    ],
+    galeria: service.imagenes && service.imagenes.length > 0 
+      ? service.imagenes 
+      : [
+          service.imagen || "/placeholder.svg",
+          service.proveedor_info?.banner_url || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&h=600&fit=crop",
+          "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&h=600&fit=crop"
+        ].filter(Boolean),
     descripcion_completa: `${service.descripcion}
 
 Este servicio incluye una consulta inicial gratuita donde analizamos tus necesidades específicas y objetivos. Trabajamos con metodologías ágiles y te mantenemos informado en cada etapa del proceso.
@@ -176,6 +194,7 @@ Nuestro enfoque se basa en la calidad, innovación y resultados medibles. Cada p
                             src={imagen || "/placeholder.svg"}
                             alt={`${serviceDetails.nombre} ${index + 1}`}
                             className="gallery-image"
+                            onError={handleImageError}
                           />
                         </Carousel.Item>
                       ))}
@@ -188,7 +207,11 @@ Nuestro enfoque se basa en la calidad, innovación y resultados medibles. Cada p
                             className={`thumbnail ${index === activeImageIndex ? "active" : ""}`}
                             onClick={() => setActiveImageIndex(index)}
                           >
-                            <img src={imagen || "/placeholder.svg"} alt={`Thumbnail ${index + 1}`} />
+                            <img 
+                              src={imagen || "/placeholder.svg"} 
+                              alt={`Thumbnail ${index + 1}`}
+                              onError={handleImageError}
+                            />
                             {index === 3 && serviceDetails.galeria.length > 4 && (
                               <div className="more-images">+{serviceDetails.galeria.length - 4}</div>
                             )}
@@ -203,23 +226,37 @@ Nuestro enfoque se basa en la calidad, innovación y resultados medibles. Cada p
                     <h2 className="service-title">{serviceDetails.nombre}</h2>
 
                     {/* Provider Info */}
-                    <div className="provider-card">
+                    <div className="provider-card" onClick={() => handleProviderClick(service.proveedor_info)} role="button" tabIndex="0">
+                      {service.proveedor_info?.banner_url && (
+                        <div className="provider-banner-background">
+                          <img
+                            src={service.proveedor_info.banner_url}
+                            alt="Banner del proveedor"
+                            className="provider-banner-img"
+                            onError={handleImageError}
+                          />
+                        </div>
+                      )}
                       <div className="provider-header">
                         <img
-                          src={serviceDetails.proveedor.avatar || "/placeholder.svg"}
-                          alt={serviceDetails.proveedor.nombre}
+                          src={service.proveedor_info?.imagen_perfil || "/placeholder.svg"}
+                          alt={service.proveedor_info?.nombre || "Usuario"}
                           className="provider-avatar"
+                          onError={handleImageError}
                         />
                         <div className="provider-info">
-                          <h5>{serviceDetails.proveedor.nombre}</h5>
+                          <h5>{service.proveedor_info?.nombre || "Usuario"}</h5>
                           <div className="provider-rating">
-                            {renderStars(Math.floor(serviceDetails.proveedor.calificacion))}
-                            <span className="rating-number">({serviceDetails.proveedor.calificacion})</span>
+                            {renderStars(Math.floor(service.calificacion || 4.5))}
+                            <span className="rating-number">({service.calificacion || 4.5})</span>
                           </div>
                           <div className="provider-location">
                             <FaMapMarkerAlt />
-                            <span>{serviceDetails.proveedor.ubicacion}</span>
+                            <span>{service.proveedor_info?.ubicacion || "Ubicación no especificada"}</span>
                           </div>
+                        </div>
+                        <div className="provider-nav-hint">
+                          <small><FaArrowRight className="me-1" /> Ver perfil</small>
                         </div>
                       </div>
 
@@ -227,21 +264,21 @@ Nuestro enfoque se basa en la calidad, innovación y resultados medibles. Cada p
                         <div className="stat">
                           <FaCheckCircle className="stat-icon" />
                           <div>
-                            <strong>{serviceDetails.estadisticas.proyectos_completados}</strong>
+                            <strong>{service.proveedor_info?.servicios_completados || 0}</strong>
                             <small>Proyectos completados</small>
                           </div>
                         </div>
                         <div className="stat">
                           <FaClock className="stat-icon" />
                           <div>
-                            <strong>{serviceDetails.estadisticas.tiempo_respuesta}</strong>
+                            <strong>&lt; 2 horas</strong>
                             <small>Tiempo de respuesta</small>
                           </div>
                         </div>
                         <div className="stat">
                           <FaThumbsUp className="stat-icon" />
                           <div>
-                            <strong>{serviceDetails.estadisticas.tasa_satisfaccion}</strong>
+                            <strong>{Math.round((service.calificacion || 4.5) * 20)}%</strong>
                             <small>Satisfacción</small>
                           </div>
                         </div>

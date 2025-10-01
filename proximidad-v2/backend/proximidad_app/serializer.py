@@ -22,6 +22,7 @@ class CategoriaSerializer(serializers.ModelSerializer):
 class UsuarioSerializer(serializers.ModelSerializer):
     """Serializer optimizado para usuarios"""
     imagen_url = serializers.SerializerMethodField()
+    banner_url = serializers.SerializerMethodField()
     servicios_count = serializers.SerializerMethodField()
     
     class Meta:
@@ -29,21 +30,32 @@ class UsuarioSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'nombre_completo', 'correo_electronico', 'telefono', 
             'direccion', 'cedula', 'tipo_usuario', 'imagen', 'imagen_url',
-            'fecha_registro', 'activo', 'servicios_count', 'codigo_verificacion'
+            'banner', 'banner_url', 'fecha_registro', 'activo', 'servicios_count', 
+            'codigo_verificacion'
         ]
-        read_only_fields = ['id', 'fecha_registro', 'imagen_url', 'servicios_count']
+        read_only_fields = ['id', 'fecha_registro', 'imagen_url', 'banner_url', 'servicios_count']
         extra_kwargs = {
             'codigo_verificacion': {'write_only': True, 'required': False},
-            'imagen': {'write_only': True}
+            'imagen': {'write_only': True},
+            'banner': {'write_only': True}
         }
     
     def get_imagen_url(self, obj):
-        """Devolver la URL completa de la imagen"""
+        """Devolver la URL completa de la imagen de perfil"""
         if obj.imagen:
             request = self.context.get('request')
             if request:
                 return request.build_absolute_uri(obj.imagen.url)
             return obj.imagen.url
+        return None
+        
+    def get_banner_url(self, obj):
+        """Devolver la URL completa del banner"""
+        if obj.banner:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.banner.url)
+            return obj.banner.url
         return None
 
     def get_servicios_count(self, obj):
@@ -68,10 +80,11 @@ class UsuarioSerializer(serializers.ModelSerializer):
 class UsuarioBasicSerializer(serializers.ModelSerializer):
     """Serializer básico para usuarios (para referencias en otros modelos)"""
     imagen_url = serializers.SerializerMethodField()
+    banner_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Usuario
-        fields = ['id', 'nombre_completo', 'imagen_url', 'tipo_usuario']
+        fields = ['id', 'nombre_completo', 'imagen_url', 'banner_url', 'tipo_usuario']
 
     def get_imagen_url(self, obj):
         """Obtiene la URL completa de la imagen"""
@@ -80,6 +93,15 @@ class UsuarioBasicSerializer(serializers.ModelSerializer):
             if request:
                 return request.build_absolute_uri(obj.imagen.url)
             return obj.imagen.url
+        return None
+    
+    def get_banner_url(self, obj):
+        """Obtiene la URL completa del banner"""
+        if obj.banner:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.banner.url)
+            return obj.banner.url
         return None
 
 
@@ -192,21 +214,23 @@ class ComentariosSerializer(serializers.ModelSerializer):
 class FavoritosSerializer(serializers.ModelSerializer):
     """Serializer optimizado para favoritos"""
     usuario_nombre = serializers.CharField(source='usuario_id.nombre_completo', read_only=True)
-    favorito_nombre = serializers.CharField(source='favorito_id.nombre_completo', read_only=True)
+    favorito_usuario_nombre = serializers.CharField(source='favorito_usuario.nombre_completo', read_only=True)
+    favorito_servicio_nombre = serializers.CharField(source='favorito_servicio.nombre_servicio', read_only=True)
     usuario_info = UsuarioBasicSerializer(source='usuario_id', read_only=True)
-    favorito_info = UsuarioBasicSerializer(source='favorito_id', read_only=True)
+    favorito_usuario_info = UsuarioBasicSerializer(source='favorito_usuario', read_only=True)
     
     class Meta:
         model = Favoritos
         fields = [
             'id', 'usuario_id', 'usuario_nombre', 'usuario_info',
-            'favorito_id', 'favorito_nombre', 'favorito_info', 'fecha_agregado'
+            'favorito_usuario', 'favorito_usuario_nombre', 'favorito_usuario_info',
+            'favorito_servicio', 'favorito_servicio_nombre', 'tipo_favorito', 'fecha_agregado'
         ]
-        read_only_fields = ['id', 'fecha_agregado', 'usuario_info', 'favorito_info']
+        read_only_fields = ['id', 'fecha_agregado', 'usuario_info', 'favorito_usuario_info']
 
     def validate(self, data):
         """Valida que un usuario no se pueda agregar a sí mismo como favorito"""
-        if data['usuario_id'] == data['favorito_id']:
+        if data.get('tipo_favorito') == 'usuario' and data.get('usuario_id') == data.get('favorito_usuario'):
             raise serializers.ValidationError("Un usuario no puede agregarse a sí mismo como favorito")
         return data
 

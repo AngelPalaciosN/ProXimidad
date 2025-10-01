@@ -575,93 +575,119 @@ body {
         }
         
         .modal-header {
-            display: flex;
-            padding: 2rem;
-            background-color: rgba($primary-color, 0.05);
+            position: relative;
+            height: 200px; // ✨ Extender altura para acomodar banner
             border-bottom: 1px solid $border-color;
+            overflow: hidden;
             
-            .modal-avatar {
-                width: 120px;
-                height: 120px;
-                border-radius: 50%;
-                overflow: hidden;
-                margin-right: 2rem;
-                border: 4px solid white;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                
-                img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                }
+            // ✨ Banner de fondo difuminado
+            .modal-banner-background {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 1;
             }
             
-            .modal-title {
-                flex: 1;
+            // ✨ Contenido del header sobre el banner
+            .modal-header-content {
+                position: relative;
+                z-index: 2;
+                display: flex;
+                padding: 2rem;
+                height: 100%;
                 
-                h2 {
-                    margin: 0 0 0.75rem 0;
-                    font-size: 1.8rem;
-                    color: $primary-color;
-                }
-                
-                .modal-subtitle {
-                    display: flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                    font-size: 1.1rem;
-                    color: $text-color;
-                    margin-bottom: 0.5rem;
+                .modal-avatar {
+                    width: 120px;
+                    height: 120px;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    margin-right: 2rem;
+                    border: 4px solid white;
+                    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+                    flex-shrink: 0;
                     
-                    .icon {
-                        color: $secondary-color;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
                     }
                 }
                 
-                .modal-especialidad {
-                    font-size: 1.1rem;
-                    color: $text-color;
-                    font-style: italic;
-                    margin-bottom: 0.75rem;
-                }
-                
-                .rating {
-                    display: flex;
-                    align-items: center;
-                    gap: 0.25rem;
+                    .modal-title {
+                        flex: 1;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
                     
-                    .star {
-                        color: #ffc107;
-                        font-size: 1.3rem;
-                        
-                        &.empty {
-                            color: #e0e0e0;
+                        h2 {
+                            margin: 0 0 0.75rem 0;
+                            font-size: 1.8rem;
+                            color: $primary-color;
+                            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
                         }
                         
-                        &.half {
-                            position: relative;
+                        .modal-subtitle {
+                            display: flex;
+                            align-items: center;
+                            gap: 0.5rem;
+                            font-size: 1.1rem;
+                            color: $text-color;
+                            margin-bottom: 0.5rem;
                             
-                            &:after {
-                                content: '★';
-                                position: absolute;
-                                left: 0;
-                                top: 0;
-                                width: 50%;
-                                overflow: hidden;
+                            .icon {
+                                color: $secondary-color;
+                            }
+                        }
+                        
+                        .modal-especialidad {
+                            font-size: 1.1rem;
+                            color: $text-color;
+                            font-style: italic;
+                            margin-bottom: 0.75rem;
+                        }
+                        
+                        .rating {
+                            display: flex;
+                            align-items: center;
+                            gap: 0.25rem;
+                            
+                            .star {
                                 color: #ffc107;
+                                font-size: 1.3rem;
+                                text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+                                
+                                &.empty {
+                                    color: #e0e0e0;
+                                }
+                                
+                                &.half {
+                                    position: relative;
+                                    
+                                    &:after {
+                                        content: '★';
+                                        position: absolute;
+                                        left: 0;
+                                        top: 0;
+                                        width: 50%;
+                                        overflow: hidden;
+                                        color: #ffc107;
+                                    }
+                                }
+                            }
+                            
+                            .rating-value {
+                                margin-left: 0.5rem;
+                                font-weight: 600;
+                                color: $text-color;
+                                font-size: 1.1rem;
+                                text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
                             }
                         }
                     }
-                    
-                    .rating-value {
-                        margin-left: 0.5rem;
-                        font-weight: 600;
-                        color: $text-color;
-                        font-size: 1.1rem;
-                    }
                 }
             }
-        }
         
         .modal-body {
             padding: 2rem;
@@ -794,13 +820,20 @@ body {
     .modal-overlay {
         .modal-content {
             .modal-header {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
+                height: 160px; // Menor altura en móviles
                 
-                .modal-avatar {
-                    margin-right: 0;
-                    margin-bottom: 1.5rem;
+                .modal-header-content {
+                    flex-direction: column;
+                    align-items: center;
+                    text-align: center;
+                    padding: 1.5rem;
+                
+                    .modal-avatar {
+                        margin-right: 0;
+                        margin-bottom: 1.5rem;
+                        width: 100px;
+                        height: 100px;
+                    }
                 }
             }
             

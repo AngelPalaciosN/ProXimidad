@@ -11,11 +11,17 @@ export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchUsuarios = useCallback(async () => {
+  const fetchUsuarios = useCallback(async (excluirUsuario = null) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(buildApiUrl('/usuarios/'));
+      // ✅ VALIDACIÓN: Construir URL con parámetro de exclusión si se proporciona
+      let url = buildApiUrl('/usuarios/');
+      if (excluirUsuario) {
+        url += `?excluir_usuario=${excluirUsuario}`;
+      }
+      
+      const response = await axios.get(url);
       if (response.status === 200) {
         setUsuarios(response.data);
       } else {

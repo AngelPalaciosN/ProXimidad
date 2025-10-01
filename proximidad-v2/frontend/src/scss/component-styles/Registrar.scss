@@ -461,6 +461,41 @@
   }
 }
 
+// Image and Banner Preview Styles
+.image-preview, .banner-preview {
+  margin-top: 15px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid #e0e0e0;
+  
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+}
+
+.image-preview img {
+  max-height: 120px;
+  object-fit: cover;
+}
+
+.banner-preview {
+  img {
+    max-height: 80px;
+    object-fit: cover;
+    aspect-ratio: 3/1; // Mantener proporción de banner
+  }
+  
+  .preview-note {
+    margin: 8px 12px;
+    font-size: 0.8rem;
+    color: #666;
+    text-align: center;
+    font-style: italic;
+  }
+}
+
 @media (max-width: 480px) {
   .progress-indicator {
     .step-text {

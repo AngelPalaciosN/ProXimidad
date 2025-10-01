@@ -60,10 +60,20 @@ class Usuario(models.Model):
     codigo_verificacion = models.IntegerField(null=True, blank=True, default=0)
     tipo_usuario = models.CharField(max_length=50)  # 'proveedor' o 'arrendador'
     imagen = models.ImageField(
+        'Foto de perfil',
         upload_to=upload_to_usuarios,
         blank=True,
         null=True,
-        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp'])]
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp'])],
+        help_text='Foto de perfil del usuario (aparece en círculo)'
+    )
+    banner = models.ImageField(
+        'Banner de perfil',
+        upload_to=upload_to_usuarios,
+        blank=True,
+        null=True,
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp'])],
+        help_text='Imagen de banner para el fondo del perfil (1200x400 recomendado)'
     )
     fecha_registro = models.DateTimeField('Fecha de registro', default=timezone.now)
     ultima_actualizacion = models.DateTimeField('Última actualización', auto_now=True)
@@ -87,6 +97,13 @@ class Usuario(models.Model):
         """URL de la imagen del usuario para el serializer"""
         if self.imagen:
             return self.imagen.url
+        return None
+    
+    @property
+    def banner_url(self):
+        """URL del banner del usuario para el serializer"""
+        if self.banner:
+            return self.banner.url
         return None
 
 
@@ -244,30 +261,15 @@ class Favoritos(models.Model):
 
     class Meta:
         db_table = 'favoritos'
-        constraints = [
-            models.UniqueConstraint(
-                fields=['usuario_id', 'favorito_usuario'],
-                condition=models.Q(tipo_favorito='usuario'),
-                name='unique_usuario_favorito'
-            ),
-            models.UniqueConstraint(
-                fields=['usuario_id', 'favorito_servicio'], 
-                condition=models.Q(tipo_favorito='servicio'),
-                name='unique_servicio_favorito'
-            ),
-            models.CheckConstraint(
-                check=models.Q(
-                    (models.Q(tipo_favorito='usuario') & models.Q(favorito_usuario__isnull=False) & models.Q(favorito_servicio__isnull=True)) |
-                    (models.Q(tipo_favorito='servicio') & models.Q(favorito_servicio__isnull=False) & models.Q(favorito_usuario__isnull=True))
-                ),
-                name='favorito_valido'
-            )
-        ]
+        # ✅ COMPATIBLE CON MYSQL: Sin unique constraints con condiciones
         indexes = [
             models.Index(fields=['usuario_id', 'tipo_favorito']),
             models.Index(fields=['favorito_usuario']),
             models.Index(fields=['favorito_servicio']),
             models.Index(fields=['fecha_agregado']),
+            # Índices compuestos para mejorar rendimiento
+            models.Index(fields=['usuario_id', 'favorito_usuario']),
+            models.Index(fields=['usuario_id', 'favorito_servicio']),
         ]
     
     def clean(self):

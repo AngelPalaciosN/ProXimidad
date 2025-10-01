@@ -28,9 +28,32 @@ const UsuarioList = () => {
   const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000"
 
   useEffect(() => {
-    fetchUsuarios()
+    // ✅ VALIDACIÓN: Excluir el usuario actual de la lista
+    if (user && user.id) {
+      fetchUsuarios(user.id)  // Pasar el ID del usuario a excluir
+    } else {
+      fetchUsuarios()  // Sin exclusiones si no hay usuario logueado
+    }
     fetchFavoritos()
-  }, [fetchUsuarios])
+
+    // Listener para navegación desde ServiceDetailModal
+    const handleUserProfileNavigation = (event) => {
+      const { userId } = event.detail
+      // Buscar el usuario en la lista
+      const userToSelect = usuarios.find(usuario => usuario.id === userId)
+      if (userToSelect) {
+        setSelectedUser(userToSelect)
+        // Cambiar a la tab de proveedores si es necesario
+        setActiveTab("proveedores")
+      }
+    }
+
+    window.addEventListener('openUserProfile', handleUserProfileNavigation)
+    
+    return () => {
+      window.removeEventListener('openUserProfile', handleUserProfileNavigation)
+    }
+  }, [fetchUsuarios, user, usuarios])
 
   const fetchFavoritos = useCallback(async () => {
     if (user && user.id) {
@@ -70,6 +93,28 @@ const UsuarioList = () => {
         title: "Inicia sesión",
         text: "Debes iniciar sesión para añadir favoritos",
         icon: "warning",
+        confirmButtonColor: "#005187",
+      })
+      return
+    }
+
+    // ✅ VALIDACIÓN DOBLE: Evitar que se agregue a sí mismo como favorito
+    if (user.id === usuarioId) {
+      Swal.fire({
+        title: "Error",
+        text: "No puedes agregarte a ti mismo como favorito",
+        icon: "error",
+        confirmButtonColor: "#005187",
+      })
+      return
+    }
+
+    // ✅ VALIDACIÓN: Verificar si ya está en favoritos
+    if (favoritos.includes(usuarioId)) {
+      Swal.fire({
+        title: "Ya es favorito",
+        text: "Este usuario ya está en tu lista de favoritos",
+        icon: "info",
         confirmButtonColor: "#005187",
       })
       return
@@ -128,7 +173,7 @@ const UsuarioList = () => {
       event.stopPropagation()
     }
     
-    if (!user || !user.usuario_id) {
+    if (!user || !user.id) {
       Swal.fire({
         title: "Inicia sesión",
         text: "Debes iniciar sesión para eliminar favoritos",
@@ -504,22 +549,35 @@ const UsuarioList = () => {
             <button className="modal-close" onClick={handleCloseModal}>×</button>
             
             <div className="modal-header">
-              <div className="modal-avatar">
-                <img src={selectedUser.imagen_url || "/placeholder.svg?height=120&width=120"} alt={selectedUser.nombre_completo} />
+              {/* ✨ Banner de fondo difuminado */}
+              <div className="modal-banner-background" 
+                   style={{
+                     backgroundImage: `url(${selectedUser.banner_url || selectedUser.imagen_url || "/placeholder.svg"})`,
+                     backgroundSize: 'cover',
+                     backgroundPosition: 'center center',
+                     filter: 'blur(2px)',
+                     opacity: '0.3'
+                   }}>
               </div>
-              <div className="modal-title">
-                <h2>{selectedUser.nombre_completo}</h2>
-                <p className="modal-subtitle">
-                  {selectedUser.tipo_usuario === "proveedor" ? (
-                    <><FaUserTie className="icon" /> Proveedor de servicios</>
-                  ) : (
-                    <><FaUserCheck className="icon" /> Arrendador</>
+              
+              <div className="modal-header-content">
+                <div className="modal-avatar">
+                  <img src={selectedUser.imagen_url || "/placeholder.svg?height=120&width=120"} alt={selectedUser.nombre_completo} />
+                </div>
+                <div className="modal-title">
+                  <h2>{selectedUser.nombre_completo}</h2>
+                  <p className="modal-subtitle">
+                    {selectedUser.tipo_usuario === "proveedor" ? (
+                      <><FaUserTie className="icon" /> Proveedor de servicios</>
+                    ) : (
+                      <><FaUserCheck className="icon" /> Arrendador</>
+                    )}
+                  </p>
+                  {selectedUser.especialidad && (
+                    <p className="modal-especialidad">{selectedUser.especialidad}</p>
                   )}
-                </p>
-                {selectedUser.especialidad && (
-                  <p className="modal-especialidad">{selectedUser.especialidad}</p>
-                )}
-                {selectedUser.calificacion && renderStars(selectedUser.calificacion)}
+                  {selectedUser.calificacion && renderStars(selectedUser.calificacion)}
+                </div>
               </div>
             </div>
             

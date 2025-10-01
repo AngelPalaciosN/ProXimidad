@@ -72,7 +72,18 @@ def usuarios_list(request):
     """Lista todos los usuarios con filtros opcionales"""
     try:
         tipo_usuario = request.GET.get('tipo_usuario', None)
-        usuarios = Usuario.objects.all()
+        excluir_usuario = request.GET.get('excluir_usuario', None)  # ✅ Nuevo parámetro
+        activo = request.GET.get('activo', 'true').lower() == 'true'
+        
+        usuarios = Usuario.objects.filter(activo=activo)
+        
+        # ✅ VALIDACIÓN: Excluir usuario específico (para que no aparezca en su propia lista de favoritos)
+        if excluir_usuario:
+            try:
+                excluir_id = int(excluir_usuario)
+                usuarios = usuarios.exclude(id=excluir_id)
+            except (ValueError, TypeError):
+                pass  # Si no es un ID válido, ignore el filtro
         
         if tipo_usuario:
             usuarios = usuarios.filter(tipo_usuario=tipo_usuario)
@@ -134,7 +145,7 @@ def agregar_favorito(request):
                 return Response({'error': 'Usuario favorito no encontrado'}, status=status.HTTP_404_NOT_FOUND)
                 
             # Verificar que no se marque a sí mismo
-            if usuario_id == favorito_id:
+            if int(usuario_id) == int(favorito_id):
                 return Response({'error': 'No puedes marcarte a ti mismo como favorito'}, status=status.HTTP_400_BAD_REQUEST)
                 
             # Verificar si ya existe
@@ -197,21 +208,23 @@ def obtener_favoritos(request, usuario_id):
             tipo_favorito=tipo_favorito
         ).select_related('favorito_usuario', 'favorito_servicio')
         
-        # Serializar los datos
+        # Serializar los datos y filtrar el usuario actual
         favoritos_data = []
         for favorito in favoritos:
             if favorito.tipo_favorito == 'usuario' and favorito.favorito_usuario:
-                favoritos_data.append({
-                    'id': favorito.id,
-                    'tipo': 'usuario',
-                    'usuario_id': favorito.usuario_id.id,
-                    'favorito_id': favorito.favorito_usuario.id,
-                    'favorito_nombre': favorito.favorito_usuario.nombre_completo,
-                    'favorito_email': favorito.favorito_usuario.correo_electronico,
-                    'favorito_tipo': favorito.favorito_usuario.tipo_usuario,
-                    'favorito_imagen_url': favorito.favorito_usuario.imagen_url,
-                    'fecha_agregado': favorito.fecha_agregado
-                })
+                # ✅ VALIDACIÓN: No incluir el propio usuario en favoritos
+                if favorito.favorito_usuario.id != int(usuario_id):
+                    favoritos_data.append({
+                        'id': favorito.id,
+                        'tipo': 'usuario',
+                        'usuario_id': favorito.usuario_id.id,
+                        'favorito_id': favorito.favorito_usuario.id,
+                        'favorito_nombre': favorito.favorito_usuario.nombre_completo,
+                        'favorito_email': favorito.favorito_usuario.correo_electronico,
+                        'favorito_tipo': favorito.favorito_usuario.tipo_usuario,
+                        'favorito_imagen_url': favorito.favorito_usuario.imagen_url,
+                        'fecha_agregado': favorito.fecha_agregado
+                    })
             elif favorito.tipo_favorito == 'servicio' and favorito.favorito_servicio:
                 favoritos_data.append({
                     'id': favorito.id,

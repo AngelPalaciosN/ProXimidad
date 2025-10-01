@@ -214,20 +214,21 @@ const ClientDashboard = () => {
         const serviciosTransformados = serviciosAPI.map((servicio) => ({
           id: servicio.id,
           nombre: servicio.nombre_servicio,
-          descripcion: servicio.descripcion_servicio || servicio.descripcion || 'Sin descripción disponible',
-          precio: parseFloat(servicio.precio_servicio || servicio.precio_base || 0),
-          categoria: servicio.categoria?.nombre_categoria || 'General',
+          descripcion: servicio.descripcion || 'Sin descripción disponible',
+          precio: parseFloat(servicio.precio_base || 0),
+          categoria: servicio.categoria_nombre || servicio.categoria_info?.nombre_categoria || 'General',
           proveedor: {
-            nombre: servicio.usuario?.nombre_completo || 'Proveedor',
-            avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-            calificacion: 4.5,
-            ubicacion: servicio.usuario?.direccion || 'Costa Rica',
-            servicios_completados: 25,
+            nombre: servicio.proveedor_info?.nombre_completo || servicio.proveedor_nombre || 'Proveedor',
+            avatar: servicio.proveedor_info?.imagen_url || "/placeholder.svg",
+            banner: servicio.proveedor_info?.banner_url || servicio.proveedor_info?.imagen_url || "/placeholder.svg",
+            calificacion: servicio.promedio_calificacion || 4.5,
+            ubicacion: servicio.ubicacion || 'Ubicación no disponible',
+            servicios_completados: 25, // Este valor podría venir del API en el futuro
           },
-          imagen: servicio.imagen_url || "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=400&h=250&fit=crop",
-          tiempo_entrega: "1-2 semanas",
-          disponible: servicio.disponible !== false,
-          tags: [servicio.categoria?.nombre_categoria || 'General'],
+          imagen: servicio.imagen_url || "/placeholder.svg",
+          tiempo_entrega: "1-2 semanas", // Este valor podría venir del API en el futuro
+          disponible: servicio.activo !== false,
+          tags: [servicio.categoria_nombre || 'General'],
         }))
         
         setServices(serviciosTransformados)
@@ -295,6 +296,13 @@ const ClientDashboard = () => {
     if (!user || !user.id) {
       console.log("Usuario actual:", user)
       alert("Debes iniciar sesión para añadir favoritos")
+      return
+    }
+
+    // ✅ VALIDACIÓN: Verificar que el servicio no sea del propio usuario
+    const service = services.find(s => s.id === serviceId)
+    if (service && service.proveedor_id === user.id) {
+      alert("No puedes agregar tu propio servicio a favoritos")
       return
     }
 
@@ -528,23 +536,34 @@ const ClientDashboard = () => {
                         </div>
 
                         <div className="provider-info">
-                          <div className="provider-avatar">
-                            <img src={service.proveedor.avatar || "/placeholder.svg"} alt={service.proveedor.nombre} />
+                          {/* ✨ Banner de fondo para el proveedor */}
+                          <div className="provider-banner-background" 
+                               style={{
+                                 backgroundImage: `url(${service.proveedor.banner || service.proveedor.avatar || "/placeholder.svg"})`,
+                                 backgroundSize: 'cover',
+                                 backgroundPosition: 'center'
+                               }}>
                           </div>
-                          <div className="provider-details">
-                            <h6>{service.proveedor.nombre}</h6>
-                            <div className="provider-meta">
-                              <div className="rating">
-                                <FaStar className="star-icon" />
-                                <span>{service.proveedor.calificacion}</span>
-                              </div>
-                              <div className="location">
-                                <FaMapMarkerAlt className="location-icon" />
-                                <span>{service.proveedor.ubicacion}</span>
-                              </div>
+                          
+                          <div className="provider-content">
+                            <div className="provider-avatar">
+                              <img src={service.proveedor.avatar || "/placeholder.svg"} alt={service.proveedor.nombre} />
                             </div>
-                            <div className="provider-stats">
-                              <small>{service.proveedor.servicios_completados} servicios completados</small>
+                            <div className="provider-details">
+                              <h6>{service.proveedor.nombre}</h6>
+                              <div className="provider-meta">
+                                <div className="rating">
+                                  <FaStar className="star-icon" />
+                                  <span>{service.proveedor.calificacion}</span>
+                                </div>
+                                <div className="location">
+                                  <FaMapMarkerAlt className="location-icon" />
+                                  <span>{service.proveedor.ubicacion}</span>
+                                </div>
+                              </div>
+                              <div className="provider-stats">
+                                <small>{service.proveedor.servicios_completados} servicios completados</small>
+                              </div>
                             </div>
                           </div>
                         </div>
