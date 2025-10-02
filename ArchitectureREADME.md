@@ -59,14 +59,14 @@ backend/
   usuarios = Usuario.objects.filter(activo=True)
   servicios = Servicios.objects.select_related('proveedor')
 
-**Serializer Pattern (DRF):
+**Serializer Pattern (DRF):**
 
 python
 class ServiciosSerializer(serializers.ModelSerializer):
     proveedor_info = UsuarioBasicSerializer(source='proveedor', read_only=True)
     categoria_info = CategoriaSerializer(source='categoria', read_only=True)
 
-**Decorator Pattern:
+**Decorator Pattern:**
 
 python
 
@@ -75,7 +75,7 @@ python
 def servicios_list(request):
     # Lógica de la vista
     
-4. Características Técnicas
+###4. Características Técnicas
 Framework: Django 5.0.6 + DRF 3.16.0
 
 Base de Datos: MySQL (mysqlclient 2.2.7)
@@ -90,10 +90,12 @@ Archivos: Pillow (manejo de imágenes)
 
 Configuración: python-decouple (variables de entorno)
 
-⚛️ FRONTEND - REACT CON VITE
-1. Patrón de Componentes React
+
+## ⚛️ FRONTEND - REACT CON VITE
+**1. Patrón de Componentes React**
 scss
-Copiar código
+
+```bash
 App.jsx
 ├── Home.jsx (Layout principal)
 │   ├── Header.jsx (Navegación)
@@ -104,9 +106,10 @@ App.jsx
 ├── ClientDashboard.jsx (Dashboard cliente)
 ├── ServiceDetailModal.jsx (Modal de servicios)
 └── Lista_usuarios.jsx (Proveedores)
+```
 2. Patrones de Estado (Context API)
-jsx
-Copiar código
+   
+```bash
 AuthContext (Auth.jsx)
  ├── user
  ├── loading
@@ -118,27 +121,29 @@ UserContext (UserContext.jsx)
  ├── usuarios
  ├── loading
  └── fetchUsuarios()
-3. Arquitectura de Hooks Personalizados
-jsx
-Copiar código
+```
+
+**3. Arquitectura de Hooks Personalizados**
+   
+javascript
 const { user, loading, loginWithPassword } = useAuth();
 const { usuarios, fetchUsuarios } = useUserContext();
-4. Patrones de Comunicación
+
+**5. Patrones de Comunicación**
 HTTP Client Pattern con Axios
 
 javascript
-Copiar código
 const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api"
 const response = await axios.get(`${baseUrl}/servicios/`)
 Environment Configuration Pattern
 
 javascript
-Copiar código
 export const config = {
   API_BASE_URL: import.meta.env.VITE_API_BASE_URL,
   APP_TITLE: import.meta.env.VITE_APP_TITLE
 }
-5. Características Técnicas
+
+**5. Características Técnicas**
 Framework: React 18.3.1
 
 Build Tool: Vite 6.2.2
@@ -155,8 +160,9 @@ Alerts: SweetAlert2 11.6.13
 
 Styling: SASS + Bootstrap
 
-🗄️ BASE DE DATOS - ARQUITECTURA RELACIONAL
-Esquema Simplificado
+## 🗄️ BASE DE DATOS - ARQUITECTURA RELACIONAL
+
+**Esquema Simplificado**
 Usuario (1) ←→ (N) Servicios
 
 Categoría (1) ←→ (N) Servicios
@@ -165,7 +171,7 @@ Usuario (1) ←→ (N) Comentarios
 
 Usuario (N) ←→ (N) Favoritos ←→ (N) Servicios
 
-Características
+**Características**
 Motor: MySQL
 
 Índices: Optimización de consultas
@@ -174,7 +180,7 @@ Constraints: Claves foráneas
 
 Almacenamiento: Archivos en sistema de ficheros
 
-🔄 PATRONES DE INTEGRACIÓN
+## 🔄 PATRONES DE INTEGRACIÓN
 API-First Architecture: Backend expone API REST, frontend consume vía HTTP.
 
 Configuration Management Pattern: Variables de entorno en .env.
@@ -185,14 +191,14 @@ Dev: Vite Dev Server + Django Runserver
 
 Prod: Build estático + WSGI/ASGI
 
-📋 RESUMEN DE ARQUITECTURA
+## 📋 RESUMEN DE ARQUITECTURA
 Capa	Tecnología	Responsabilidad	Patrón
 Frontend	React + Vite	UI/UX, Estado, Navegación	Component-Based + Context
 API	Django REST	Lógica de negocio, validación	MVC + REST
 Datos	MySQL	Persistencia, integridad	Relacional Normalizada
 Assets	File System	Archivos multimedia	Upload + URL Serving
 
-🔧 Patrones de Diseño Identificados
+## 🔧 Patrones de Diseño Identificados
 MVC (Backend)
 
 Component Architecture (Frontend)
@@ -207,7 +213,7 @@ Configuration Pattern (Env Vars)
 
 API Gateway Pattern (Endpoints centralizados)
 
-✅ Beneficios
+## ✅ Beneficios
 Escalabilidad: Componentes independientes
 
 Mantenibilidad: Separación clara de capas
@@ -217,5 +223,6 @@ Testabilidad: Cada capa testeable
 Flexibilidad: Cambios aislados por capa
 
 Reutilización: APIs y componentes reutilizables
+
 
 Esta es una arquitectura moderna, robusta y bien estructurada, que sigue las mejores prácticas de desarrollo web full-stack. 🚀
