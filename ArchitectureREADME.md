@@ -36,6 +36,7 @@ Después de un análisis exhaustivo, se presenta el detalle de la arquitectura i
 
 ### 2. Estructura de Directorios (Modular)  
 
+```bash
 backend/
 ├── core/ # Configuración principal
 │ ├── settings.py # Configuración de Django
