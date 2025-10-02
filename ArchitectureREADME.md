@@ -49,7 +49,7 @@ backend/
 │ ├── urls.py # Rutas de la app
 │ └── migrations/ # Migraciones de BD
 └── media/ # Archivos estáticos
-
+```
 
 ---
 
@@ -66,14 +66,15 @@ class ServiciosSerializer(serializers.ModelSerializer):
     proveedor_info = UsuarioBasicSerializer(source='proveedor', read_only=True)
     categoria_info = CategoriaSerializer(source='categoria', read_only=True)
 
-Decorator Pattern:
+**Decorator Pattern:
 
 python
-Copiar código
+
 @api_view(['GET', 'POST'])
 @permission_classes([AllowAny])
 def servicios_list(request):
     # Lógica de la vista
+    
 4. Características Técnicas
 Framework: Django 5.0.6 + DRF 3.16.0
 
