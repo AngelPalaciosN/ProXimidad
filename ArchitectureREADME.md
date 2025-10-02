@@ -70,13 +70,9 @@ class ServiciosSerializer(serializers.ModelSerializer):
 
 python
 
-@api_view(['GET', 'POST'])
-@permission_classes([AllowAny])
-def servicios_list(request):
-    # Lógica de la vista
-    
-###4. Características Técnicas
-Framework: Django 5.0.6 + DRF 3.16.0
+@api_view(['GET', 'POST']) @permission_classes([AllowAny]) def servicios_list(request): # Lógica de la vista
+
+###4. Características Técnicas Framework: Django 5.0.6 + DRF 3.16.0
 
 Base de Datos: MySQL (mysqlclient 2.2.7)
 
@@ -92,6 +88,7 @@ Configuración: python-decouple (variables de entorno)
 
 
 ## ⚛️ FRONTEND - REACT CON VITE
+
 **1. Patrón de Componentes React**
 scss
 
@@ -107,7 +104,7 @@ App.jsx
 ├── ServiceDetailModal.jsx (Modal de servicios)
 └── Lista_usuarios.jsx (Proveedores)
 ```
-2. Patrones de Estado (Context API)
+**2. Patrones de Estado (Context API)**
    
 ```bash
 AuthContext (Auth.jsx)
@@ -124,26 +121,29 @@ UserContext (UserContext.jsx)
 ```
 
 **3. Arquitectura de Hooks Personalizados**
-   
-javascript
+
+```javascript
 const { user, loading, loginWithPassword } = useAuth();
 const { usuarios, fetchUsuarios } = useUserContext();
+```
 
-**5. Patrones de Comunicación**
+**4. Patrones de Comunicación**
 HTTP Client Pattern con Axios
 
-javascript
+```javascript
 const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api"
 const response = await axios.get(`${baseUrl}/servicios/`)
 Environment Configuration Pattern
+```
 
-javascript
+```javascript
 export const config = {
   API_BASE_URL: import.meta.env.VITE_API_BASE_URL,
   APP_TITLE: import.meta.env.VITE_APP_TITLE
 }
+```
 
-**5. Características Técnicas**
+## 5. Características Técnicas
 Framework: React 18.3.1
 
 Build Tool: Vite 6.2.2
