@@ -50,8 +50,6 @@ backend/
 │ └── migrations/ # Migraciones de BD
 └── media/ # Archivos estáticos
 
-yaml
-Copiar código
 
 ---
 
@@ -60,13 +58,14 @@ Copiar código
   ```python
   usuarios = Usuario.objects.filter(activo=True)
   servicios = Servicios.objects.select_related('proveedor')
-Serializer Pattern (DRF):
+
+**Serializer Pattern (DRF):
 
 python
-Copiar código
 class ServiciosSerializer(serializers.ModelSerializer):
     proveedor_info = UsuarioBasicSerializer(source='proveedor', read_only=True)
     categoria_info = CategoriaSerializer(source='categoria', read_only=True)
+
 Decorator Pattern:
 
 python
