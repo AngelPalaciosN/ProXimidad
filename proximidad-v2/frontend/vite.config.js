@@ -17,6 +17,9 @@ export default defineConfig(({ mode }) => {
         scss: {
           api: 'modern-compiler'
         }
+      },
+      postcss: {
+        plugins: []
       }
     },
     build: {

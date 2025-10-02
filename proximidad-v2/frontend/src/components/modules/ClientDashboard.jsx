@@ -23,31 +23,13 @@ import {
   FaCalendarAlt,
 } from "react-icons/fa"
 import axios from "axios"
-import { config, buildApiUrl } from "../../config/env.js"
 import { useAuth } from "../../Auth"
 import Header from "./Header"
 import ServiceDetailModal from "./ServiceDetailModal"
 import ServiceRequestModal from "./ServiceRequestModal"
 
-const ClientDashboard = () => {
-  const { user, loading: authLoading } = useAuth()
-  
-  // Debug: Ver la estructura del usuario
-  console.log("👤 Usuario en ClientDashboard:", user)
-  
-  const [activeTab, setActiveTab] = useState("browse")
-  const [services, setServices] = useState([])
-  const [myRequests, setMyRequests] = useState([])
-  const [favorites, setFavorites] = useState([])
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("")
-  const [showRequestModal, setShowRequestModal] = useState(false)
-  const [showDetailModal, setShowDetailModal] = useState(false)
-  const [selectedService, setSelectedService] = useState(null)
-  const [loading, setLoading] = useState(true)
-
-  // Datos hardcodeados más completos
-  const mockServices = [
+// Datos mock fuera del componente para evitar recreaciones
+const mockServices = [
     {
       id: 1,
       nombre: "Desarrollo Web Profesional",
@@ -158,56 +140,76 @@ const ClientDashboard = () => {
     },
   ]
 
-  const mockRequests = [
-    {
-      id: 1,
-      servicio: "Desarrollo Web Profesional",
-      proveedor: "Juan Pérez",
-      fecha_solicitud: "2024-01-15",
-      estado: "pendiente",
-      precio_acordado: 1500,
-      descripcion_personalizada:
-        "Necesito un sitio web para mi negocio de repostería con catálogo de productos y sistema de pedidos",
-      urgencia: "media",
-    },
-    {
-      id: 2,
-      servicio: "Diseño Gráfico Creativo",
-      proveedor: "María González",
-      fecha_solicitud: "2024-01-10",
-      estado: "aceptado",
-      precio_acordado: 800,
-      descripcion_personalizada: "Logo para empresa de tecnología, necesito algo moderno y profesional",
-      urgencia: "alta",
-    },
-    {
-      id: 3,
-      servicio: "Marketing Digital Integral",
-      proveedor: "Carlos Rodríguez",
-      fecha_solicitud: "2024-01-05",
-      estado: "completado",
-      precio_acordado: 1200,
-      descripcion_personalizada: "Campaña para lanzamiento de producto en redes sociales",
-      urgencia: "baja",
-    },
-    {
-      id: 4,
-      servicio: "Fotografía Profesional",
-      proveedor: "Ana Jiménez",
-      fecha_solicitud: "2024-01-20",
-      estado: "rechazado",
-      precio_acordado: 600,
-      descripcion_personalizada: "Sesión fotográfica para productos de mi tienda online",
-      urgencia: "media",
-    },
-  ]
+const mockRequests = [
+  {
+    id: 1,
+    servicio: "Desarrollo Web Profesional",
+    proveedor: "Juan Pérez",
+    fecha_solicitud: "2024-01-15",
+    estado: "pendiente",
+    precio_acordado: 1500,
+    descripcion_personalizada:
+      "Necesito un sitio web para mi negocio de repostería con catálogo de productos y sistema de pedidos",
+    urgencia: "media",
+  },
+  {
+    id: 2,
+    servicio: "Diseño Gráfico Creativo",
+    proveedor: "María González",
+    fecha_solicitud: "2024-01-10",
+    estado: "aceptado",
+    precio_acordado: 800,
+    descripcion_personalizada: "Logo para empresa de tecnología, necesito algo moderno y profesional",
+    urgencia: "alta",
+  },
+  {
+    id: 3,
+    servicio: "Marketing Digital Integral",
+    proveedor: "Carlos Rodríguez",
+    fecha_solicitud: "2024-01-05",
+    estado: "completado",
+    precio_acordado: 1200,
+    descripcion_personalizada: "Campaña para lanzamiento de producto en redes sociales",
+    urgencia: "baja",
+  },
+  {
+    id: 4,
+    servicio: "Fotografía Profesional",
+    proveedor: "Ana Jiménez",
+    fecha_solicitud: "2024-01-20",
+    estado: "rechazado",
+    precio_acordado: 600,
+    descripcion_personalizada: "Sesión fotográfica para productos de mi tienda online",
+    urgencia: "media",
+  },
+]
+
+const ClientDashboard = () => {
+  const { user, loading: authLoading } = useAuth()
+  
+  // Debug: Ver la estructura del usuario
+  console.log("👤 Usuario en ClientDashboard:", user)
+  
+  const [activeTab, setActiveTab] = useState("browse")
+  const [services, setServices] = useState([])
+  const [myRequests, setMyRequests] = useState([])
+  const [favorites, setFavorites] = useState([])
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState("")
+  const [showRequestModal, setShowRequestModal] = useState(false)
+  const [showDetailModal, setShowDetailModal] = useState(false)
+  const [selectedService, setSelectedService] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  // Usar la variable de entorno como Lista_usuarios
+  const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://192.168.0.101:8000/api"
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
       try {
         // Cargar servicios desde la API
-        const response = await axios.get(buildApiUrl('/servicios/'))
+        const response = await axios.get(`${baseUrl}/servicios/`)
         const serviciosAPI = response.data.servicios || []
         
         // Transformar datos de la API al formato esperado
@@ -248,14 +250,14 @@ const ClientDashboard = () => {
     }
     
     fetchData()
-  }, [])
+  }, [baseUrl])
 
   // Cargar favoritos cuando el usuario esté disponible
   useEffect(() => {
     const fetchFavoritos = async () => {
       if (user && user.id) {
         try {
-          const favoritosResponse = await axios.get(buildApiUrl(`/favoritos/${user.id}/?tipo=servicio`))
+          const favoritosResponse = await axios.get(`${baseUrl}/favoritos/${user.id}/?tipo=servicio`)
           const favoritosIds = favoritosResponse.data.favoritos?.map(fav => fav.id) || []
           setFavorites(favoritosIds)
         } catch (error) {
@@ -266,14 +268,13 @@ const ClientDashboard = () => {
     }
     
     fetchFavoritos()
-  }, [user?.id])
+  }, [user?.id, baseUrl, user])
 
   const filteredServices = services.filter((service) => {
     const matchesSearch =
-      service.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      service.descripcion.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      service.tags.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase()))
-    const matchesCategory = selectedCategory === "" || service.categoria === selectedCategory
+      (service.nombre_servicio || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (service.descripcion || '').toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesCategory = selectedCategory === "" || service.categoria_nombre === selectedCategory
     return matchesSearch && matchesCategory
   })
 
@@ -281,14 +282,14 @@ const ClientDashboard = () => {
     console.log("🔧 Abriendo modal de solicitud para:", service)
     setSelectedService(service)
     setShowRequestModal(true)
-    console.log("🔧 Estado después: showRequestModal =", true, "selectedService =", service.nombre)
+    console.log("🔧 Estado después: showRequestModal =", true, "selectedService =", service.nombre_servicio)
   }
 
   const handleViewDetails = (service) => {
     console.log("👁️ Abriendo modal de detalles para:", service)
     setSelectedService(service)
     setShowDetailModal(true)
-    console.log("👁️ Estado después: showDetailModal =", true, "selectedService =", service.nombre)
+    console.log("👁️ Estado después: showDetailModal =", true, "selectedService =", service.nombre_servicio)
   }
 
   const handleToggleFavorite = async (serviceId) => {
@@ -301,7 +302,7 @@ const ClientDashboard = () => {
 
     // ✅ VALIDACIÓN: Verificar que el servicio no sea del propio usuario
     const service = services.find(s => s.id === serviceId)
-    if (service && service.proveedor_id === user.id) {
+    if (service && service.proveedor === user.id) {
       alert("No puedes agregar tu propio servicio a favoritos")
       return
     }
@@ -312,7 +313,7 @@ const ClientDashboard = () => {
       if (isFavorited) {
         // Eliminar de favoritos
         console.log(`🗑️ Eliminando favorito: user.id=${user.id}, serviceId=${serviceId}`)
-        await axios.delete(buildApiUrl(`/favoritos/eliminar/${user.id}/${serviceId}/?tipo=servicio`))
+        await axios.delete(`${baseUrl}/favoritos/eliminar/${user.id}/${serviceId}/?tipo=servicio`)
         setFavorites((prev) => prev.filter((id) => id !== serviceId))
       } else {
         // Añadir a favoritos
@@ -322,8 +323,8 @@ const ClientDashboard = () => {
           tipo: 'servicio'
         }
         console.log(`❤️ Añadiendo favorito con payload:`, payload)
-        console.log(`📡 URL completa:`, buildApiUrl('/favoritos/'))
-        await axios.post(buildApiUrl('/favoritos/'), payload)
+        console.log(`📡 URL completa:`, `${baseUrl}/favoritos/`)
+        await axios.post(`${baseUrl}/favoritos/`, payload)
         setFavorites((prev) => [...prev, serviceId])
       }
     } catch (error) {
@@ -363,7 +364,7 @@ const ClientDashboard = () => {
     return icons[category] || FaTools
   }
 
-  const categories = [...new Set(services.map((service) => service.categoria))]
+  const categories = [...new Set(services.map((service) => service.categoria_nombre))]
 
   if (loading || authLoading) {
     return (
@@ -502,7 +503,11 @@ const ClientDashboard = () => {
                   <Col key={service.id} lg={4} md={6} className="mb-4">
                     <Card className="service-card h-100">
                       <div className="service-image">
-                        <Card.Img variant="top" src={service.imagen} />
+                        <Card.Img 
+                          variant="top" 
+                          src={service.imagen_url || service.proveedor_info?.banner_url || "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&h=600&fit=crop"} 
+                          onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&h=600&fit=crop"; }}
+                        />
                         <Button
                           variant="link"
                           className="favorite-btn"
@@ -519,16 +524,16 @@ const ClientDashboard = () => {
 
                       <Card.Body className="d-flex flex-column">
                         <div className="service-header">
-                          <Card.Title>{service.nombre}</Card.Title>
+                          <Card.Title>{service.nombre_servicio || service.nombre}</Card.Title>
                           <Badge bg="secondary" className="category-badge">
-                            {service.categoria}
+                            {service.categoria_nombre || service.categoria}
                           </Badge>
                         </div>
 
                         <Card.Text className="service-description">{service.descripcion}</Card.Text>
 
                         <div className="service-tags">
-                          {service.tags.slice(0, 3).map((tag) => (
+                          {(service.tags || [service.categoria_nombre]).slice(0, 3).map((tag) => (
                             <span key={tag} className="tag">
                               {tag}
                             </span>
@@ -539,7 +544,7 @@ const ClientDashboard = () => {
                           {/* ✨ Banner de fondo para el proveedor */}
                           <div className="provider-banner-background" 
                                style={{
-                                 backgroundImage: `url(${service.proveedor.banner || service.proveedor.avatar || "/placeholder.svg"})`,
+                                 backgroundImage: `url(${service.proveedor_info?.banner_url || service.proveedor_info?.imagen_url || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=300&fit=crop"})`,
                                  backgroundSize: 'cover',
                                  backgroundPosition: 'center'
                                }}>
@@ -547,22 +552,26 @@ const ClientDashboard = () => {
                           
                           <div className="provider-content">
                             <div className="provider-avatar">
-                              <img src={service.proveedor.avatar || "/placeholder.svg"} alt={service.proveedor.nombre} />
+                              <img 
+                                src={service.proveedor_info?.imagen_url || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"} 
+                                alt={service.proveedor_info?.nombre_completo || service.proveedor_nombre || "Proveedor"} 
+                                onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"; }}
+                              />
                             </div>
                             <div className="provider-details">
-                              <h6>{service.proveedor.nombre}</h6>
+                              <h6>{service.proveedor_info?.nombre_completo || service.proveedor_nombre || "Proveedor"}</h6>
                               <div className="provider-meta">
                                 <div className="rating">
                                   <FaStar className="star-icon" />
-                                  <span>{service.proveedor.calificacion}</span>
+                                  <span>{service.promedio_calificacion || 4.5}</span>
                                 </div>
                                 <div className="location">
                                   <FaMapMarkerAlt className="location-icon" />
-                                  <span>{service.proveedor.ubicacion}</span>
+                                  <span>{service.proveedor_info?.direccion || service.ubicacion || "Ubicación no disponible"}</span>
                                 </div>
                               </div>
                               <div className="provider-stats">
-                                <small>{service.proveedor.servicios_completados} servicios completados</small>
+                                <small>{service.proveedor_info?.servicios_completados || 0} servicios completados</small>
                               </div>
                             </div>
                           </div>
@@ -571,11 +580,11 @@ const ClientDashboard = () => {
                         <div className="service-footer mt-auto">
                           <div className="service-meta">
                             <div className="price">
-                              <strong>${service.precio.toLocaleString()}</strong>
+                              <strong>${parseFloat(service.precio_base || service.precio || 0).toLocaleString()}</strong>
                             </div>
                             <div className="delivery-time">
                               <FaClock className="me-1" />
-                              {service.tiempo_entrega}
+                              {service.tiempo_entrega || "7-10 días"}
                             </div>
                           </div>
 
@@ -751,7 +760,11 @@ const ClientDashboard = () => {
                       <Col key={service.id} lg={4} md={6} className="mb-4">
                         <Card className="service-card h-100">
                           <div className="service-image">
-                            <Card.Img variant="top" src={service.imagen} />
+                            <Card.Img 
+                              variant="top" 
+                              src={service.imagen_url || service.proveedor_info?.banner_url || "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&h=600&fit=crop"} 
+                              onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&h=600&fit=crop"; }}
+                            />
                             <Button
                               variant="link"
                               className="favorite-btn"
@@ -763,7 +776,7 @@ const ClientDashboard = () => {
 
                           <Card.Body className="d-flex flex-column">
                             <div className="service-header">
-                              <Card.Title>{service.nombre}</Card.Title>
+                              <Card.Title>{service.nombre_servicio || service.nombre}</Card.Title>
                               <Badge bg="secondary" className="category-badge">
                                 {service.categoria}
                               </Badge>
@@ -773,7 +786,7 @@ const ClientDashboard = () => {
                             <div className="service-footer mt-auto">
                               <div className="service-meta">
                                 <div className="price">
-                                  <strong>${service.precio.toLocaleString()}</strong>
+                                  <strong>${parseFloat(service.precio_base || service.precio || 0).toLocaleString()}</strong>
                                 </div>
                                 <div className="delivery-time">
                                   <FaClock className="me-1" />

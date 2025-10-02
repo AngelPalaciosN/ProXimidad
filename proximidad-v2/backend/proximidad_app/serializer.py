@@ -81,10 +81,18 @@ class UsuarioBasicSerializer(serializers.ModelSerializer):
     """Serializer básico para usuarios (para referencias en otros modelos)"""
     imagen_url = serializers.SerializerMethodField()
     banner_url = serializers.SerializerMethodField()
+    imagen_perfil = serializers.SerializerMethodField()  # Alias para compatibilidad con frontend
+    nombre = serializers.CharField(source='nombre_completo', read_only=True)  # Alias para frontend
+    ubicacion = serializers.CharField(source='direccion', read_only=True)  # Alias para frontend
+    servicios_completados = serializers.SerializerMethodField()
 
     class Meta:
         model = Usuario
-        fields = ['id', 'nombre_completo', 'imagen_url', 'banner_url', 'tipo_usuario']
+        fields = [
+            'id', 'nombre_completo', 'nombre', 'imagen_url', 'imagen_perfil', 
+            'banner_url', 'tipo_usuario', 'direccion', 'ubicacion', 
+            'telefono', 'correo_electronico', 'servicios_completados'
+        ]
 
     def get_imagen_url(self, obj):
         """Obtiene la URL completa de la imagen"""
@@ -95,6 +103,10 @@ class UsuarioBasicSerializer(serializers.ModelSerializer):
             return obj.imagen.url
         return None
     
+    def get_imagen_perfil(self, obj):
+        """Alias de imagen_url para compatibilidad con frontend"""
+        return self.get_imagen_url(obj)
+    
     def get_banner_url(self, obj):
         """Obtiene la URL completa del banner"""
         if obj.banner:
@@ -103,6 +115,12 @@ class UsuarioBasicSerializer(serializers.ModelSerializer):
                 return request.build_absolute_uri(obj.banner.url)
             return obj.banner.url
         return None
+    
+    def get_servicios_completados(self, obj):
+        """Cuenta los servicios del proveedor"""
+        if obj.tipo_usuario == 'proveedor':
+            return obj.servicios_ofrecidos.filter(activo=True).count()
+        return 0
 
 
 class ServiciosSerializer(serializers.ModelSerializer):

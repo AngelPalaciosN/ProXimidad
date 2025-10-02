@@ -17,6 +17,7 @@ import {
   FaShieldAlt,
   FaArrowRight,
 } from "react-icons/fa"
+import PropTypes from "prop-types"
 import ServiceRequestModal from "./ServiceRequestModal"
 
 const ServiceDetailModal = ({ show, onHide, service, user, onToggleFavorite, isFavorite }) => {
@@ -40,97 +41,27 @@ const ServiceDetailModal = ({ show, onHide, service, user, onToggleFavorite, isF
     e.target.src = "/placeholder.svg"
   }
 
-  // Usar datos reales del servicio con fallbacks seguros y galería extendida
+  // Usar datos reales del servicio directamente como Lista_usuarios
   const serviceDetails = {
     ...service,
-    galeria: service.imagenes && service.imagenes.length > 0 
-      ? service.imagenes 
-      : [
-          service.imagen || "/placeholder.svg",
-          service.proveedor_info?.banner_url || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
-          "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&h=600&fit=crop",
-          "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&h=600&fit=crop"
-        ].filter(Boolean),
-    descripcion_completa: `${service.descripcion}
-
-Este servicio incluye una consulta inicial gratuita donde analizamos tus necesidades específicas y objetivos. Trabajamos con metodologías ágiles y te mantenemos informado en cada etapa del proceso.
-
-Nuestro enfoque se basa en la calidad, innovación y resultados medibles. Cada proyecto es único y lo tratamos con la atención personalizada que merece.`,
-    incluye: [
-      "Consulta inicial gratuita",
-      "Análisis de requerimientos",
-      "Propuesta detallada",
-      "Desarrollo/Implementación",
-      "Pruebas y revisiones",
-      "Entrega final",
-      "Soporte post-entrega (30 días)",
-      "Documentación completa",
-    ],
-    proceso: [
-      {
-        paso: 1,
-        titulo: "Consulta Inicial",
-        descripcion: "Analizamos tus necesidades y objetivos",
-        duracion: "1-2 días",
-      },
-      {
-        paso: 2,
-        titulo: "Propuesta",
-        descripcion: "Creamos una propuesta detallada y presupuesto",
-        duracion: "2-3 días",
-      },
-      {
-        paso: 3,
-        titulo: "Desarrollo",
-        descripcion: "Implementamos la solución paso a paso",
-        duracion: service.tiempo_entrega,
-      },
-      {
-        paso: 4,
-        titulo: "Entrega",
-        descripcion: "Revisión final y entrega del proyecto",
-        duracion: "1-2 días",
-      },
-    ],
-    reseñas: [
-      {
-        id: 1,
-        usuario: "María Rodríguez",
-        avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=50&h=50&fit=crop&crop=face",
-        calificacion: 5,
-        fecha: "2024-01-10",
-        comentario:
-          "Excelente trabajo, muy profesional y cumplió con todos los tiempos. El resultado superó mis expectativas. Definitivamente lo recomiendo.",
-        proyecto: "Sitio web corporativo",
-      },
-      {
-        id: 2,
-        usuario: "Carlos Méndez",
-        avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop&crop=face",
-        calificacion: 5,
-        fecha: "2024-01-05",
-        comentario:
-          "Muy satisfecho con el servicio. Comunicación excelente durante todo el proceso y entrega a tiempo.",
-        proyecto: "E-commerce",
-      },
-      {
-        id: 3,
-        usuario: "Ana Jiménez",
-        avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=50&h=50&fit=crop&crop=face",
-        calificacion: 4,
-        fecha: "2023-12-28",
-        comentario: "Buen trabajo en general. Hubo algunos ajustes menores pero el resultado final fue muy bueno.",
-        proyecto: "Landing page",
-      },
-    ],
+    nombre: service.nombre_servicio,
+    precio: parseFloat(service.precio_base) || 0,
+    tiempo_entrega: "7-10 días laborales",
+    disponible: service.activo,
+    calificacion: service.promedio_calificacion || 4.5,
+    galeria: [
+      service.imagen_url,
+      service.proveedor_info?.banner_url,
+      service.proveedor_info?.imagen_url,
+      "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&h=600&fit=crop"
+    ].filter(Boolean),
+    descripcion_completa: service.descripcion,
     estadisticas: {
-      proyectos_completados: service.proveedor.servicios_completados,
+      proyectos_completados: service.proveedor_info?.servicios_completados || 0,
       tiempo_respuesta: "< 2 horas",
       tasa_satisfaccion: "98%",
       clientes_recurrentes: "85%",
     },
-    certificaciones: ["Certificado en React", "Google Analytics", "Scrum Master"],
-    garantia: "30 días de garantía y soporte incluido",
   }
 
   const handleRequestService = () => {
@@ -180,7 +111,7 @@ Nuestro enfoque se basa en la calidad, innovación y resultados medibles. Cada p
             {/* Hero Section */}
             <div className="service-hero">
               <Row className="g-0">
-                <Col lg={8}>
+                <Col lg={7}>
                   <div className="image-gallery">
                     <Carousel
                       activeIndex={activeImageIndex}
@@ -221,66 +152,99 @@ Nuestro enfoque se basa en la calidad, innovación y resultados medibles. Cada p
                     )}
                   </div>
                 </Col>
-                <Col lg={4}>
+                <Col lg={5}>
                   <div className="service-summary">
                     <h2 className="service-title">{serviceDetails.nombre}</h2>
 
-                    {/* Provider Info */}
-                    <div className="provider-card" onClick={() => handleProviderClick(service.proveedor_info)} role="button" tabIndex="0">
+                    {/* Provider Info - Expandida */}
+                    <div className="provider-card expanded" onClick={() => handleProviderClick(service.proveedor_info)} role="button" tabIndex="0">
                       {service.proveedor_info?.banner_url && (
                         <div className="provider-banner-background">
                           <img
                             src={service.proveedor_info.banner_url}
                             alt="Banner del proveedor"
                             className="provider-banner-img"
-                            onError={handleImageError}
+                            onError={(e) => { 
+                              e.target.src = "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=300&fit=crop"; 
+                            }}
                           />
                         </div>
                       )}
-                      <div className="provider-header">
-                        <img
-                          src={service.proveedor_info?.imagen_perfil || "/placeholder.svg"}
-                          alt={service.proveedor_info?.nombre || "Usuario"}
-                          className="provider-avatar"
-                          onError={handleImageError}
-                        />
-                        <div className="provider-info">
-                          <h5>{service.proveedor_info?.nombre || "Usuario"}</h5>
+                      <div className="provider-header expanded">
+                        <div className="provider-avatar-section">
+                          <img
+                            src={service.proveedor_info?.imagen_url || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"}
+                            alt={service.proveedor_info?.nombre_completo || service.proveedor_nombre || "Usuario"}
+                            className="provider-avatar large"
+                            onError={(e) => { 
+                              e.target.src = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"; 
+                            }}
+                          />
+                          <div className="provider-badge">
+                            <FaCheckCircle className="verified-icon" />
+                            <small>Verificado</small>
+                          </div>
+                        </div>
+                        <div className="provider-info expanded">
+                          <h4>{service.proveedor_info?.nombre_completo || service.proveedor_nombre || "Usuario"}</h4>
+                          <p className="provider-title">{service.categoria_nombre || "Proveedor de servicios"}</p>
                           <div className="provider-rating">
-                            {renderStars(Math.floor(service.calificacion || 4.5))}
-                            <span className="rating-number">({service.calificacion || 4.5})</span>
+                            {renderStars(Math.floor(serviceDetails.calificacion || 4.5))}
+                            <span className="rating-number">({serviceDetails.calificacion || 4.5})</span>
+                            <Badge bg="success" className="ms-2">PRO</Badge>
                           </div>
                           <div className="provider-location">
                             <FaMapMarkerAlt />
-                            <span>{service.proveedor_info?.ubicacion || "Ubicación no especificada"}</span>
+                            <span>{service.proveedor_info?.direccion || service.ubicacion || "Ubicación no especificada"}</span>
+                          </div>
+                          <div className="provider-experience">
+                            <FaAward />
+                            <span>Proveedor verificado</span>
                           </div>
                         </div>
                         <div className="provider-nav-hint">
-                          <small><FaArrowRight className="me-1" /> Ver perfil</small>
+                          <FaArrowRight className="me-1" />
+                          <small>Ver perfil completo</small>
                         </div>
                       </div>
 
-                      <div className="provider-stats">
+                      <div className="provider-stats expanded">
                         <div className="stat">
-                          <FaCheckCircle className="stat-icon" />
+                          <FaCheckCircle className="stat-icon success" />
                           <div>
                             <strong>{service.proveedor_info?.servicios_completados || 0}</strong>
                             <small>Proyectos completados</small>
                           </div>
                         </div>
                         <div className="stat">
-                          <FaClock className="stat-icon" />
+                          <FaClock className="stat-icon info" />
                           <div>
                             <strong>&lt; 2 horas</strong>
                             <small>Tiempo de respuesta</small>
                           </div>
                         </div>
                         <div className="stat">
-                          <FaThumbsUp className="stat-icon" />
+                          <FaThumbsUp className="stat-icon primary" />
                           <div>
-                            <strong>{Math.round((service.calificacion || 4.5) * 20)}%</strong>
+                            <strong>{Math.round((serviceDetails.calificacion || 4.5) * 20)}%</strong>
                             <small>Satisfacción</small>
                           </div>
+                        </div>
+                        <div className="stat">
+                          <FaUser className="stat-icon warning" />
+                          <div>
+                            <strong>{service.views || 0}</strong>
+                            <small>Visualizaciones</small>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="provider-skills">
+                        <h6>Especialidades:</h6>
+                        <div className="skills-tags">
+                          <Badge bg="outline-primary" className="skill-tag">{service.categoria_nombre}</Badge>
+                          <Badge bg="outline-secondary" className="skill-tag">Profesional</Badge>
+                          <Badge bg="outline-success" className="skill-tag">Rápido</Badge>
                         </div>
                       </div>
                     </div>
@@ -367,7 +331,7 @@ Nuestro enfoque se basa en la calidad, innovación y resultados medibles. Cada p
                           <div className="tags-section">
                             <h6>Tecnologías y herramientas:</h6>
                             <div className="service-tags">
-                              {serviceDetails.tags.map((tag, index) => (
+                              {(serviceDetails.tags || [service.categoria_nombre]).map((tag, index) => (
                                 <Badge key={index} bg="secondary" className="service-tag">
                                   {tag}
                                 </Badge>
@@ -424,9 +388,9 @@ Nuestro enfoque se basa en la calidad, innovación y resultados medibles. Cada p
                     <div className="reviews-header">
                       <div className="rating-summary">
                         <div className="overall-rating">
-                          <span className="rating-number">{serviceDetails.proveedor.calificacion}</span>
+                          <span className="rating-number">{serviceDetails.calificacion}</span>
                           <div className="rating-stars">
-                            {renderStars(Math.floor(serviceDetails.proveedor.calificacion))}
+                            {renderStars(Math.floor(serviceDetails.calificacion))}
                           </div>
                           <span className="rating-text">Excelente</span>
                         </div>
@@ -499,6 +463,36 @@ Nuestro enfoque se basa en la calidad, innovación y resultados medibles. Cada p
       />
     </>
   )
+}
+
+ServiceDetailModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  onHide: PropTypes.func.isRequired,
+  service: PropTypes.shape({
+    id: PropTypes.number,
+    nombre_servicio: PropTypes.string,
+    descripcion: PropTypes.string,
+    precio_base: PropTypes.string,
+    imagen_url: PropTypes.string,
+    activo: PropTypes.bool,
+    promedio_calificacion: PropTypes.number,
+    tiempo_entrega: PropTypes.string,
+    categoria_nombre: PropTypes.string,
+    proveedor_nombre: PropTypes.string,
+    ubicacion: PropTypes.string,
+    views: PropTypes.number,
+    proveedor_info: PropTypes.shape({
+      id: PropTypes.number,
+      nombre_completo: PropTypes.string,
+      imagen_url: PropTypes.string,
+      banner_url: PropTypes.string,
+      direccion: PropTypes.string, 
+      servicios_completados: PropTypes.number
+    })
+  }),
+  user: PropTypes.object,
+  onToggleFavorite: PropTypes.func.isRequired,
+  isFavorite: PropTypes.bool.isRequired
 }
 
 export default ServiceDetailModal

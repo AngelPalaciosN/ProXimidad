@@ -22,49 +22,17 @@ const UsuarioList = () => {
   const [selectedUser, setSelectedUser] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage] = useState(5)
+  const [dataLoaded, setDataLoaded] = useState(false)
 
   const { user } = useAuth()
   // Usar la variable de entorno de Vite
-  const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000"
-
-  useEffect(() => {
-    // ✅ VALIDACIÓN: Excluir el usuario actual de la lista
-    if (user && user.id) {
-      fetchUsuarios(user.id)  // Pasar el ID del usuario a excluir
-    } else {
-      fetchUsuarios()  // Sin exclusiones si no hay usuario logueado
-    }
-    fetchFavoritos()
-
-    // Listener para navegación desde ServiceDetailModal
-    const handleUserProfileNavigation = (event) => {
-      const { userId } = event.detail
-      // Buscar el usuario en la lista
-      const userToSelect = usuarios.find(usuario => usuario.id === userId)
-      if (userToSelect) {
-        setSelectedUser(userToSelect)
-        // Cambiar a la tab de proveedores si es necesario
-        setActiveTab("proveedores")
-      }
-    }
-
-    window.addEventListener('openUserProfile', handleUserProfileNavigation)
-    
-    return () => {
-      window.removeEventListener('openUserProfile', handleUserProfileNavigation)
-    }
-  }, [fetchUsuarios, user, usuarios])
+  const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://192.168.0.101:8000/api"
 
   const fetchFavoritos = useCallback(async () => {
     if (user && user.id) {
       try {
         // Llamada real a la API para obtener favoritos de usuarios
         const response = await axios.get(`${baseUrl}/favoritos/${user.id}/?tipo=usuario`)
-        
-        // Debug: Ver qué está devolviendo la API
-        console.log("Response from API:", response.data)
-        console.log("Type of response.data:", typeof response.data)
-        console.log("Is array?", Array.isArray(response.data))
         
         // El backend devuelve el array directamente en formato simple
         const favoritosArray = response.data || []
@@ -81,6 +49,39 @@ const UsuarioList = () => {
       }
     }
   }, [user, baseUrl])
+
+  useEffect(() => {
+    if (!dataLoaded && user) {
+      // ✅ VALIDACIÓN: Excluir el usuario actual de la lista
+      if (user.id) {
+        fetchUsuarios(user.id)  // Pasar el ID del usuario a excluir
+      } else {
+        fetchUsuarios()  // Sin exclusiones si no hay usuario logueado
+      }
+      fetchFavoritos()
+      setDataLoaded(true)
+    }
+  }, [user, dataLoaded, fetchUsuarios, fetchFavoritos])
+
+  // Listener separado para navegación desde ServiceDetailModal
+  useEffect(() => {
+    const handleUserProfileNavigation = (event) => {
+      const { userId } = event.detail
+      // Buscar el usuario en la lista
+      const userToSelect = usuarios.find(usuario => usuario.id === userId)
+      if (userToSelect) {
+        setSelectedUser(userToSelect)
+        // Cambiar a la tab de proveedores si es necesario
+        setActiveTab("proveedores")
+      }
+    }
+
+    window.addEventListener('openUserProfile', handleUserProfileNavigation)
+    
+    return () => {
+      window.removeEventListener('openUserProfile', handleUserProfileNavigation)
+    }
+  }, [usuarios])
 
   const handleAddToFavorites = async (usuarioId, event) => {
     // Evitar que el clic se propague al elemento padre
