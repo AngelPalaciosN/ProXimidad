@@ -49,7 +49,7 @@ export default defineConfig(({ mode }) => {
       port: parseInt(env.FRONTEND_PORT) || 5173,
       strictPort: true,
       hmr: {
-        host: env.SERVER_HOST || '192.168.1.61',
+        host: env.SERVER_HOST || '192.168.0.103',
         port: parseInt(env.FRONTEND_PORT) || 5173
       }
     }

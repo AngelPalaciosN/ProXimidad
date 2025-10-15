@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Container, Row, Col, Card, Button, Badge, Form } from "react-bootstrap"
 import {
   FaSearch,
@@ -212,9 +212,10 @@ const ClientDashboard = () => {
         const response = await axios.get(`${baseUrl}/servicios/`)
         const serviciosAPI = response.data.servicios || []
         
-        // Transformar datos de la API al formato esperado
+        // Transformar datos de la API manteniendo estructura original
         const serviciosTransformados = serviciosAPI.map((servicio) => ({
-          id: servicio.id,
+          ...servicio, // Mantener todos los datos originales del API
+          // Agregar campos transformados para compatibilidad
           nombre: servicio.nombre_servicio,
           descripcion: servicio.descripcion || 'Sin descripción disponible',
           precio: parseFloat(servicio.precio_base || 0),
@@ -225,7 +226,7 @@ const ClientDashboard = () => {
             banner: servicio.proveedor_info?.banner_url || servicio.proveedor_info?.imagen_url || "/placeholder.svg",
             calificacion: servicio.promedio_calificacion || 4.5,
             ubicacion: servicio.ubicacion || 'Ubicación no disponible',
-            servicios_completados: 25, // Este valor podría venir del API en el futuro
+            servicios_completados: servicio.proveedor_info?.servicios_completados || 0,
           },
           imagen: servicio.imagen_url || "/placeholder.svg",
           tiempo_entrega: "1-2 semanas", // Este valor podría venir del API en el futuro
@@ -282,15 +283,15 @@ const ClientDashboard = () => {
     console.log("🔧 Abriendo modal de solicitud para:", service)
     setSelectedService(service)
     setShowRequestModal(true)
-    console.log("🔧 Estado después: showRequestModal =", true, "selectedService =", service.nombre_servicio)
+    console.log("🔧 Estado después: showRequestModal =", true, "selectedService =", service?.nombre_servicio || "undefined")
   }
 
-  const handleViewDetails = (service) => {
-    console.log("👁️ Abriendo modal de detalles para:", service)
+  const handleViewDetails = useCallback((service) => {
+    console.log("👁️ Servicio completo recibido:", service)
+    console.log("👁️ Proveedor info:", service?.proveedor_info)
     setSelectedService(service)
     setShowDetailModal(true)
-    console.log("👁️ Estado después: showDetailModal =", true, "selectedService =", service.nombre_servicio)
-  }
+  }, [])
 
   const handleToggleFavorite = async (serviceId) => {
     // Verificar autenticación
@@ -462,7 +463,7 @@ const ClientDashboard = () => {
                       onChange={(e) => setSelectedCategory(e.target.value)}
                       className="category-filter"
                     >
-                      <option value="">Todas las categorías</option>
+                      <option key="all-categories" value="">Todas las categorías</option>
                       {categories.map((category) => (
                         <option key={category} value={category}>
                           {category}
@@ -544,7 +545,10 @@ const ClientDashboard = () => {
                           {/* ✨ Banner de fondo para el proveedor */}
                           <div className="provider-banner-background" 
                                style={{
-                                 backgroundImage: `url(${service.proveedor_info?.banner_url || service.proveedor_info?.imagen_url || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=300&fit=crop"})`,
+                                 backgroundImage: service.proveedor_info?.banner_url || service.proveedor_info?.imagen_url 
+                                   ? `url(${service.proveedor_info.banner_url || service.proveedor_info.imagen_url})` 
+                                   : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                 backgroundColor: '#2c3e50',
                                  backgroundSize: 'cover',
                                  backgroundPosition: 'center'
                                }}>
@@ -553,7 +557,7 @@ const ClientDashboard = () => {
                           <div className="provider-content">
                             <div className="provider-avatar">
                               <img 
-                                src={service.proveedor_info?.imagen_url || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"} 
+                                src={service.proveedor_info?.imagen_url || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"} 
                                 alt={service.proveedor_info?.nombre_completo || service.proveedor_nombre || "Proveedor"} 
                                 onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"; }}
                               />

@@ -24,7 +24,17 @@ const ServiceDetailModal = ({ show, onHide, service, user, onToggleFavorite, isF
   const [showRequestModal, setShowRequestModal] = useState(false)
   const [activeImageIndex, setActiveImageIndex] = useState(0)
 
-  if (!service) return null
+  if (!service) {
+    console.warn('⚠️ ServiceDetailModal: No service provided')
+    return null
+  }
+
+  console.log('🔍 ServiceDetailModal recibió:', {
+    serviceId: service.id,
+    serviceName: service.nombre_servicio,
+    hasProveedorInfo: !!service.proveedor_info,
+    proveedorNombre: service.proveedor_info?.nombre_completo
+  })
 
   const handleProviderClick = (providerInfo) => {
     if (providerInfo?.id) {
@@ -56,6 +66,41 @@ const ServiceDetailModal = ({ show, onHide, service, user, onToggleFavorite, isF
       "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&h=600&fit=crop"
     ].filter(Boolean),
     descripcion_completa: service.descripcion,
+    incluye: [
+      "Consulta inicial gratuita",
+      "Análisis de requerimientos",
+      "Propuesta detallada",
+      "Desarrollo/Implementación",
+      "Pruebas y revisiones",
+      "Entrega final",
+      "Soporte post-entrega (30 días)",
+      "Documentación completa"
+    ],
+    tags: service.categoria_nombre ? [service.categoria_nombre] : [],
+    certificaciones: ["Certificado Profesional", "Experiencia Verificada", "Calidad Garantizada"],
+    proceso: [
+      { paso: 1, titulo: "Consulta Inicial", descripcion: "Análisis de necesidades y requerimientos del cliente" },
+      { paso: 2, titulo: "Planificación", descripcion: "Desarrollo de la estrategia y cronograma de trabajo" },
+      { paso: 3, titulo: "Desarrollo", descripcion: "Implementación del servicio según especificaciones" },
+      { paso: 4, titulo: "Revisión", descripcion: "Pruebas, ajustes y validación de calidad" },
+      { paso: 5, titulo: "Entrega", descripcion: "Entrega final y documentación completa" }
+    ],
+    reseñas: [
+      {
+        id: 1,
+        usuario_nombre: "Cliente Satisfecho",
+        calificacion: 5,
+        comentario: "Excelente servicio, muy profesional y cumplió con todos los requerimientos.",
+        fecha: "2024-09-15"
+      },
+      {
+        id: 2,
+        usuario_nombre: "Empresa ABC",
+        calificacion: 4.5,
+        comentario: "Muy buen trabajo, entregas a tiempo y comunicación constante.",
+        fecha: "2024-09-10"
+      }
+    ],
     estadisticas: {
       proyectos_completados: service.proveedor_info?.servicios_completados || 0,
       tiempo_respuesta: "< 2 horas",
@@ -80,6 +125,12 @@ const ServiceDetailModal = ({ show, onHide, service, user, onToggleFavorite, isF
       month: "long",
       day: "numeric",
     })
+  }
+
+  // Safety check: no renderizar si no hay servicio
+  if (!service) {
+    console.warn('⚠️ ServiceDetailModal: No service provided')
+    return null
   }
 
   return (
@@ -119,7 +170,7 @@ const ServiceDetailModal = ({ show, onHide, service, user, onToggleFavorite, isF
                       indicators={false}
                       controls={serviceDetails.galeria.length > 1}
                     >
-                      {serviceDetails.galeria.map((imagen, index) => (
+                      {(serviceDetails.galeria || []).map((imagen, index) => (
                         <Carousel.Item key={index}>
                           <img
                             src={imagen || "/placeholder.svg"}
@@ -132,7 +183,7 @@ const ServiceDetailModal = ({ show, onHide, service, user, onToggleFavorite, isF
                     </Carousel>
                     {serviceDetails.galeria.length > 1 && (
                       <div className="image-thumbnails">
-                        {serviceDetails.galeria.slice(0, 4).map((imagen, index) => (
+                        {(serviceDetails.galeria || []).slice(0, 4).map((imagen, index) => (
                           <div
                             key={index}
                             className={`thumbnail ${index === activeImageIndex ? "active" : ""}`}
@@ -158,18 +209,18 @@ const ServiceDetailModal = ({ show, onHide, service, user, onToggleFavorite, isF
 
                     {/* Provider Info - Expandida */}
                     <div className="provider-card expanded" onClick={() => handleProviderClick(service.proveedor_info)} role="button" tabIndex="0">
-                      {service.proveedor_info?.banner_url && (
-                        <div className="provider-banner-background">
-                          <img
-                            src={service.proveedor_info.banner_url}
-                            alt="Banner del proveedor"
-                            className="provider-banner-img"
-                            onError={(e) => { 
-                              e.target.src = "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=300&fit=crop"; 
-                            }}
-                          />
-                        </div>
-                      )}
+                      <div className="provider-banner-background" 
+                           style={{
+                             backgroundImage: service.proveedor_info?.banner_url || service.proveedor_info?.imagen_url 
+                               ? `url(${service.proveedor_info.banner_url || service.proveedor_info.imagen_url})` 
+                               : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                             backgroundColor: '#2c3e50',
+                             backgroundSize: 'cover',
+                             backgroundPosition: 'center',
+                             height: '120px',
+                             borderRadius: '8px 8px 0 0'
+                           }}>
+                      </div>
                       <div className="provider-header expanded">
                         <div className="provider-avatar-section">
                           <img
@@ -313,14 +364,14 @@ const ServiceDetailModal = ({ show, onHide, service, user, onToggleFavorite, isF
                         <div className="description-content">
                           <h4>Sobre este servicio</h4>
                           <div className="description-text">
-                            {serviceDetails.descripcion_completa.split("\n").map((paragraph, index) => (
+                            {(serviceDetails.descripcion_completa || "").split("\n").map((paragraph, index) => (
                               <p key={index}>{paragraph}</p>
                             ))}
                           </div>
 
                           <h5>¿Qué incluye?</h5>
                           <div className="includes-list">
-                            {serviceDetails.incluye.map((item, index) => (
+                            {(serviceDetails.incluye || []).map((item, index) => (
                               <div key={index} className="include-item">
                                 <FaCheckCircle className="check-icon" />
                                 <span>{item}</span>
@@ -348,7 +399,7 @@ const ServiceDetailModal = ({ show, onHide, service, user, onToggleFavorite, isF
                               Certificaciones
                             </Card.Header>
                             <Card.Body>
-                              {serviceDetails.certificaciones.map((cert, index) => (
+                              {(serviceDetails.certificaciones || []).map((cert, index) => (
                                 <div key={index} className="certification">
                                   <FaAward className="cert-icon" />
                                   <span>{cert}</span>
@@ -366,7 +417,7 @@ const ServiceDetailModal = ({ show, onHide, service, user, onToggleFavorite, isF
                   <div className="tab-content-wrapper">
                     <h4>¿Cómo trabajamos?</h4>
                     <div className="process-timeline">
-                      {serviceDetails.proceso.map((paso, index) => (
+                      {(serviceDetails.proceso || []).map((paso, index) => (
                         <div key={index} className="process-step">
                           <div className="step-number">{paso.paso}</div>
                           <div className="step-content">
@@ -421,7 +472,7 @@ const ServiceDetailModal = ({ show, onHide, service, user, onToggleFavorite, isF
                     </div>
 
                     <div className="reviews-list">
-                      {serviceDetails.reseñas.map((reseña) => (
+                      {(serviceDetails.reseñas || []).map((reseña) => (
                         <div key={reseña.id} className="review-item">
                           <div className="review-header">
                             <img

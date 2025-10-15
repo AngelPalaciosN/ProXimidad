@@ -13,6 +13,7 @@ export default function Sec1({ handleAbrirFormulario }) {
     usuario_fk: "",
     servicio_fk: "",
     mensaje: "",
+    calificacion: "",
   });
   const [isFormVisible, setIsFormVisible] = useState(false);
   const formRef = useRef(null);
@@ -34,18 +35,21 @@ export default function Sec1({ handleAbrirFormulario }) {
     const fetchUsuarios = async () => {
       try {
         const response = await axios.get(`${baseUrl}/usuarios/`);
-        setUsuarios(response.data);
+        // Los usuarios vienen directamente como array
+        setUsuarios(Array.isArray(response.data) ? response.data : []);
       } catch (err) {
         console.error('Error fetching users:', err);
+        setUsuarios([]);
       }
     };
 
     const fetchServicios = async () => {
       try {
         const response = await axios.get(`${baseUrl}/servicios/`);
-        setServicios(response.data);
+        setServicios(response.data.servicios || []);
       } catch (err) {
         console.error('Error fetching services:', err);
+        setServicios([]);
       }
     };
 
@@ -80,12 +84,18 @@ export default function Sec1({ handleAbrirFormulario }) {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.post(apiUrl, formData);
+          // Preparar datos para envío
+          const dataToSend = {
+            ...formData,
+            calificacion: formData.calificacion ? parseInt(formData.calificacion) : null
+          };
+          await axios.post(apiUrl, dataToSend);
           Swal.fire('Enviado!', 'Tu comentario ha sido enviado.', 'success');
           setFormData({
             usuario_fk: "",
             servicio_fk: "",
             mensaje: "",
+            calificacion: "",
           });
           setIsFormVisible(false);
         } catch (err) {
@@ -159,6 +169,17 @@ export default function Sec1({ handleAbrirFormulario }) {
                             {servicio.nombre_servicio}
                           </option>
                         ))}
+                      </Form.Select>
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Calificación (Opcional)</Form.Label>
+                      <Form.Select name="calificacion" value={formData.calificacion} onChange={handleInputChange}>
+                        <option value="">Sin calificación</option>
+                        <option value="1">⭐ 1 - Muy malo</option>
+                        <option value="2">⭐⭐ 2 - Malo</option>
+                        <option value="3">⭐⭐⭐ 3 - Regular</option>
+                        <option value="4">⭐⭐⭐⭐ 4 - Bueno</option>
+                        <option value="5">⭐⭐⭐⭐⭐ 5 - Excelente</option>
                       </Form.Select>
                     </Form.Group>
                     <Form.Group className="mb-3">
