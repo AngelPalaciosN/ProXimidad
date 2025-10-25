@@ -1,5 +1,20 @@
 # ProXimidad Backend - Estructura Limpia
 
+## ⚠️ IMPORTANTE: Configuración del Entorno Virtual
+
+**Este proyecto usa ÚNICAMENTE el entorno virtual en `backend/venv/`**
+
+Para activar el entorno virtual correctamente, consulta: [VENV_SETUP.md](../VENV_SETUP.md)
+
+**Método rápido desde la raíz del proyecto:**
+```powershell
+# PowerShell
+.\activar_venv.ps1
+
+# CMD
+activar_venv.bat
+```
+
 ## 📁 Estructura del Backend
 
 ```

@@ -1,7 +1,7 @@
 // Configuración de variables de entorno
 export const config = {
   // API Configuration
-  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://192.168.0.101:8000/api',
+  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://10.1.104.36:8000/api',
   
   // App Configuration
   APP_TITLE: import.meta.env.VITE_APP_TITLE || 'ProXimidad',

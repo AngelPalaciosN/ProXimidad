@@ -51,14 +51,16 @@ const UsuarioList = () => {
   }, [user, baseUrl])
 
   useEffect(() => {
-    if (!dataLoaded && user) {
+    if (!dataLoaded) {
       // ✅ VALIDACIÓN: Excluir el usuario actual de la lista
-      if (user.id) {
+      if (user && user.id) {
+        console.log('🔍 Excluyendo usuario logueado:', user.id, user.nombre_completo);
         fetchUsuarios(user.id)  // Pasar el ID del usuario a excluir
+        fetchFavoritos()
       } else {
+        console.log('⚠️ No hay usuario logueado, mostrando todos');
         fetchUsuarios()  // Sin exclusiones si no hay usuario logueado
       }
-      fetchFavoritos()
       setDataLoaded(true)
     }
   }, [user, dataLoaded, fetchUsuarios, fetchFavoritos])
@@ -256,6 +258,11 @@ const UsuarioList = () => {
 
   // Filtrar y ordenar usuarios
   const filteredUsuarios = usuarios.filter((usuario) => {
+    // ✅ VALIDACIÓN ADICIONAL: Nunca mostrar al usuario logueado
+    if (user && usuario.id === user.id) {
+      return false
+    }
+
     // Filtro por tipo de usuario
     const matchTipo = tipoFiltro === "todos" 
       ? true 

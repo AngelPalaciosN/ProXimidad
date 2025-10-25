@@ -1,0 +1,64 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual Environment - SOLO usar backend/venv/
+venv/
+env/
+ENV/
+.venv/
+# Ignorar cualquier otro entorno virtual excepto el de backend
+!backend/venv/
+
+# Django
+*.log
+db.sqlite3
+db.sqlite3-journal
+/media
+/staticfiles
+*.pot
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDEs
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+frontend/dist/
+frontend/build/
+*.min.js
+*.min.css
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/

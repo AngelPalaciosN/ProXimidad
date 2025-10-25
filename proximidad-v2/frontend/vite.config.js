@@ -49,8 +49,12 @@ export default defineConfig(({ mode }) => {
       port: parseInt(env.FRONTEND_PORT) || 5173,
       strictPort: true,
       hmr: {
-        host: env.SERVER_HOST || '192.168.0.103',
-        port: parseInt(env.FRONTEND_PORT) || 5173
+        host: '10.1.104.36', // Tu IP detectada por Vite
+        port: parseInt(env.FRONTEND_PORT) || 5173,
+        protocol: 'ws'
+      },
+      watch: {
+        usePolling: true
       }
     }
   };

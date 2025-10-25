@@ -73,15 +73,22 @@ def usuarios_list(request):
     try:
         tipo_usuario = request.GET.get('tipo_usuario', None)
         excluir_usuario = request.GET.get('excluir_usuario', None)  # ✅ Nuevo parámetro
-        activo = request.GET.get('activo', 'true').lower() == 'true'
+        # ✅ MODIFICADO: Por defecto mostrar todos los usuarios (activos e inactivos)
+        activo = request.GET.get('activo', None)
         
-        usuarios = Usuario.objects.filter(activo=activo)
+        usuarios = Usuario.objects.all()
         
-        # ✅ VALIDACIÓN: Excluir usuario específico (para que no aparezca en su propia lista de favoritos)
+        # ✅ VALIDACIÓN: Filtrar por activo solo si se especifica
+        if activo is not None:
+            activo_bool = activo.lower() == 'true'
+            usuarios = usuarios.filter(activo=activo_bool)
+        
+        # ✅ VALIDACIÓN: Excluir usuario específico (para que no aparezca en su propia lista)
         if excluir_usuario:
             try:
                 excluir_id = int(excluir_usuario)
                 usuarios = usuarios.exclude(id=excluir_id)
+                print(f"🔍 Excluyendo usuario ID: {excluir_id}")
             except (ValueError, TypeError):
                 pass  # Si no es un ID válido, ignore el filtro
         
