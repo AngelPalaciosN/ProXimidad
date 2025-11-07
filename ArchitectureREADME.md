@@ -13,10 +13,11 @@ Después de un análisis exhaustivo, se presenta el detalle de la arquitectura i
   
 <img width="1066" height="565" alt="sistema general" src="https://github.com/user-attachments/assets/7496225c-f871-44e8-9e8f-11791d2c7227" />
 
-
 ---
 
 ## 🔧 BACKEND - DJANGO REST FRAMEWORK  
+
+<img width="818" height="678" alt="Backend" src="https://github.com/user-attachments/assets/dfc570cd-0d17-44f5-a275-be7545d110a2" />
 
 ### 1. Patrón MVC (Model-View-Controller)  
 **Models (Modelos de Datos):**  
@@ -92,6 +93,8 @@ Configuración: python-decouple (variables de entorno)
 
 ## ⚛️ FRONTEND - REACT CON VITE
 
+<img width="785" height="704" alt="Frontend" src="https://github.com/user-attachments/assets/17ab7962-6c2d-4bab-909c-6f6bb2b86259" />
+
 **1. Patrón de Componentes React**
 scss
 
@@ -165,6 +168,9 @@ Styling: SASS + Bootstrap
 
 ## 🗄️ BASE DE DATOS - ARQUITECTURA RELACIONAL
 
+<img width="789" height="899" alt="DataBase" src="https://github.com/user-attachments/assets/df96e1d4-05a7-4cb6-845b-9ff278da28b0" />
+
+
 **Esquema Simplificado**
 Usuario (1) ←→ (N) Servicios
 
@@ -182,6 +188,7 @@ Motor: MySQL
 Constraints: Claves foráneas
 
 Almacenamiento: Archivos en sistema de ficheros
+
 
 ## 🔄 PATRONES DE INTEGRACIÓN
 API-First Architecture: Backend expone API REST, frontend consume vía HTTP.
