@@ -9,7 +9,10 @@ Después de un análisis exhaustivo, se presenta el detalle de la arquitectura i
 - **Frontend:** SPA (Single Page Application) con React  
 - **Backend:** API REST con Django REST Framework  
 - **Comunicación:** HTTP/HTTPS con JSON  
-- **Base de Datos:** MySQL (relacional)  
+- **Base de Datos:** MySQL (relacional)
+  
+<img width="1066" height="565" alt="sistema general" src="https://github.com/user-attachments/assets/7496225c-f871-44e8-9e8f-11791d2c7227" />
+
 
 ---
 
