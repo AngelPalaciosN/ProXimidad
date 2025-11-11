@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+backend/venv/
+backend/env/
+*.log
+*.pot
+*.pyc
+db.sqlite3
+db.sqlite3-journal
+
+# Django
+backend/core/local_settings.py
+backend/media/
+backend/staticfiles/
+*.log
+
+# Node
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Variables de entorno
+.env
+.env.local
+.env.*.local
+frontend/.env
+backend/.env
+
+# Imágenes y backups
+media_backup.zip
+media_backup.rar
+ProXimidadImages/
+backup_imagenes/
+
+# Scripts generados automáticamente
+start.bat
+scripts/info.bat
+scripts/backup.bat
+scripts/clean.bat
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+*.bak
+
+# Distribuible
+ProXimidad_Distribuible/

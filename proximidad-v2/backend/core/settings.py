@@ -264,3 +264,11 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = config('FILE_UPLOAD_MAX_SIZE', default=5242880, ca
 SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=False, cast=bool)
 SECURE_BROWSER_XSS_FILTER = config('SECURE_BROWSER_XSS_FILTER', default=True, cast=bool)
 SECURE_CONTENT_TYPE_NOSNIFF = config('SECURE_CONTENT_TYPE_NOSNIFF', default=True, cast=bool)
+
+# ========================================
+# Importar configuración local (sobrescribe configuraciones anteriores)
+# ========================================
+try:
+    from .local_settings import *
+except ImportError:
+    pass

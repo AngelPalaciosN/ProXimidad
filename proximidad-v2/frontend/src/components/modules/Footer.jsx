@@ -16,7 +16,7 @@ export default function Footer() {
               <div className="footer-info">
                 <div className="footer-logo">
                   <img 
-                    src="../../../public/Proximidad.svg" 
+                    src="/Proximidad.svg" 
                     alt="ProXimidad Logo" 
                     height="30"
                     style={{ filter: 'brightness(0) invert(1)' }} 
