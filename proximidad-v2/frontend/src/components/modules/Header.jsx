@@ -21,7 +21,6 @@ export default function Header({ handleAbrirFormulario }) {
   const userMenuRef = useRef(null);
   const { user } = useAuth();
   const navigate = useNavigate();
-  const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const { logout } = useAuth();
 
   const toggleMenu = () => {

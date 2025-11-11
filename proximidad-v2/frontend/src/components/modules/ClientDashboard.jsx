@@ -27,6 +27,7 @@ import { useAuth } from "../../Auth"
 import Header from "./Header"
 import ServiceDetailModal from "./ServiceDetailModal"
 import ServiceRequestModal from "./ServiceRequestModal"
+import { buildApiUrl } from "../../config/env"
 
 // Datos mock fuera del componente para evitar recreaciones
 const mockServices = [
@@ -201,15 +202,12 @@ const ClientDashboard = () => {
   const [selectedService, setSelectedService] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  // Usar la variable de entorno como Lista_usuarios
-  const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://192.168.0.101:8000/api"
-
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
       try {
         // Cargar servicios desde la API
-        const response = await axios.get(`${baseUrl}/servicios/`)
+        const response = await axios.get(buildApiUrl('/servicios/'))
         const serviciosAPI = response.data.servicios || []
         
         // Transformar datos de la API manteniendo estructura original
@@ -251,14 +249,14 @@ const ClientDashboard = () => {
     }
     
     fetchData()
-  }, [baseUrl])
+  }, [])
 
   // Cargar favoritos cuando el usuario esté disponible
   useEffect(() => {
     const fetchFavoritos = async () => {
       if (user && user.id) {
         try {
-          const favoritosResponse = await axios.get(`${baseUrl}/favoritos/${user.id}/?tipo=servicio`)
+          const favoritosResponse = await axios.get(buildApiUrl(`/favoritos/${user.id}/?tipo=servicio`))
           const favoritosIds = favoritosResponse.data.favoritos?.map(fav => fav.id) || []
           setFavorites(favoritosIds)
         } catch (error) {
@@ -269,7 +267,7 @@ const ClientDashboard = () => {
     }
     
     fetchFavoritos()
-  }, [user?.id, baseUrl, user])
+  }, [user?.id, user])
 
   const filteredServices = services.filter((service) => {
     const matchesSearch =
@@ -314,7 +312,7 @@ const ClientDashboard = () => {
       if (isFavorited) {
         // Eliminar de favoritos
         console.log(`🗑️ Eliminando favorito: user.id=${user.id}, serviceId=${serviceId}`)
-        await axios.delete(`${baseUrl}/favoritos/eliminar/${user.id}/${serviceId}/?tipo=servicio`)
+        await axios.delete(buildApiUrl(`/favoritos/eliminar/${user.id}/${serviceId}/?tipo=servicio`))
         setFavorites((prev) => prev.filter((id) => id !== serviceId))
       } else {
         // Añadir a favoritos
@@ -324,8 +322,8 @@ const ClientDashboard = () => {
           tipo: 'servicio'
         }
         console.log(`❤️ Añadiendo favorito con payload:`, payload)
-        console.log(`📡 URL completa:`, `${baseUrl}/favoritos/`)
-        await axios.post(`${baseUrl}/favoritos/`, payload)
+        console.log(`📡 URL completa:`, buildApiUrl('/favoritos/'))
+        await axios.post(buildApiUrl('/favoritos/'), payload)
         setFavorites((prev) => [...prev, serviceId])
       }
     } catch (error) {

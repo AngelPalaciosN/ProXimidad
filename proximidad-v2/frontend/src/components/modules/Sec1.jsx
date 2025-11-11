@@ -3,6 +3,7 @@ import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import { ArrowRight, Send, MessageSquare } from "lucide-react";
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { buildApiUrl } from '../../config/env';
 
 export default function Sec1({ handleAbrirFormulario }) {
   const [displayText, setDisplayText] = useState("");
@@ -31,10 +32,9 @@ export default function Sec1({ handleAbrirFormulario }) {
   }, []);
 
   useEffect(() => {
-    const baseUrl = import.meta.env.VITE_API_BASE_URL;
     const fetchUsuarios = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/usuarios/`);
+        const response = await axios.get(buildApiUrl('/usuarios/'));
         // Los usuarios vienen directamente como array
         setUsuarios(Array.isArray(response.data) ? response.data : []);
       } catch (err) {
@@ -45,7 +45,7 @@ export default function Sec1({ handleAbrirFormulario }) {
 
     const fetchServicios = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/servicios/`);
+        const response = await axios.get(buildApiUrl('/servicios/'));
         setServicios(response.data.servicios || []);
       } catch (err) {
         console.error('Error fetching services:', err);
@@ -71,7 +71,7 @@ export default function Sec1({ handleAbrirFormulario }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/comentarios/crear/`;
+    const apiUrl = buildApiUrl('/comentarios/crear/');
     Swal.fire({
       title: '¿Enviar comentario?',
       text: "¿Estás seguro de que quieres enviar este comentario?",

@@ -15,6 +15,7 @@ import BadgeIcon from "@mui/icons-material/Badge"
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera"
 import { motion } from "framer-motion"
+import { buildApiUrl } from "../../config/env"
 
 const Editar_p = ({ onClose, user }) => {
   const [formData, setFormData] = useState({
@@ -34,13 +35,11 @@ const Editar_p = ({ onClose, user }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
   // Fetch user data from Django API
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/usuarios`);
+        const response = await axios.get(buildApiUrl('/usuarios/'));
         if (response.status === 200 && response.data.length > 0) {
           // Assuming the API returns a list of users, find the user with the matching email
           const userData = response.data.find((u) => u.correo_electronico === user.correo_electronico);
@@ -71,7 +70,7 @@ const Editar_p = ({ onClose, user }) => {
     };
 
     fetchUserData();
-  }, [user, API_BASE_URL]);
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -193,7 +192,7 @@ const Editar_p = ({ onClose, user }) => {
       if (result.isConfirmed) {
         setLoading(true);
         try {
-          const apiUrl = `${API_BASE_URL}/create-usuario/`;
+          const apiUrl = buildApiUrl('/create-usuario/');
 
           // Convert avatarPreview to File object
           let avatarFile = null;

@@ -11,6 +11,7 @@ import {
 } from "react-icons/fa"
 import Swal from "sweetalert2"
 import { useUserContext } from '../../context/UserContext';
+import { buildApiUrl } from "../../config/env"
 
 const UsuarioList = () => {
   const { usuarios, loading, error, fetchUsuarios } = useUserContext();
@@ -25,14 +26,12 @@ const UsuarioList = () => {
   const [dataLoaded, setDataLoaded] = useState(false)
 
   const { user } = useAuth()
-  // Usar la variable de entorno de Vite
-  const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://192.168.0.101:8000/api"
 
   const fetchFavoritos = useCallback(async () => {
     if (user && user.id) {
       try {
         // Llamada real a la API para obtener favoritos de usuarios
-        const response = await axios.get(`${baseUrl}/favoritos/${user.id}/?tipo=usuario`)
+        const response = await axios.get(buildApiUrl(`/favoritos/${user.id}/?tipo=usuario`))
         
         // El backend devuelve el array directamente en formato simple
         const favoritosArray = response.data || []
@@ -48,7 +47,7 @@ const UsuarioList = () => {
         setFavoritos([])
       }
     }
-  }, [user, baseUrl])
+  }, [user])
 
   useEffect(() => {
     if (!dataLoaded) {
@@ -137,7 +136,7 @@ const UsuarioList = () => {
         try {
           // Intentar añadir a favoritos en la API
           try {
-            await axios.post(`${baseUrl}/favoritos/`, { 
+            await axios.post(buildApiUrl('/favoritos/'), { 
               usuario_id: user.id, 
               favorito_id: usuarioId,
               tipo: 'usuario'
@@ -200,7 +199,7 @@ const UsuarioList = () => {
         try {
           // Intentar eliminar de favoritos en la API
           try {
-            await axios.delete(`${baseUrl}/favoritos/eliminar/${user.id}/${usuarioId}/?tipo=usuario`)
+            await axios.delete(buildApiUrl(`/favoritos/eliminar/${user.id}/${usuarioId}/?tipo=usuario`))
           } catch (apiError) {
             console.warn("No se pudo conectar a la API para eliminar favorito", apiError)
           }
