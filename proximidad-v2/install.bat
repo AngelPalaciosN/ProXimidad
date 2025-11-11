@@ -35,11 +35,80 @@ node --version >nul 2>&1 || (echo [ERROR] Node.js no instalado & pause & exit /b
 echo [OK] Python y Node.js OK
 echo.
 
-echo [2/5] Imagenes...
+echo [2/5] Restaurando imagenes...
 if not exist "backend\media\usuarios" mkdir "backend\media\usuarios"
 if not exist "backend\media\servicios\imagenes" mkdir "backend\media\servicios\imagenes"
-if exist "media_backup.zip" powershell -command "Expand-Archive -Path 'media_backup.zip' -DestinationPath 'backend\' -Force" 2>nul
-echo [OK] Carpetas OK
+
+REM Intentar restaurar desde backup RAR con contrasena
+if exist "media_backup.rar" (
+    echo [i] Backup encontrado: media_backup.rar
+    
+    REM Buscar UnRAR o WinRAR en multiples ubicaciones
+    set "UNRAR_CMD="
+    
+    REM 1. Buscar en PATH
+    where unrar >nul 2>&1
+    if %errorLevel% equ 0 (
+        set "UNRAR_CMD=unrar"
+    ) else (
+        where rar >nul 2>&1
+        if %errorLevel% equ 0 (
+            set "UNRAR_CMD=rar"
+        )
+    )
+    
+    REM 2. Buscar en Program Files (x64)
+    if "%UNRAR_CMD%"=="" if exist "C:\Program Files\WinRAR\unrar.exe" (
+        set "UNRAR_CMD=C:\Program Files\WinRAR\unrar.exe"
+    )
+    if "%UNRAR_CMD%"=="" if exist "C:\Program Files\WinRAR\rar.exe" (
+        set "UNRAR_CMD=C:\Program Files\WinRAR\rar.exe"
+    )
+    
+    REM 3. Buscar en Program Files (x86)
+    if "%UNRAR_CMD%"=="" if exist "C:\Program Files (x86)\WinRAR\unrar.exe" (
+        set "UNRAR_CMD=C:\Program Files (x86)\WinRAR\unrar.exe"
+    )
+    if "%UNRAR_CMD%"=="" if exist "C:\Program Files (x86)\WinRAR\rar.exe" (
+        set "UNRAR_CMD=C:\Program Files (x86)\WinRAR\rar.exe"
+    )
+    
+    REM 4. Buscar 7-Zip como alternativa
+    if "%UNRAR_CMD%"=="" (
+        where 7z >nul 2>&1
+        if %errorLevel% equ 0 (
+            set "UNRAR_CMD=7z"
+        ) else if exist "C:\Program Files\7-Zip\7z.exe" (
+            set "UNRAR_CMD=C:\Program Files\7-Zip\7z.exe"
+        ) else if exist "C:\Program Files (x86)\7-Zip\7z.exe" (
+            set "UNRAR_CMD=C:\Program Files (x86)\7-Zip\7z.exe"
+        )
+    )
+    
+    REM Extraer backup si se encontro el descompresor
+    if not "%UNRAR_CMD%"=="" (
+        echo [i] Extrayendo imagenes con contrasena...
+        "%UNRAR_CMD%" x -pproximidad_2025 -o+ media_backup.rar backend\ >nul 2>&1
+        if %errorLevel% equ 0 (
+            echo [OK] Imagenes restauradas desde backup
+        ) else (
+            echo [!] Error al extraer backup
+            echo [!] Extrae manualmente con contrasena: proximidad_2025
+        )
+    ) else (
+        echo [!] WinRAR/7-Zip no instalado
+        echo [!] Instala desde: https://www.winrar.es/ o https://www.7-zip.org/
+        echo [!] Luego extrae manualmente media_backup.rar
+        echo [!] Contrasena: proximidad_2025
+    )
+) else if exist "media_backup.zip" (
+    echo [i] Backup ZIP encontrado
+    powershell -command "Expand-Archive -Path 'media_backup.zip' -DestinationPath 'backend\' -Force" 2>nul
+    echo [OK] Imagenes restauradas desde ZIP
+) else (
+    echo [i] No hay backup de imagenes
+    echo [i] Carpetas vacias creadas (normal en primera instalacion)
+)
 echo.
 
 echo [3/5] Backend...
@@ -101,7 +170,7 @@ echo.
 echo [5/5] Frontend...
 cd frontend
 call npm install --silent 2>nul
-echo VITE_API_BASE_URL=http://%LOCAL_IP%:8000 > .env
+echo VITE_API_BASE_URL=http://%LOCAL_IP%:8000/api > .env
 cd ..
 echo [OK] Frontend OK
 echo.
@@ -110,15 +179,32 @@ if not exist "scripts" mkdir "scripts"
 
 (
 echo @echo off
-echo title ProXimidad
+echo title ProXimidad - Sistema Completo
 echo cls
-echo Iniciando con IP: %LOCAL_IP%
-start "Backend" cmd /k "cd backend && venv\Scripts\activate && python manage.py runserver %LOCAL_IP%:8000"
+echo.
+echo ============================================================
+echo      Iniciando ProXimidad
+echo ============================================================
+echo.
+echo IP Local: %LOCAL_IP%
+echo.
+echo [1/2] Iniciando Backend Django...
+start "ProXimidad Backend" cmd /k "cd backend ^&^& venv\Scripts\activate ^&^& python manage.py runserver %LOCAL_IP%:8000"
 timeout /t 3 /nobreak ^>nul
-start "Frontend" cmd /k "cd frontend && npm run dev"
+echo.
+echo [2/2] Iniciando Frontend React...
+start "ProXimidad Frontend" cmd /k "cd frontend ^&^& npm run dev -- --host %LOCAL_IP%"
+echo.
+echo ============================================================
+echo      Servidores Activos
+echo ============================================================
 echo.
 echo Backend:  http://%LOCAL_IP%:8000
-echo Frontend: http://localhost:5173
+echo Frontend: http://%LOCAL_IP%:5173
+echo Admin:    http://%LOCAL_IP%:8000/admin
+echo.
+echo Presiona cualquier tecla para cerrar este launcher...
+echo ^(Los servidores seguiran corriendo en sus ventanas^)
 pause ^>nul
 ) > start.bat
 

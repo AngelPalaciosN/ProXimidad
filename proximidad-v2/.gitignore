@@ -14,9 +14,17 @@ db.sqlite3-journal
 
 # Django
 backend/core/local_settings.py
-backend/media/
 backend/staticfiles/
 *.log
+
+# Media - NO subir imagenes originales
+backend/media/usuarios/**
+backend/media/servicios/**
+# Pero mantener estructura de carpetas
+!backend/media/usuarios/.gitkeep
+!backend/media/servicios/.gitkeep
+!backend/media/servicios/imagenes/
+!backend/media/servicios/imagenes/.gitkeep
 
 # Node
 frontend/node_modules/
@@ -34,17 +42,17 @@ yarn-error.log*
 frontend/.env
 backend/.env
 
-# Imágenes y backups
+# Backups antiguos (NO usar)
 media_backup.zip
-media_backup.rar
 ProXimidadImages/
 backup_imagenes/
 
-# Scripts generados automáticamente
+# IMPORTANTE: media_backup.rar SI se sube a GitHub
+# Contiene imagenes con contrasena proximidad_2025
+!media_backup.rar
+
+# Scripts generados automaticamente
 start.bat
-scripts/info.bat
-scripts/backup.bat
-scripts/clean.bat
 
 # IDE
 .vscode/
