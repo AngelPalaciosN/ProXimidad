@@ -1,32 +1,26 @@
 @echo off
-setlocal enabledelayedexpansion
 cls
 echo.
 echo ============================================================
 echo      ProXimidad - Instalacion Automatica v2.0
 echo ============================================================
 echo.
+echo [INFO] Este script ahora usa PowerShell para mejor compatibilidad
+echo.
 
 if not exist "backend" (
-    echo [ERROR] Ejecuta desde el directorio raiz
+    echo [ERROR] Ejecuta desde el directorio raiz de proximidad-v2
     pause
     exit /b 1
 )
 
-REM Detectar IP
-echo [Detectando IP...]
-for /f "tokens=2 delims=:" %%a in ('ipconfig ^| findstr /i "IPv4" ^| findstr /v "127.0.0.1"') do (
-    set "TEMP_IP=%%a"
-    goto :found
+if not exist "install.ps1" (
+    echo [ERROR] No se encuentra install.ps1
+    pause
+    exit /b 1
 )
-:found
-set "LOCAL_IP=%TEMP_IP: =%"
-if "%LOCAL_IP%"=="" set "LOCAL_IP=192.168.1.101"
-echo [OK] IP: %LOCAL_IP%
-echo.
-set /p CONFIRM="Usar esta IP? (S/N) [S]: "
-if "%CONFIRM%"=="" set "CONFIRM=S"
-if /i "%CONFIRM%"=="N" set /p LOCAL_IP="IP manual: "
+
+echo [i] Iniciando instalador PowerShell...
 echo.
 
 echo [1/5] Verificando...
@@ -203,29 +197,8 @@ echo Backend:  http://%LOCAL_IP%:8000
 echo Frontend: http://%LOCAL_IP%:5173
 echo Admin:    http://%LOCAL_IP%:8000/admin
 echo.
-echo Presiona cualquier tecla para cerrar este launcher...
-echo ^(Los servidores seguiran corriendo en sus ventanas^)
-pause ^>nul
-) > start.bat
+REM Ejecutar el instalador PowerShell
+powershell -ExecutionPolicy Bypass -File install.ps1
 
-(
-echo @echo off
-echo cls
-echo Creando backup...
-powershell -command "Compress-Archive -Path 'backend\media\*' -DestinationPath 'media_backup.zip' -Force"
-echo [OK] media_backup.zip creado
-pause
-) > scripts\backup.bat
-
-echo.
-echo ============================================================
-echo           INSTALACION COMPLETADA
-echo ============================================================
-echo.
-echo IP Local: %LOCAL_IP%
-echo Backend:  http://%LOCAL_IP%:8000
-echo Frontend: http://localhost:5173
-echo.
-echo Ejecuta: start.bat
-echo.
-pause
+REM Fin
+exit /b 0

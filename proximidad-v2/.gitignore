@@ -43,16 +43,22 @@ frontend/.env
 backend/.env
 
 # Backups antiguos (NO usar)
-media_backup.zip
 ProXimidadImages/
 backup_imagenes/
 
-# IMPORTANTE: media_backup.rar SI se sube a GitHub
-# Contiene imagenes con contrasena proximidad_2025
+# IMPORTANTE: Backups con contraseña SI se suben a GitHub
+# media_backup.rar contiene imagenes protegidas con: proximidad_2025
+# media_backup.zip (alternativa) también con contraseña
 !media_backup.rar
+!media_backup.zip
+media_backup_sin_password.zip
 
-# Scripts generados automaticamente
+# Scripts generados automaticamente por install.ps1
+start.ps1
+
+# Scripts BAT legacy (ya no se usan)
 start.bat
+scripts/backup.bat
 
 # IDE
 .vscode/
