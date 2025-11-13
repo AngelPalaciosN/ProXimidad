@@ -105,14 +105,14 @@ if (Test-Path "media_backup.rar") {
         Write-Host "[i] Usando WinRAR: $unrarCmd" -ForegroundColor Cyan
         Write-Host "[i] Extrayendo imágenes con contraseña proximidad_2025..." -ForegroundColor Cyan
         
-        # Extraer con WinRAR
+        # Extraer con WinRAR a backend\media
         $arguments = @(
             "x",
             "-pproximidad_2025",
             "-o+",
             "-y",
             "media_backup.rar",
-            "backend\"
+            "backend\media\"
         )
         
         & $unrarCmd $arguments 2>&1 | Out-Null
@@ -129,12 +129,12 @@ if (Test-Path "media_backup.rar") {
         Write-Host "[i] Usando 7-Zip: $zipCmd" -ForegroundColor Cyan
         Write-Host "[i] Extrayendo imágenes con contraseña proximidad_2025..." -ForegroundColor Cyan
         
-        # Extraer con 7-Zip
+        # Extraer con 7-Zip a backend\media
         $arguments = @(
             "x",
             "media_backup.rar",
             "-pproximidad_2025",
-            "-obackend\",
+            "-obackend\media",
             "-aoa",
             "-y"
         )
@@ -169,7 +169,7 @@ if (Test-Path "media_backup.rar") {
         ) | Where-Object { Test-Path $_ } | Select-Object -First 1
         
         if ($zipCmd) {
-            $arguments = @("x", "media_backup.zip", "-pproximidad_2025", "-obackend\", "-aoa", "-y")
+            $arguments = @("x", "media_backup.zip", "-pproximidad_2025", "-obackend\media", "-aoa", "-y")
             & $zipCmd $arguments 2>&1 | Out-Null
             
             if ($LASTEXITCODE -eq 0) {
@@ -180,7 +180,7 @@ if (Test-Path "media_backup.rar") {
         
         # Si falla o no hay 7-Zip, intentar con PowerShell nativo
         if (-not $backupRestored) {
-            Expand-Archive -Path "media_backup.zip" -DestinationPath "backend\" -Force 2>&1 | Out-Null
+            Expand-Archive -Path "media_backup.zip" -DestinationPath "backend\media" -Force 2>&1 | Out-Null
             Write-Host "[OK] Imágenes restauradas desde backup ZIP" -ForegroundColor Green
             $backupRestored = $true
         }
@@ -289,6 +289,52 @@ CORS_ALLOW_CREDENTIALS = True
 
 $localSettings | Out-File -FilePath "core\local_settings.py" -Encoding UTF8
 
+# Actualizar backend .env con la IP detectada
+Write-Host "[i] Actualizando backend/.env con IP $LOCAL_IP..." -ForegroundColor Cyan
+$backendEnv = @"
+# Configuración de Django
+SECRET_KEY=tu-clave-secreta-super-segura-para-desarrollo
+DEBUG=True
+ALLOWED_HOSTS=*
+
+# Configuración de Logging  
+LOG_LEVEL=INFO
+LOG_TO_FILE=False
+
+# Configuración de Base de Datos
+DATABASE_ENGINE=django.db.backends.mysql
+DATABASE_NAME=$DB_NAME
+DATABASE_USER=$DB_USER
+DATABASE_PASSWORD=$DB_PASSWORD
+DATABASE_HOST=localhost
+DATABASE_PORT=3306
+
+# Configuración Completa de CORS
+CORS_ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173,http://${LOCAL_IP}:5173
+CORS_ALLOW_ALL_ORIGINS=True
+CORS_ALLOW_CREDENTIALS=True
+CORS_ALLOWED_METHODS=DELETE,GET,OPTIONS,PATCH,POST,PUT
+CORS_ALLOWED_HEADERS=accept,accept-encoding,authorization,content-type,dnt,origin,user-agent,x-csrftoken,x-requested-with
+CORS_EXPOSE_HEADERS=
+CORS_PREFLIGHT_MAX_AGE=86400
+CORS_URLS_REGEX=^/api/.*$
+
+# Configuración de Internacionalización
+LANGUAGE_CODE=es-es
+TIME_ZONE=America/Bogota
+
+# Configuración de Archivos Estáticos
+STATIC_URL=/static/
+MEDIA_URL=/media/
+
+# Configuración de Desarrollo
+USE_I18N=True
+USE_TZ=True
+DEFAULT_AUTO_FIELD=django.db.models.BigAutoField
+"@
+
+$backendEnv | Out-File -FilePath ".env" -Encoding UTF8
+
 Write-Host "[i] Ejecutando migraciones..." -ForegroundColor Cyan
 python manage.py makemigrations 2>&1 | Out-Null
 python manage.py migrate 2>&1
@@ -315,6 +361,11 @@ Write-Host ""
 
 # Crear script de inicio PowerShell
 Write-Host "[i] Creando scripts de inicio..." -ForegroundColor Cyan
+
+# Eliminar start.ps1 antiguo si existe
+if (Test-Path "start.ps1") {
+    Remove-Item "start.ps1" -Force 2>&1 | Out-Null
+}
 
 $startPS = @"
 # ============================================================
@@ -358,12 +409,12 @@ Write-Host ""
 Write-Host "[1/2] Iniciando Backend Django..." -ForegroundColor Yellow
 
 # Iniciar Backend en nueva ventana PowerShell
-`$backendScript = @'
+`$backendScript = @"
 Set-Location backend
 .\venv\Scripts\Activate.ps1
-Write-Host "Backend corriendo en http://$LOCAL_IP:8000" -ForegroundColor Green
+Write-Host 'Backend corriendo en http://$LOCAL_IP:8000' -ForegroundColor Green
 python manage.py runserver $LOCAL_IP:8000
-'@
+"@
 
 Start-Process powershell -ArgumentList "-NoExit", "-Command", `$backendScript
 
@@ -372,11 +423,11 @@ Start-Sleep -Seconds 4
 Write-Host "[2/2] Iniciando Frontend React..." -ForegroundColor Yellow
 
 # Iniciar Frontend en nueva ventana PowerShell
-`$frontendScript = @'
+`$frontendScript = @"
 Set-Location frontend
-Write-Host "Frontend corriendo en http://$LOCAL_IP:5173" -ForegroundColor Green
+Write-Host 'Frontend corriendo en http://$LOCAL_IP:5173' -ForegroundColor Green
 npm run dev -- --host $LOCAL_IP
-'@
+"@
 
 Start-Process powershell -ArgumentList "-NoExit", "-Command", `$frontendScript
 
