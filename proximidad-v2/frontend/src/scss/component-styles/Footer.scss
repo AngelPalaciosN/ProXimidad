@@ -1,5 +1,4 @@
-@use '../variables' as *;
-@use '../responsive' as *;
+// Las variables y mixins se heredan desde style.scss (punto de entrada)
 
 .footer {
   background-color: $primary-color;

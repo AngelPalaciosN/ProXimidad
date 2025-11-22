@@ -1,0 +1,159 @@
+// ============================================================
+//                    TIPOGRAFÍA BASE
+// ============================================================
+// Las variables se heredan desde style.scss (punto de entrada)
+
+// Importar fuente Quicksand
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+// Títulos
+h1, .h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  color: $text-dark;
+}
+
+h2, .h2 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1.25rem;
+  color: $text-dark;
+}
+
+h3, .h3 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 1rem;
+  color: $text-dark;
+}
+
+h4, .h4 {
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 0.875rem;
+  color: $text-dark;
+}
+
+h5, .h5 {
+  font-size: clamp(1.125rem, 2vw, 1.25rem);
+  font-weight: 600;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+  color: $text-dark;
+}
+
+h6, .h6 {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+  color: $text-dark;
+}
+
+// Párrafos
+p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  color: $text-dark;
+  
+  &.lead {
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.7;
+  }
+  
+  &.small {
+    font-size: 0.875rem;
+  }
+}
+
+// Texto pequeño
+small, .small {
+  font-size: 0.875rem;
+  color: $text-muted;
+}
+
+// Texto destacado
+strong, .strong {
+  font-weight: 700;
+}
+
+em, .em {
+  font-style: italic;
+}
+
+// Clases de utilidad
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-primary {
+  color: $primary-color;
+}
+
+.text-secondary {
+  color: $secondary-color;
+}
+
+.text-muted {
+  color: $text-muted;
+}
+
+.text-light {
+  color: $text-light;
+}
+
+.text-dark {
+  color: $text-dark;
+}
+
+.text-success {
+  color: $success-color;
+}
+
+.text-danger {
+  color: $danger-color;
+}
+
+.text-warning {
+  color: $warning-color;
+}
+
+.text-info {
+  color: $info-color;
+}
+
+// Peso de fuente
+.font-light {
+  font-weight: 300;
+}
+
+.font-normal {
+  font-weight: 400;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-bold {
+  font-weight: 700;
+}

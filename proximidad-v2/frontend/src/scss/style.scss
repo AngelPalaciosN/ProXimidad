@@ -1,42 +1,38 @@
-@use 'variables' as *;
-@use 'responsive';
-@use "bootstrap/scss/bootstrap" with (
-  $primary: $primary-color,
-  $secondary: $secondary-color,
-  $body-bg: $background-color,
-);
+// ============================================================
+//                 ARCHIVO PRINCIPAL DE ESTILOS
+// ============================================================
 
-// Importar todos los estilos de componentes
-@import 'component-styles/Header.scss';
-@import 'component-styles/Footer.scss';
-@import 'component-styles/Sec1.scss';
-@import 'component-styles/Sec2.scss';
-@import 'component-styles/Sec3.scss';
+// 1. Abstracts (Variables, Mixins, Functions) - Importación global
+@import 'variables';
+@import 'responsive';
+@import 'abstracts/mixins';
+
+// 2. Bootstrap (usando @import para compatibilidad)
+@import "bootstrap/scss/bootstrap";
+
+// 3. Base (Reset, Typography, Utilities)
+@import 'base/reset';
+@import 'base/typography';
+@import 'base/utilities';
+
+// 4. Components (Componentes de la aplicación)
+// Nueva estructura migrada
+@import 'components/header';
+@import 'components/footer';
+@import 'components/sec1';
+@import 'components/sec2';
+@import 'components/sec3';
+
+// Estructura antigua (temporal)
+// @import 'component-styles/Header.scss'; // ✅ Migrado
+// @import 'component-styles/Footer.scss'; // ✅ Migrado
+// @import 'component-styles/Sec1.scss'; // ✅ Migrado
+// @import 'component-styles/Sec2.scss'; // ✅ Migrado
+// @import 'component-styles/Sec3.scss'; // ✅ Migrado
 @import 'component-styles/Registrar.scss';
 @import 'component-styles/ClientDashboard.scss';
 @import 'component-styles/Listaust.scss';
-@import 'component-styles/ServiceDetailModal.scss';
-@import 'component-styles/ServiceRequestModal.scss';
-
-// Importar la fuente Quicksand
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
-
-// Aplicar la fuente a toda la página
-body {
-  font-family: "Quicksand", sans-serif;
-  scroll-behavior: smooth;
-  
-  &::-webkit-scrollbar {
-    width: 0.5rem;
-  }
-  &::-webkit-scrollbar-track {
-    background: $secondary-color;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: $primary-color;
-    border-radius: 0.5rem;
-  }
-}
+@import 'component-styles/_modals.scss';
 
 // Estilos generales
 .proximidad-app {

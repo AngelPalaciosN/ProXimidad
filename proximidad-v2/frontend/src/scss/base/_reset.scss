@@ -1,0 +1,123 @@
+// ============================================================
+//                    RESET Y NORMALIZE
+// ============================================================
+// Las variables se heredan desde style.scss (punto de entrada)
+
+// Box sizing
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+// Reset de márgenes y padding
+* {
+  margin: 0;
+  padding: 0;
+}
+
+// HTML y Body
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: "Quicksand", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: $text-dark;
+  background-color: $background-color;
+  min-height: 100vh;
+}
+
+// Imágenes responsivas
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+// Formularios
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+// Botones
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  
+  &:focus {
+    outline: 2px solid $primary-color;
+    outline-offset: 2px;
+  }
+}
+
+// Links
+a {
+  color: $primary-color;
+  text-decoration: none;
+  transition: $transition-base;
+  
+  &:hover {
+    color: darken($primary-color, 10%);
+  }
+  
+  &:focus {
+    outline: 2px solid $primary-color;
+    outline-offset: 2px;
+  }
+}
+
+// Listas
+ul,
+ol {
+  list-style: none;
+}
+
+// Tipografía
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+// Scrollbar personalizado global
+::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+::-webkit-scrollbar-track {
+  background: darken($background-color, 5%);
+}
+
+::-webkit-scrollbar-thumb {
+  background: $primary-color;
+  border-radius: 0.25rem;
+  
+  &:hover {
+    background: darken($primary-color, 10%);
+  }
+}
+
+// Focus visible
+:focus-visible {
+  outline: 2px solid $primary-color;
+  outline-offset: 2px;
+}

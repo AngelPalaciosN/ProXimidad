@@ -1,5 +1,4 @@
-@use '../variables' as *;
-@use '../responsive';
+// Las variables y mixins se heredan desde style.scss (punto de entrada)
 
 $primary-color: #005187;
 $secondary-color: #4d82bc;

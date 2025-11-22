@@ -1,0 +1,172 @@
+// ============================================================
+//                    SEC1 COMPONENT (Hero Section)
+// ============================================================
+// Las variables y mixins se heredan desde style.scss (punto de entrada)
+
+.sec1 {
+  background-color: $background-color;
+  padding: 6rem 0;
+  overflow: hidden;
+  
+  .hero-content {
+    height: auto;
+    min-height: 450px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 3rem;
+    border-radius: $border-radius-lg;
+    box-shadow: $shadow-md;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeIn 0.8s forwards;
+    
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: $shadow-lg;
+    }
+  }
+  
+  #hero-1 {
+    background-color: $secondary-color;
+    color: $text-light;
+    
+    h2 {
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+    
+    .hero-description {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+    }
+    
+    .btn-hover-rise {
+      background-color: $text-light;
+      color: $primary-color;
+      border: none;
+      border-radius: 50px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      align-self: flex-start;
+      
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+  
+  #hero-2 {
+    background-color: $sextiary-color;
+    color: $text-dark;
+    
+    h2 {
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+    
+    .hero-description {
+      font-size: 1.1rem;
+      color: $text-dark;
+      margin-bottom: 2rem;
+    }
+    
+    .comment-button {
+      background-color: $primary-color;
+      color: $text-light;
+      border: none;
+      border-radius: 50px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+  
+  .typing-effect {
+    position: relative;
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    
+    .cursor {
+      display: inline-block;
+      margin-left: 2px;
+      animation: blink 0.7s infinite;
+    }
+  }
+  
+  .comment-form-container {
+    background-color: $text-light;
+    border-radius: $border-radius;
+    padding: 1.5rem;
+    box-shadow: $shadow-sm;
+    animation: slideUp 0.3s forwards;
+    
+    .form-label {
+      font-weight: 600;
+      color: $text-dark;
+    }
+    
+    .form-control, .form-select {
+      border-radius: $border-radius;
+      border: 1px solid $border-color;
+      padding: 0.75rem;
+      
+      &:focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 0.25rem rgba($primary-color, 0.25);
+      }
+    }
+  }
+  
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+  
+  @keyframes fadeInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  // Responsive
+  @include media-breakpoint-down(lg) {
+    padding: 4rem 0;
+    
+    .hero-content {
+      min-height: 400px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .typing-effect {
+      font-size: 1.3rem;
+    }
+  }
+  
+  @include media-breakpoint-down(md) {
+    padding: 3rem 0;
+    
+    .hero-content {
+      min-height: 350px;
+      padding: 1.5rem;
+    }
+    
+    .typing-effect {
+      font-size: 1.2rem;
+    }
+  }
+}
