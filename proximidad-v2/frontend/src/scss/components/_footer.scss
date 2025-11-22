@@ -7,6 +7,25 @@
   background-color: $primary-color;
   color: $text-light;
   
+  // Asegurar que SOLO el contenido del footer sea blanco
+  .footer-main,
+  .footer-bottom {
+    * {
+      color: $text-light !important;
+    }
+    
+    a, h1, h2, h3, h4, h5, h6, p, span, li, div, strong {
+      color: $text-light !important;
+    }
+    
+    // Links específicos del footer
+    a {
+      &:hover {
+        color: rgba($text-light, 0.8) !important;
+      }
+    }
+  }
+  
   .footer-main {
     padding: 5rem 0 3rem;
   }
@@ -15,6 +34,13 @@
     .footer-logo {
       display: flex;
       align-items: center;
+      
+      // Permitir que el logo tenga su tamaño natural
+      img {
+        max-width: none !important;
+        width: auto !important;
+        height: 30px !important;
+      }
       
       .logo-container {
         display: flex;

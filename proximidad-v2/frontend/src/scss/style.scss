@@ -22,17 +22,21 @@
 @import 'components/sec1';
 @import 'components/sec2';
 @import 'components/sec3';
+@import 'components/registrar';
+@import 'components/client-dashboard';
+@import 'components/listaust';
+@import 'components/modals';
 
-// Estructura antigua (temporal)
+// Estructura antigua (temporal - deprecada)
 // @import 'component-styles/Header.scss'; // ✅ Migrado
 // @import 'component-styles/Footer.scss'; // ✅ Migrado
 // @import 'component-styles/Sec1.scss'; // ✅ Migrado
 // @import 'component-styles/Sec2.scss'; // ✅ Migrado
 // @import 'component-styles/Sec3.scss'; // ✅ Migrado
-@import 'component-styles/Registrar.scss';
-@import 'component-styles/ClientDashboard.scss';
-@import 'component-styles/Listaust.scss';
-@import 'component-styles/_modals.scss';
+// @import 'component-styles/Registrar.scss'; // ✅ Migrado
+// @import 'component-styles/ClientDashboard.scss'; // ✅ Migrado
+// @import 'component-styles/Listaust.scss'; // ✅ Migrado
+// @import 'component-styles/_modals.scss'; // ✅ Migrado
 
 // Estilos generales
 .proximidad-app {
