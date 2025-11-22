@@ -53,9 +53,6 @@ backup_imagenes/
 !media_backup.zip
 media_backup_sin_password.zip
 
-# Scripts generados automaticamente por install.ps1
-start.ps1
-
 # Scripts BAT legacy (ya no se usan)
 start.bat
 scripts/backup.bat
