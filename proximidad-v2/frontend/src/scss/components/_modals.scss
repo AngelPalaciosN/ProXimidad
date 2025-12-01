@@ -1309,3 +1309,915 @@
     }
   }
 }
+
+// ============================================================
+//       SERVICE UPLOAD MODAL (Crear/Subir servicio - Proveedor)
+// ============================================================
+
+.service-upload-modal {
+  @extend %modal-base;
+
+  .modal-dialog {
+    max-width: 1100px;
+  }
+
+  // Secciones del formulario
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: $text-dark;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid lighten($background-color, 2%);
+
+    svg {
+      color: $primary-color;
+    }
+
+    small {
+      font-weight: 400;
+      font-size: 0.85rem;
+    }
+  }
+
+  .form-section {
+    background: $text-light;
+    padding: 1.5rem;
+    border-radius: $border-radius-lg;
+    box-shadow: $shadow-sm;
+    height: 100%;
+  }
+
+  // ============ Sección de imágenes ============
+  .upload-section {
+    background: $text-light;
+    padding: 1.5rem;
+    border-radius: $border-radius-lg;
+    box-shadow: $shadow-sm;
+  }
+
+  .images-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+  }
+
+  .image-preview-card {
+    position: relative;
+    aspect-ratio: 4/3;
+    border-radius: $border-radius-lg;
+    overflow: hidden;
+    box-shadow: $shadow-md;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: $primary-color;
+      transform: translateY(-3px);
+
+      .remove-image-btn {
+        opacity: 1;
+      }
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .remove-image-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba($danger-color, 0.9);
+      border: none;
+      color: $text-light;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: $danger-color;
+        transform: scale(1.1);
+      }
+    }
+
+    .main-badge {
+      position: absolute;
+      bottom: 0.5rem;
+      left: 0.5rem;
+      font-size: 0.7rem;
+    }
+  }
+
+  .upload-placeholder {
+    aspect-ratio: 4/3;
+    border: 2px dashed darken($background-color, 10%);
+    border-radius: $border-radius-lg;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: lighten($background-color, 2%);
+
+    &:hover {
+      border-color: $primary-color;
+      background: rgba($primary-color, 0.05);
+
+      .upload-icon {
+        color: $primary-color;
+        transform: scale(1.1);
+      }
+    }
+
+    .upload-icon {
+      font-size: 2rem;
+      color: $text-muted;
+      margin-bottom: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    span {
+      font-size: 0.85rem;
+      color: $text-muted;
+    }
+  }
+
+  // ============ Inputs con botón ============
+  .input-with-button {
+    display: flex;
+    gap: 0.5rem;
+
+    .form-control {
+      flex: 1;
+    }
+
+    .btn {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+    }
+  }
+
+  // ============ Lista de items (incluye) ============
+  .items-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .item-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: lighten($success-color, 45%);
+    color: darken($success-color, 10%);
+    padding: 0.4rem 0.75rem;
+    border-radius: $border-radius-pill;
+    font-size: 0.85rem;
+    border: 1px solid lighten($success-color, 30%);
+
+    button {
+      background: none;
+      border: none;
+      color: darken($success-color, 10%);
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      font-size: 0.75rem;
+      opacity: 0.7;
+      transition: opacity 0.2s ease;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  // ============ Tags ============
+  .tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.75rem;
+
+    button {
+      background: none;
+      border: none;
+      color: $text-light;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      font-size: 0.7rem;
+      opacity: 0.8;
+      transition: opacity 0.2s ease;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  // ============ Vista previa / Resumen del servicio ============
+  .service-preview,
+  .service-resumen {
+    background: $text-light;
+    padding: 1.5rem;
+    border-radius: $border-radius-lg;
+    box-shadow: $shadow-sm;
+    margin-bottom: 1rem;
+  }
+
+  .preview-card,
+  .resumen-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: lighten($background-color, 2%);
+    border-radius: $border-radius-lg;
+    border: 1px solid darken($background-color, 5%);
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: $shadow-md;
+      transform: translateY(-2px);
+    }
+
+    .preview-image,
+    .resumen-image {
+      width: 100%;
+      height: 180px;
+      border-radius: $border-radius;
+      overflow: hidden;
+      flex-shrink: 0;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+
+      &:hover img {
+        transform: scale(1.05);
+      }
+
+      .no-image {
+        width: 100%;
+        height: 100%;
+        background: darken($background-color, 5%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: $text-muted;
+
+        svg {
+          font-size: 2.5rem;
+          margin-bottom: 0.75rem;
+          opacity: 0.5;
+        }
+
+        span {
+          font-size: 0.9rem;
+          font-weight: 500;
+        }
+      }
+    }
+
+    .preview-content,
+    .resumen-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+
+      h6 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: $text-dark;
+        margin-bottom: 0;
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      p {
+        flex: 1;
+        font-size: 0.9rem;
+        color: $text-muted;
+        margin-bottom: 0;
+        line-height: 1.6;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .preview-meta,
+      .resumen-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 0.75rem;
+        border-top: 1px solid darken($background-color, 5%);
+        margin-top: auto;
+
+        .price {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: $success-color;
+        }
+
+        .category {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+          color: $primary-color;
+          font-size: 0.85rem;
+          font-weight: 600;
+          background: rgba($primary-color, 0.1);
+          padding: 0.25rem 0.75rem;
+          border-radius: $border-radius-pill;
+
+          svg {
+            font-size: 0.75rem;
+          }
+        }
+
+        .delivery {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+          color: $text-muted;
+          font-size: 0.9rem;
+
+          svg {
+            color: $info-color;
+          }
+        }
+      }
+    }
+  }
+
+  // ============ Animaciones ============
+  @keyframes scaleIn {
+    0% {
+      transform: scale(0);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .success-animation {
+    animation: fadeInUp 0.5s ease-out;
+  }
+
+  // ============ Input Groups ============
+  .input-group {
+    .input-group-text {
+      background-color: lighten($background-color, 2%);
+      border: 1px solid darken($background-color, 10%);
+      color: $text-muted;
+      font-weight: 600;
+    }
+
+    .form-control:focus + .input-group-text,
+    .input-group-text + .form-control:focus {
+      border-color: $primary-color;
+    }
+  }
+
+  // ============ Cards dentro del modal ============
+  .card {
+    border: none;
+    
+    .card-header {
+      background: transparent;
+      padding: 1rem 1.25rem;
+      
+      .section-title {
+        font-size: 1rem;
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+      }
+    }
+
+    .card-body {
+      padding: 1.25rem;
+    }
+  }
+
+  // ============ Responsive ============
+  @media (max-width: 991px) {
+    .modal-dialog {
+      max-width: 95%;
+    }
+
+    .images-grid {
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+
+    .preview-card,
+    .resumen-card {
+      flex-direction: column;
+
+      .preview-image,
+      .resumen-image {
+        width: 100%;
+        height: 180px;
+      }
+    }
+  }
+
+  @media (max-width: 576px) {
+    .modal-body {
+      padding: 1rem;
+    }
+
+    .form-section,
+    .upload-section,
+    .service-preview,
+    .service-resumen {
+      padding: 1rem;
+    }
+
+    .images-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .section-title {
+      font-size: 1rem;
+    }
+  }
+}
+
+// ============================================================
+//       SERVICE CREATOR MODAL (Estilo compacto como Iniciar.jsx)
+// ============================================================
+
+.service-creator-modal {
+  .modal-dialog {
+    max-width: 600px;
+  }
+
+  .modal-content {
+    border-radius: 12px;
+    overflow: hidden;
+    border: none;
+  }
+
+  .form-header {
+    background-color: $primary-color;
+    color: $text-light;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba($text-light, 0.1);
+
+    h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+    }
+
+    .close-button {
+      color: $text-light;
+      transition: transform 0.2s;
+
+      &:hover {
+        transform: rotate(90deg);
+        background-color: rgba($text-light, 0.1);
+      }
+    }
+  }
+
+  .formulario {
+    padding: 30px;
+    max-height: calc(90vh - 100px);
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba($text-dark, 0.05);
+      border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $primary-color;
+      border-radius: 3px;
+
+      &:hover {
+        background: darken($primary-color, 10%);
+      }
+    }
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: $text-dark;
+      font-size: 0.9rem;
+    }
+
+    input:not([type="checkbox"]),
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid darken($background-color, 10%);
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.2s;
+      background-color: lighten($background-color, 2%);
+
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px rgba($primary-color, 0.15);
+        background-color: $text-light;
+      }
+
+      &::placeholder {
+        color: $text-muted;
+      }
+
+      &.error-input {
+        border-color: $danger-color;
+        background-color: lighten($danger-color, 45%);
+      }
+
+      &:disabled {
+        background-color: darken($background-color, 3%);
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+    }
+
+    textarea {
+      resize: vertical;
+      font-family: inherit;
+      line-height: 1.5;
+    }
+
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23adb5bd' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 16px;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+
+    .error-message {
+      display: block;
+      color: $danger-color;
+      font-size: 0.8rem;
+      margin-top: 5px;
+      animation: shake 0.5s;
+    }
+
+    .char-counter {
+      display: block;
+      font-size: 0.75rem;
+      color: $text-muted;
+      margin-top: 4px;
+      text-align: right;
+
+      &.text-danger {
+        color: $danger-color;
+        font-weight: 600;
+      }
+
+      &.text-success {
+        color: $success-color;
+        font-weight: 600;
+      }
+    }
+
+    // Upload de imagen
+    .upload-placeholder {
+      border: 2px dashed darken($background-color, 10%);
+      border-radius: 8px;
+      padding: 40px 20px;
+      text-align: center;
+      background-color: lighten($background-color, 2%);
+      transition: all 0.3s ease;
+      cursor: pointer;
+
+      &:hover {
+        border-color: $primary-color;
+        background-color: rgba($primary-color, 0.05);
+
+        svg {
+          color: $primary-color;
+          transform: scale(1.1);
+        }
+      }
+
+      p {
+        margin: 10px 0 5px;
+        color: $text-dark;
+        font-weight: 500;
+      }
+
+      small {
+        color: $text-muted;
+        font-size: 0.8rem;
+      }
+
+      svg {
+        transition: all 0.3s ease;
+      }
+    }
+
+    // Galería de imágenes (hasta 5)
+    .images-counter {
+      font-size: 0.85rem;
+      color: $text-muted;
+      font-weight: 400;
+      margin-left: 8px;
+    }
+
+    .images-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+
+      @media (max-width: 576px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .image-preview-container {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: $shadow-md;
+      background-color: lighten($background-color, 3%);
+
+      .image-preview {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        display: block;
+      }
+
+      .remove-image-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background-color: rgba($danger-color, 0.95);
+        color: $text-light;
+        transition: all 0.2s;
+        padding: 6px;
+
+        svg {
+          font-size: 18px;
+        }
+
+        &:hover {
+          background-color: $danger-color;
+          transform: scale(1.1);
+        }
+      }
+
+      .image-number {
+        position: absolute;
+        bottom: 8px;
+        left: 8px;
+        background-color: rgba($primary-color, 0.9);
+        color: $text-light;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 600;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+    }
+
+    // Input con prefijo ($)
+    .input-with-prefix {
+      position: relative;
+      display: flex;
+      align-items: center;
+
+      .prefix {
+        position: absolute;
+        left: 15px;
+        color: $text-muted;
+        font-weight: 600;
+        font-size: 1.1rem;
+        pointer-events: none;
+      }
+
+      input {
+        padding-left: 35px;
+      }
+    }
+
+    // Checkbox destacado
+    &.checkbox-group {
+      .checkbox-label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        padding: 12px;
+        border-radius: 8px;
+        background-color: lighten($background-color, 2%);
+        border: 1px solid darken($background-color, 5%);
+        transition: all 0.2s;
+
+        &:hover {
+          background-color: rgba($primary-color, 0.05);
+          border-color: $primary-color;
+        }
+
+        input[type="checkbox"] {
+          width: auto;
+          margin-right: 10px;
+          cursor: pointer;
+          transform: scale(1.2);
+        }
+
+        span {
+          color: $text-dark;
+          font-weight: 500;
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+  }
+
+  // Fila con 2 columnas
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+
+    @media (max-width: 576px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .form-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid darken($background-color, 5%);
+
+    button {
+      flex: 1;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      &.btn-cancel {
+        background-color: darken($background-color, 5%);
+        color: $text-dark;
+
+        &:hover:not(:disabled) {
+          background-color: darken($background-color, 10%);
+        }
+      }
+
+      &.btn-submit {
+        background-color: $primary-color;
+        color: $text-light;
+
+        &:hover:not(:disabled) {
+          background-color: darken($primary-color, 10%);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba($primary-color, 0.3);
+        }
+      }
+    }
+  }
+
+  .info-box {
+    background-color: lighten($info-color, 45%);
+    border-left: 4px solid $info-color;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 20px;
+
+    p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: darken($info-color, 20%);
+      line-height: 1.5;
+
+      strong {
+        color: darken($info-color, 30%);
+      }
+    }
+  }
+
+  // Animación shake para errores
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+  }
+
+  // Responsive
+  @media (max-width: 768px) {
+    .modal-dialog {
+      max-width: 95%;
+      margin: 1rem;
+    }
+
+    .form-header {
+      padding: 15px 20px;
+
+      h2 {
+        font-size: 1.3rem;
+      }
+    }
+
+    .formulario {
+      padding: 20px;
+    }
+
+    .form-buttons {
+      flex-direction: column;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}

@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view, parser_classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import Servicios, Usuario, Favoritos, Categoria, Comentarios
+from .models import Servicios, Usuario, Favoritos, Categoria, Comentarios, ServicioImagenes
 from .serializer import ServiciosSerializer, UsuarioSerializer, FavoritosSerializer, CategoriaSerializer, ComentariosSerializer
 import random
 from rest_framework import serializers
@@ -300,35 +300,89 @@ def eliminar_favorito(request, usuario_id, favorito_id):
 @parser_classes([MultiPartParser, FormParser])
 def create_usuario(request):
     """Crea un nuevo usuario con validaciones mejoradas"""
+    print("\n" + "="*60)
+    print("🆕 SOLICITUD DE REGISTRO DE USUARIO")
+    print("="*60)
+    
     try:
         # Validar que no exista un usuario con el mismo correo o cédula
         correo = request.data.get('correo_electronico')
         cedula = request.data.get('cedula')
+        nombre = request.data.get('nombre_completo')
+        tipo = request.data.get('tipo_usuario')
         
-        if Usuario.objects.filter(correo_electronico=correo).exists():
+        print(f"📧 Email: {correo}")
+        print(f"🆔 Cédula: {cedula}")
+        print(f"👤 Nombre: {nombre}")
+        print(f"🏷️ Tipo: {tipo}")
+        
+        # Verificar email existente
+        email_exists = Usuario.objects.filter(correo_electronico=correo).exists()
+        print(f"\n🔍 Verificando email existente: {email_exists}")
+        
+        if email_exists:
+            usuarios_con_email = Usuario.objects.filter(correo_electronico=correo)
+            print(f"❌ Email ya existe:")
+            for u in usuarios_con_email:
+                print(f"   - ID: {u.id}, Nombre: {u.nombre_completo}, Activo: {u.activo}")
+            print("="*60 + "\n")
             return Response({'error': 'Ya existe un usuario con este correo electrónico'}, 
                           status=status.HTTP_400_BAD_REQUEST)
         
-        if Usuario.objects.filter(cedula=cedula).exists():
+        # Verificar cédula existente
+        cedula_exists = Usuario.objects.filter(cedula=cedula).exists()
+        print(f"🔍 Verificando cédula existente: {cedula_exists}")
+        
+        if cedula_exists:
+            usuarios_con_cedula = Usuario.objects.filter(cedula=cedula)
+            print(f"❌ Cédula ya existe:")
+            for u in usuarios_con_cedula:
+                print(f"   - ID: {u.id}, Nombre: {u.nombre_completo}, Email: {u.correo_electronico}")
+            print("="*60 + "\n")
             return Response({'error': 'Ya existe un usuario con esta cédula'}, 
                           status=status.HTTP_400_BAD_REQUEST)
+        
+        print("\n✅ Email y cédula disponibles")
+        print("💾 Creando usuario...")
         
         serializer = UsuarioSerializer(data=request.data)
         if serializer.is_valid():
             usuario = serializer.save()
+            print(f"✅ Usuario guardado en DB - ID: {usuario.id}")
+            
             # Generar código de verificación
             usuario.codigo_verificacion = random.randint(100000, 999999)
             usuario.save()
+            print(f"🔐 Código generado: {usuario.codigo_verificacion}")
+            
+            # Verificar que se guardó
+            verificar = Usuario.objects.filter(id=usuario.id).exists()
+            print(f"🔍 Verificación en DB: {verificar}")
             
             # No devolver el código de verificación en la respuesta por seguridad
             response_data = UsuarioSerializer(usuario, context={'request': request}).data
             response_data.pop('codigo_verificacion', None)
             
+            print(f"✅ Usuario creado exitosamente - ID: {usuario.id}")
+            print("="*60 + "\n")
+            
             return Response(response_data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            print(f"❌ Error de validación:")
+            print(f"   {serializer.errors}")
+            print("="*60 + "\n")
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
     except Exception as e:
+        import traceback
+        print(f"\n❌ ERROR CRÍTICO:")
+        print(f"   Tipo: {type(e).__name__}")
+        print(f"   Mensaje: {str(e)}")
+        print(f"\n📋 Traceback:")
+        traceback.print_exc()
+        print("="*60 + "\n")
         logger.error(f"Error al crear usuario: {str(e)}")
-        return Response({'error': 'Error interno del servidor'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({'error': f'Error interno del servidor: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['POST'])
 def generar_codigo(request):
@@ -343,19 +397,65 @@ def generar_codigo(request):
         usuario.codigo_verificacion = codigo
         usuario.save()
         
-        # En un entorno real, aquí enviarías el código por email
-        # send_email_with_code(email, codigo)
-        
         # Para desarrollo: mostrar código en consola
         print(f"\n{'='*60}")
         print(f"🔐 CÓDIGO DE VERIFICACIÓN GENERADO")
         print(f"📧 Usuario: {email}")
-        print(f"� Código: {codigo}")
+        print(f"🔐 Código: {codigo}")
         print(f"⏰ Usa este código para iniciar sesión")
         print(f"{'='*60}\n")
         
         # También usar logger para que aparezca en los logs
         logger.info(f"Código de verificación generado para {email}: {codigo}")
+        
+        # Enviar correo electrónico con el código
+        from django.core.mail import send_mail
+        from django.conf import settings
+        import traceback
+        
+        try:
+            print("📤 Intentando enviar correo...")
+            print(f"   Host: {settings.EMAIL_HOST}")
+            print(f"   Puerto: {settings.EMAIL_PORT}")
+            print(f"   De: {settings.EMAIL_HOST_USER}")
+            print(f"   Para: {email}")
+            
+            asunto = 'Tu codigo de verificacion - ProXimidad'
+            mensaje = f'''
+Hola {usuario.nombre_completo},
+
+Tu codigo de verificacion es:
+
+    {codigo}
+
+Este codigo es valido por 10 minutos.
+
+Si no solicitaste este codigo, ignora este mensaje.
+
+---
+Equipo de ProXimidad
+proximidad.serveirc.com
+            '''
+            
+            resultado = send_mail(
+                asunto,
+                mensaje,
+                settings.EMAIL_HOST_USER,
+                [email],
+                fail_silently=False,
+            )
+            
+            print(f"✅ Correo enviado exitosamente (resultado: {resultado})")
+            print("="*60 + "\n")
+            
+        except Exception as e:
+            print(f"\n❌ ERROR AL ENVIAR CORREO:")
+            print(f"   Tipo: {type(e).__name__}")
+            print(f"   Mensaje: {str(e)}")
+            print(f"\n📋 Traceback completo:")
+            traceback.print_exc()
+            print(f"\n📧 CODIGO DE RESPALDO: {codigo}")
+            print("="*60 + "\n")
         
         return Response({'message': 'Código de verificación enviado'}, status=status.HTTP_200_OK)
     except Usuario.DoesNotExist:
@@ -591,7 +691,7 @@ def crear_comentario(request):
 @api_view(['POST'])
 @parser_classes([MultiPartParser, FormParser])
 def crear_servicio(request):
-    """Crea un nuevo servicio con imagen"""
+    """Crea un nuevo servicio con múltiples imágenes (hasta 5)"""
     try:
         # Validar que el proveedor existe
         proveedor_id = request.data.get('proveedor')
@@ -603,9 +703,32 @@ def crear_servicio(request):
         if categoria_id and not Categoria.objects.filter(categoria_id=categoria_id).exists():
             return Response({'error': 'Categoría no encontrada'}, status=status.HTTP_404_NOT_FOUND)
         
+        # Obtener las imágenes del request
+        imagenes = request.FILES.getlist('imagenes')  # Array de archivos
+        
+        # Validar que haya al menos 1 imagen
+        if not imagenes:
+            return Response({'error': 'Debes subir al menos 1 imagen'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Validar que no excedan 5 imágenes
+        if len(imagenes) > 5:
+            return Response({'error': 'Solo puedes subir un máximo de 5 imágenes'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Crear el servicio (sin incluir 'imagenes' en el serializer)
         serializer = ServiciosSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             servicio = serializer.save()
+            
+            # Guardar las imágenes en ServicioImagenes
+            for index, imagen_file in enumerate(imagenes):
+                ServicioImagenes.objects.create(
+                    servicio=servicio,
+                    imagen=imagen_file,
+                    orden=index + 1,
+                    es_principal=(index == 0)  # La primera es principal
+                )
+            
+            # Retornar el servicio con todas sus imágenes
             response_data = ServiciosSerializer(servicio, context={'request': request}).data
             return Response(response_data, status=status.HTTP_201_CREATED)
         
@@ -613,7 +736,9 @@ def crear_servicio(request):
         
     except Exception as e:
         logger.error(f"Error al crear servicio: {str(e)}")
-        return Response({'error': 'Error interno del servidor'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        import traceback
+        logger.error(traceback.format_exc())
+        return Response({'error': f'Error interno del servidor: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
 def servicio_detail(request, servicio_id):
@@ -639,7 +764,7 @@ def servicio_detail(request, servicio_id):
 @api_view(['PUT'])
 @parser_classes([MultiPartParser, FormParser])
 def actualizar_servicio(request, servicio_id):
-    """Actualiza un servicio existente"""
+    """Actualiza un servicio existente con múltiples imágenes"""
     try:
         servicio = get_object_or_404(Servicios, id=servicio_id)
         
@@ -653,9 +778,31 @@ def actualizar_servicio(request, servicio_id):
         if categoria_id and not Categoria.objects.filter(categoria_id=categoria_id).exists():
             return Response({'error': 'Categoría no encontrada'}, status=status.HTTP_404_NOT_FOUND)
         
+        # Actualizar datos básicos del servicio
         serializer = ServiciosSerializer(servicio, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid():
             servicio_actualizado = serializer.save()
+            
+            # Manejar nuevas imágenes si se envían
+            imagenes = request.FILES.getlist('imagenes')
+            if imagenes:
+                # Validar límite de 5 imágenes
+                total_imagenes = servicio.imagenes.count() + len(imagenes)
+                if total_imagenes > 5:
+                    return Response({
+                        'error': f'El servicio ya tiene {servicio.imagenes.count()} imágenes. Solo puedes agregar {5 - servicio.imagenes.count()} más.'
+                    }, status=status.HTTP_400_BAD_REQUEST)
+                
+                # Agregar nuevas imágenes
+                ultimo_orden = servicio.imagenes.count()
+                for index, imagen_file in enumerate(imagenes):
+                    ServicioImagenes.objects.create(
+                        servicio=servicio_actualizado,
+                        imagen=imagen_file,
+                        orden=ultimo_orden + index + 1,
+                        es_principal=False  # Las nuevas no son principales
+                    )
+            
             response_data = ServiciosSerializer(servicio_actualizado, context={'request': request}).data
             return Response({
                 'message': 'Servicio actualizado exitosamente',
@@ -666,7 +813,9 @@ def actualizar_servicio(request, servicio_id):
         
     except Exception as e:
         logger.error(f"Error al actualizar servicio: {str(e)}")
-        return Response({'error': 'Error interno del servidor'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        import traceback
+        logger.error(traceback.format_exc())
+        return Response({'error': f'Error interno del servidor: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['DELETE'])
 def eliminar_servicio(request, servicio_id):
@@ -680,4 +829,36 @@ def eliminar_servicio(request, servicio_id):
         
     except Exception as e:
         logger.error(f"Error al eliminar servicio: {str(e)}")
+        return Response({'error': 'Error interno del servidor'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+def mis_servicios(request):
+    """Obtiene todos los servicios de un proveedor específico"""
+    try:
+        proveedor_id = request.GET.get('proveedor_id')
+        
+        if not proveedor_id:
+            return Response({'error': 'proveedor_id es requerido'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Verificar que el usuario existe y es proveedor
+        proveedor = get_object_or_404(Usuario, id=proveedor_id, tipo_usuario='proveedor')
+        
+        # Obtener servicios del proveedor (activos e inactivos)
+        servicios = Servicios.objects.filter(proveedor=proveedor).order_by('-fecha_creacion')
+        
+        serializer = ServiciosSerializer(servicios, many=True, context={'request': request})
+        
+        print(f"\n📦 SERVICIOS DEL PROVEEDOR {proveedor.nombre_completo}")
+        print(f"   Total servicios: {servicios.count()}")
+        print(f"   Activos: {servicios.filter(activo=True).count()}")
+        print(f"   Inactivos: {servicios.filter(activo=False).count()}\n")
+        
+        return Response({
+            'servicios': serializer.data,
+            'total': servicios.count(),
+            'activos': servicios.filter(activo=True).count()
+        }, status=status.HTTP_200_OK)
+        
+    except Exception as e:
+        logger.error(f"Error al obtener servicios del proveedor: {str(e)}")
         return Response({'error': 'Error interno del servidor'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

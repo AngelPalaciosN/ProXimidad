@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Header from './modules/Header';
 import Sec1 from './modules/Sec1';
+import Sec1Provider from './modules/Sec1Provider';
 import Sec2 from './modules/Sec2';
 import Sec3 from './modules/Sec3';
 import Footer from './modules/Footer'
@@ -26,7 +27,16 @@ function Home() {
   return (
     <>
       <Header handleAbrirFormulario={handleAbrirFormulario} />
-      <Sec1 handleAbrirFormulario={handleAbrirFormulario} />
+      {user && user.tipo_usuario === 'proveedor' ? (
+        <Sec1Provider 
+          serviciosExitosos={0}
+          serviciosCreados={user.servicios_count || 0}
+          calificacionGeneral={0}
+          proveedorId={user.id}
+        />
+      ) : (
+        <Sec1 handleAbrirFormulario={handleAbrirFormulario} />
+      )}
       <Sec2 />
       <Sec3 handleAbrirFormulario={handleAbrirFormulario} />
       <Footer />

@@ -50,7 +50,7 @@ export default defineConfig(({ mode }) => {
       port: parseInt(env.FRONTEND_PORT) || 5173,
       strictPort: true,
       hmr: {
-        host: '10.1.104.36', // Tu IP detectada por Vite
+        host: '192.168.1.70', // ✅ IP actualizada - Local network
         port: parseInt(env.FRONTEND_PORT) || 5173,
         protocol: 'ws'
       },

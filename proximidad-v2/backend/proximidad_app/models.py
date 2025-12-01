@@ -183,6 +183,43 @@ class Servicios(models.Model):
         return None
 
 
+class ServicioImagenes(models.Model):
+    """Modelo para almacenar múltiples imágenes por servicio (hasta 5)"""
+    id = models.BigAutoField(primary_key=True)
+    servicio = models.ForeignKey(
+        Servicios,
+        on_delete=models.CASCADE,
+        db_column='servicio_id',
+        related_name='imagenes'
+    )
+    imagen = models.ImageField(
+        upload_to=upload_to_servicios,
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp'])]
+    )
+    imagen_url = models.CharField(max_length=255, blank=True, null=True)
+    orden = models.PositiveIntegerField(default=0, db_index=True, help_text='Orden de visualización (1-5)')
+    es_principal = models.BooleanField(default=False, db_index=True, help_text='Indica si es la imagen principal')
+    fecha_creacion = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        db_table = 'servicio_imagenes'
+        ordering = ['orden']
+        indexes = [
+            models.Index(fields=['servicio', 'orden']),
+            models.Index(fields=['es_principal']),
+        ]
+
+    def __str__(self):
+        return f"Imagen {self.orden} del servicio {self.servicio.nombre_servicio}"
+
+    def save(self, *args, **kwargs):
+        """Asegurar que solo haya una imagen principal por servicio"""
+        if self.es_principal:
+            # Quitar es_principal de otras imágenes del mismo servicio
+            ServicioImagenes.objects.filter(servicio=self.servicio, es_principal=True).update(es_principal=False)
+        super().save(*args, **kwargs)
+
+
 class Comentarios(models.Model):
     comentario_id = models.BigAutoField(primary_key=True)
     mensaje = models.TextField()

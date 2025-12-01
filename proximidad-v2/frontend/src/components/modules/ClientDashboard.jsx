@@ -186,10 +186,7 @@ const mockRequests = [
 ]
 
 const ClientDashboard = () => {
-  const { user, loading: authLoading } = useAuth()
-  
-  // Debug: Ver la estructura del usuario
-  console.log("👤 Usuario en ClientDashboard:", user)
+  const { user, loading: authLoading, isAuthenticated } = useAuth()
   
   const [activeTab, setActiveTab] = useState("browse")
   const [services, setServices] = useState([])
@@ -370,6 +367,25 @@ const ClientDashboard = () => {
       <div className="loading-container">
         <div className="loading-spinner"></div>
         <p>Cargando dashboard...</p>
+      </div>
+    )
+  }
+
+  // ✅ Si no está autenticado, mostrar mensaje
+  if (!isAuthenticated || !user) {
+    return (
+      <div className="client-dashboard">
+        <Header />
+        <Container className="mt-5">
+          <div className="empty-state">
+            <FaUser size={48} className="empty-icon" />
+            <h4>Debes iniciar sesión</h4>
+            <p>Para acceder al dashboard de servicios, inicia sesión primero.</p>
+            <Button variant="primary" href="/">
+              Ir a Inicio
+            </Button>
+          </div>
+        </Container>
       </div>
     )
   }

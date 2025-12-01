@@ -20,12 +20,14 @@
 @import 'components/header';
 @import 'components/footer';
 @import 'components/sec1';
+@import 'components/sec1-provider';
+// @import 'components/service-creator'; // ❌ DEPRECADO - Estilos movidos a _modals.scss
 @import 'components/sec2';
 @import 'components/sec3';
 @import 'components/registrar';
 @import 'components/client-dashboard';
 @import 'components/listaust';
-@import 'components/modals';
+@import 'components/modals'; // ✅ Contiene .service-upload-modal para ServiceCreator
 
 // Estructura antigua (temporal - deprecada)
 // @import 'component-styles/Header.scss'; // ✅ Migrado

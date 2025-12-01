@@ -23,7 +23,7 @@ Write-Host "[1/3] Exportando Base de Datos..." -ForegroundColor Cyan
 Write-Host "[INFO] Verificando MySQL..." -ForegroundColor Yellow
 $mysqlRunning = Get-Process mysqld -ErrorAction SilentlyContinue
 if (-not $mysqlRunning) {
-    Write-Host "[ERROR] MySQL no está corriendo. Inicia Laragon primero." -ForegroundColor Red
+    Write-Host "[ERROR] MySQL no esta corriendo. Inicia Laragon primero." -ForegroundColor Red
     Read-Host "`nPresiona Enter para salir"
     exit 1
 }
@@ -154,22 +154,22 @@ if (Test-Path "media_backup.rar") {
 # ============================================================
 Write-Host ""
 Write-Host "============================================================" -ForegroundColor Green
-Write-Host "     ✅ BACKUP COMPLETADO" -ForegroundColor Green
+Write-Host "     BACKUP COMPLETADO" -ForegroundColor Green
 Write-Host "============================================================" -ForegroundColor Green
 Write-Host ""
-Write-Host "📁 Archivos creados:" -ForegroundColor Cyan
+Write-Host "Archivos creados:" -ForegroundColor Cyan
 Write-Host "   1. database/proxima_refinado.sql" -ForegroundColor Yellow
-Write-Host "   2. media_backup.rar (protegido con contraseña)" -ForegroundColor Yellow
+Write-Host "   2. media_backup.rar (protegido con contrasena)" -ForegroundColor Yellow
 Write-Host ""
-Write-Host "🔐 Contraseña del RAR: $rarPassPlain" -ForegroundColor Cyan
+Write-Host "Contrasena del RAR: $rarPassPlain" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "📤 Para subir a GitHub:" -ForegroundColor Cyan
+Write-Host "Para subir a GitHub:" -ForegroundColor Cyan
 Write-Host "   git add database/proxima_refinado.sql media_backup.rar" -ForegroundColor Yellow
-Write-Host "   git commit -m `"Actualizar backup BD + imágenes`"" -ForegroundColor Yellow
+Write-Host "   git commit -m `"Actualizar backup BD + imagenes`"" -ForegroundColor Yellow
 Write-Host "   git push" -ForegroundColor Yellow
 Write-Host ""
-Write-Host "⚠️  IMPORTANTE:" -ForegroundColor Yellow
-Write-Host "   - La BD está sin contraseña (database/proxima_refinado.sql)" -ForegroundColor White
-Write-Host "   - Las imágenes están protegidas (media_backup.rar)" -ForegroundColor White
+Write-Host "IMPORTANTE:" -ForegroundColor Yellow
+Write-Host "   - La BD esta sin contrasena (database/proxima_refinado.sql)" -ForegroundColor White
+Write-Host "   - Las imagenes estan protegidas (media_backup.rar)" -ForegroundColor White
 Write-Host ""
 Read-Host "Presiona Enter para salir"

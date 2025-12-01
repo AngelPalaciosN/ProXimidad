@@ -1,0 +1,360 @@
+# ============================================================
+#           PROXIMIDAD V3 - PLAN DE DESARROLLO
+# ============================================================
+# Fecha: 30 de Noviembre, 2025
+# Estado: FASE 1 Y FASE 2 COMPLETADAS ✅✅
+# ============================================================
+
+## ✅ COMPLETADO HOY:
+
+### 1. Integración de Sec1Provider (FASE 1)
+- ✅ Componente Sec1Provider.jsx copiado a frontend/src/components/modules/
+- ✅ SCSS _sec1-provider.scss copiado a frontend/src/scss/components/
+- ✅ Importado en style.scss
+- ✅ Lógica condicional en Home.jsx (muestra Sec1Provider solo para proveedores)
+- ✅ Usa datos existentes: servicios_count del usuario
+
+### 2. Sistema de Correos Electrónicos
+- ✅ Configuración de Gmail SMTP
+- ✅ Credenciales almacenadas en .env
+- ✅ Función de envío de códigos por email
+- ✅ Logs detallados en consola del backend
+- ✅ Comando test_email para pruebas
+- ✅ Fallback a consola si falla el envío
+
+### 3. Scripts de Instalación y Arranque
+- ✅ install.ps1 arreglado (sin emojis problemáticos)
+- ✅ start.ps1 arreglado (ventanas visibles con títulos)
+- ✅ Detección automática de IP
+- ✅ Manejo de errores mejorado
+
+### 4. Configuración del Proyecto
+- ✅ API_URL con fallback (DNS + IP local)
+- ✅ fetchWithFallback para redundancia
+- ✅ .env configurado en frontend y backend
+- ✅ CORS configurado correctamente
+
+### 5. Creador/Editor de Servicios (FASE 2) ✅
+- ✅ Backend: Endpoint GET /api/servicios/mis-servicios/
+- ✅ Backend: Endpoints crear/actualizar/eliminar ya existían
+- ✅ Frontend: ServiceCreator.jsx modal fullscreen
+- ✅ Frontend: Upload múltiple de imágenes con preview
+- ✅ Frontend: Campos dinámicos (¿Qué incluye?, Tags)
+- ✅ Frontend: Validaciones (precio > 0, descripción min 50 caracteres)
+- ✅ Frontend: Lista de servicios en Sec1Provider
+- ✅ Frontend: Botones editar/eliminar por servicio
+- ✅ SCSS: _service-creator.scss con animaciones
+- ✅ SCSS: Estilos para tarjetas de servicios
+- ✅ Integración completa en panel de proveedor
+
+---
+
+## 📋 FASES PENDIENTES:
+
+### FASE 2: CREADOR/EDITOR DE SERVICIOS ✅ COMPLETADA
+
+**Objetivo**: Permitir a proveedores crear y editar servicios con interfaz profesional
+
+#### Backend:
+1. **Endpoint POST /api/servicios/crear/**
+   - Recibir FormData con múltiples imágenes
+   - Validar campos obligatorios
+   - Guardar imágenes en media/servicios/imagenes/
+   - Asociar servicio al proveedor autenticado
+
+2. **Endpoint PUT /api/servicios/{id}/editar/**
+   - Permitir actualizar solo servicios propios
+   - Manejar actualización de imágenes (agregar/eliminar)
+   - Validar permisos del proveedor
+
+3. **Modelo Servicios - Campos adicionales** (opcional):
+   - incluye: TextField JSON con array de ítems incluidos
+   - tags: TextField JSON con array de tecnologías/etiquetas
+   - tiempo_entrega: CharField con estimado de tiempo
+
+#### Frontend:
+1. **Componente ServiceCreator.jsx**
+   - Modal fullscreen (size="xl")
+   - Formulario con Cards organizadas:
+     * Información Básica (nombre, precio, descripción, categoría)
+     * Galería de Imágenes (múltiple upload con preview)
+     * ¿Qué Incluye? (campos dinámicos)
+     * Tags/Tecnologías (chips dinámicos)
+     * Ubicación y tiempo estimado
+   
+2. **Integrar en Sec1Provider**
+   - Botón "➕ Crear Nuevo Servicio"
+   - Lista de servicios creados con opción de editar
+   - Ver estadísticas de visualizaciones
+
+3. **Validaciones Frontend**
+   - Precio > 0
+   - Al menos 1 imagen
+   - Descripción mínimo 50 caracteres
+   - Categoría obligatoria
+
+#### Archivos a Crear/Modificar:
+```
+backend/proximidad_app/views.py
+  - crear_servicio_view()
+  - editar_servicio_view()
+
+frontend/src/components/modules/ServiceCreator.jsx (NUEVO)
+frontend/src/scss/components/_service-creator.scss (NUEVO)
+frontend/src/components/modules/Sec1Provider.jsx (MODIFICAR)
+```
+
+---
+
+### FASE 3: SISTEMA DE CALIFICACIONES Y RESEÑAS ⭐ PRIORIDAD MEDIA
+
+**Objetivo**: Activar calificaciones y comentarios de clientes
+
+#### Backend:
+1. **Endpoint POST /api/calificaciones/crear/**
+   - Recibir: service_id, rating (1-5), comentario
+   - Validar que el usuario haya contratado el servicio
+   - Prevenir calificaciones duplicadas
+   - Actualizar promedio automáticamente
+
+2. **Endpoint GET /api/servicios/{id}/calificaciones/**
+   - Listar todas las calificaciones del servicio
+   - Incluir información del usuario (nombre, foto)
+   - Paginación (10 por página)
+   - Ordenar por fecha descendente
+
+3. **Calcular promedio_calificacion**
+   - Signal post_save en Comentarios
+   - Actualizar campo en Servicios
+   - Caché para optimizar
+
+#### Frontend:
+1. **Componente RatingWidget.jsx**
+   - Modal para calificar
+   - 5 estrellas interactivas
+   - Campo de comentario
+   - Integrar después de "servicio completado"
+
+2. **Mostrar Calificaciones en ServiceDetailModal**
+   - Sección de reseñas
+   - Avatar del usuario
+   - Fecha de calificación
+   - Botón "Ver todas" con paginación
+
+3. **Actualizar Sec1Provider**
+   - Mostrar calificación_promedio real desde DB
+   - Calcular desde tabla comentarios
+
+#### Archivos a Modificar:
+```
+backend/proximidad_app/models.py
+  - Signal para actualizar promedios
+
+backend/proximidad_app/views.py
+  - crear_calificacion_view()
+  - listar_calificaciones_view()
+
+frontend/src/components/modules/RatingWidget.jsx (NUEVO)
+frontend/src/scss/components/_rating-widget.scss (NUEVO)
+frontend/src/components/modules/ServiceDetailModal.jsx (MODIFICAR)
+```
+
+---
+
+### FASE 4: CAMPO servicios_exitosos EN USUARIO ⭐ PRIORIDAD BAJA
+
+**Objetivo**: Trackear servicios completados del proveedor
+
+#### Backend:
+1. **Migración Django**
+   ```python
+   # backend/proximidad_app/migrations/000X_agregar_servicios_exitosos.py
+   
+   from django.db import migrations, models
+   
+   class Migration(migrations.Migration):
+       dependencies = [
+           ('proximidad_app', '0008_remove_favoritos_unique_usuario_favorito_and_more'),
+       ]
+       
+       operations = [
+           migrations.AddField(
+               model_name='usuario',
+               name='servicios_exitosos',
+               field=models.IntegerField(default=0, verbose_name='Servicios Exitosos'),
+           ),
+       ]
+   ```
+
+2. **Modelo Solicitudes** (si no existe):
+   - solicitud_id (PK)
+   - servicio_fk (FK a Servicios)
+   - cliente_fk (FK a Usuario)
+   - proveedor_fk (FK a Usuario)
+   - estado (pendiente, aceptada, completada, cancelada)
+   - fecha_solicitud
+   - fecha_completado
+
+3. **Signal para incrementar contador**
+   ```python
+   from django.db.models.signals import post_save
+   
+   @receiver(post_save, sender=Solicitud)
+   def incrementar_servicios_exitosos(sender, instance, **kwargs):
+       if instance.estado == 'completada':
+           proveedor = instance.proveedor_fk
+           proveedor.servicios_exitosos += 1
+           proveedor.save()
+   ```
+
+4. **Actualizar UsuarioSerializer**
+   - Agregar campo servicios_exitosos
+   - Exponer en API
+
+---
+
+### FASE 5: MEJORAS Y OPTIMIZACIONES ⭐ PRIORIDAD BAJA
+
+#### Seguridad:
+- [ ] Implementar JWT tokens reales (actualmente usa 'dummy_token')
+- [ ] Middleware de autenticación en endpoints protegidos
+- [ ] Rate limiting en endpoints de email
+- [ ] Validación de tamaño de imágenes (max 5MB)
+
+#### Performance:
+- [ ] Lazy loading de imágenes en galería
+- [ ] Caché de servicios populares (Redis opcional)
+- [ ] Índices en campos frecuentes de búsqueda
+- [ ] Comprimir imágenes automáticamente (Pillow)
+
+#### UI/UX:
+- [ ] Toast notifications con react-toastify
+- [ ] Loading skeletons en lugar de spinners
+- [ ] Animaciones de transición suaves
+- [ ] Modo oscuro (opcional)
+
+#### Deployment:
+- [ ] Configurar Gunicorn para producción
+- [ ] Nginx como reverse proxy
+- [ ] SSL/HTTPS con Let's Encrypt
+- [ ] Backup automático de base de datos
+- [ ] Logs en archivos rotativos
+
+---
+
+## 🗂️ ESTRUCTURA DE ARCHIVOS ACTUAL:
+
+```
+proximidad-v2/
+├── backend/
+│   ├── .env (NUEVO - credenciales locales)
+│   ├── .env.production (ACTUALIZADO - para Raspberry Pi)
+│   ├── core/
+│   │   └── settings.py (MODIFICADO - email config)
+│   ├── proximidad_app/
+│   │   ├── auth_views.py (MODIFICADO - logs detallados)
+│   │   └── management/commands/
+│   │       ├── test_email.py (NUEVO)
+│   │       └── delete_user.py (NUEVO)
+│   └── media/
+│       ├── usuarios/
+│       └── servicios/imagenes/
+│
+├── frontend/
+│   ├── .env (ACTUALIZADO - IP dinámica)
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Home.jsx (MODIFICADO - renderizado condicional)
+│   │   │   └── modules/
+│   │   │       └── Sec1Provider.jsx (NUEVO ✅)
+│   │   ├── config/
+│   │   │   └── env.js (MODIFICADO - fallback URLs)
+│   │   └── scss/
+│   │       ├── style.scss (MODIFICADO - import sec1-provider)
+│   │       └── components/
+│   │           └── _sec1-provider.scss (NUEVO ✅)
+│   └── dist/ (build para producción)
+│
+└── scripts/
+    ├── install.ps1 (ARREGLADO ✅)
+    ├── start.ps1 (ARREGLADO ✅)
+    ├── crear_backup.ps1 (ARREGLADO)
+    └── ver_ip.ps1
+
+```
+
+---
+
+## 📝 NOTAS IMPORTANTES:
+
+### Credenciales Gmail:
+```
+Email: palaciosangeldavidn@gmail.com
+App Password: pnhx zscz cujc vfrg
+```
+⚠️ NO COMMITEAR .env al repositorio (ya está en .gitignore)
+
+### IP Actual del Proyecto:
+- Local: 192.168.1.70
+- Externa: proximidad.serveirc.com
+
+### Usuarios de Prueba en DB:
+- palaciosangel@gmail.com (Angel) - Proveedor
+- D@gmail.com (David)
+
+### Comandos Útiles:
+```powershell
+# Iniciar proyecto
+cd scripts
+.\start.ps1
+
+# Reinstalar proyecto
+.\install.ps1
+
+# Probar email
+cd backend
+python manage.py test_email tu@email.com
+
+# Eliminar usuario
+python manage.py delete_user correo@ejemplo.com
+
+# Ver usuarios
+python manage.py shell -c "from proximidad_app.models import Usuario; [print(f'{u.id}: {u.correo_electronico}') for u in Usuario.objects.all()]"
+```
+
+---
+
+## 🎯 ORDEN DE IMPLEMENTACIÓN SUGERIDO:
+
+**Mañana (1 de Diciembre)**:
+1. ☐ FASE 2: ServiceCreator (4-6 horas)
+   - Backend endpoints primero
+   - Luego componente frontend
+   - Testing completo
+
+**Próximos días**:
+2. ☐ FASE 3: Calificaciones (3-4 horas)
+3. ☐ FASE 4: Campo servicios_exitosos (1-2 horas)
+4. ☐ FASE 5: Optimizaciones (según tiempo disponible)
+
+---
+
+## 🐛 PROBLEMAS CONOCIDOS:
+
+1. ✅ RESUELTO: Scripts con emojis causaban errores de codificación
+2. ✅ RESUELTO: Entorno virtual corrupto (ahora usa Python global como fallback)
+3. ✅ RESUELTO: MySQL no en PATH (se agregó detección de rutas de Laragon)
+4. ⚠️ PENDIENTE: JWT tokens dummy (usar djangorestframework-simplejwt correctamente)
+5. ⚠️ PENDIENTE: Validación de tipos de usuario en endpoints (cualquiera puede crear servicios)
+
+---
+
+## 📞 SOPORTE Y REFERENCIAS:
+
+- Django Email: https://docs.djangoproject.com/en/5.0/topics/email/
+- React Bootstrap: https://react-bootstrap.github.io/
+- Lucide Icons: https://lucide.dev/icons/
+
+---
+
+FIN DEL DOCUMENTO - Última actualización: 30/Nov/2025 - 21:45 hrs

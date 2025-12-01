@@ -24,8 +24,8 @@ const ServiceDetailModal = ({ show, onHide, service, user, onToggleFavorite, isF
   const [showRequestModal, setShowRequestModal] = useState(false)
   const [activeImageIndex, setActiveImageIndex] = useState(0)
 
+  // ✅ Early return BEFORE any hooks
   if (!service) {
-    console.warn('⚠️ ServiceDetailModal: No service provided')
     return null
   }
 
@@ -125,12 +125,6 @@ const ServiceDetailModal = ({ show, onHide, service, user, onToggleFavorite, isF
       month: "long",
       day: "numeric",
     })
-  }
-
-  // Safety check: no renderizar si no hay servicio
-  if (!service) {
-    console.warn('⚠️ ServiceDetailModal: No service provided')
-    return null
   }
 
   return (

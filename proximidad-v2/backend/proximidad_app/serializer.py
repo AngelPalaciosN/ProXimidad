@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Servicios, Usuario, Favoritos, Categoria, Comentarios
+from .models import Servicios, Usuario, Favoritos, Categoria, Comentarios, ServicioImagenes
 
 
 class CategoriaSerializer(serializers.ModelSerializer):
@@ -123,11 +123,36 @@ class UsuarioBasicSerializer(serializers.ModelSerializer):
         return 0
 
 
+class ServicioImagenesSerializer(serializers.ModelSerializer):
+    """Serializer para imágenes de servicios"""
+    imagen_url = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = ServicioImagenes
+        fields = ['id', 'imagen', 'imagen_url', 'orden', 'es_principal', 'fecha_creacion']
+        read_only_fields = ['id', 'fecha_creacion', 'imagen_url']
+        extra_kwargs = {
+            'imagen': {'write_only': True}
+        }
+    
+    def get_imagen_url(self, obj):
+        """Devolver la URL completa de la imagen"""
+        if obj.imagen:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.imagen.url)
+            return obj.imagen.url
+        elif obj.imagen_url:
+            return obj.imagen_url
+        return None
+
+
 class ServiciosSerializer(serializers.ModelSerializer):
     """Serializer optimizado para servicios"""
     categoria_nombre = serializers.CharField(source='categoria.nombre_categoria', read_only=True)
     proveedor_nombre = serializers.CharField(source='proveedor.nombre_completo', read_only=True)
     imagen_url = serializers.SerializerMethodField()
+    imagenes = ServicioImagenesSerializer(many=True, read_only=True)
     comentarios_count = serializers.SerializerMethodField()
     promedio_calificacion = serializers.SerializerMethodField()
     proveedor_info = UsuarioBasicSerializer(source='proveedor', read_only=True)
@@ -137,14 +162,14 @@ class ServiciosSerializer(serializers.ModelSerializer):
         model = Servicios
         fields = [
             'id', 'nombre_servicio', 'descripcion', 'precio_base', 
-            'imagen_url', 'imagen', 'activo', 'destacado', 'views',
+            'imagen_url', 'imagen', 'imagenes', 'activo', 'destacado', 'views',
             'ubicacion', 'categoria', 'categoria_nombre', 'categoria_info',
             'proveedor', 'proveedor_nombre', 'proveedor_info',
             'fecha_creacion', 'fecha_actualizacion',
             'comentarios_count', 'promedio_calificacion'
         ]
         read_only_fields = [
-            'id', 'fecha_creacion', 'fecha_actualizacion', 'imagen_url',
+            'id', 'fecha_creacion', 'fecha_actualizacion', 'imagen_url', 'imagenes',
             'proveedor_info', 'categoria_info', 'comentarios_count', 'promedio_calificacion'
         ]
         extra_kwargs = {
@@ -152,7 +177,24 @@ class ServiciosSerializer(serializers.ModelSerializer):
         }
     
     def get_imagen_url(self, obj):
-        """Devolver la URL completa de la imagen del servicio"""
+        """Devolver la URL completa de la imagen principal o la primera imagen disponible"""
+        # Primero intentar con la tabla servicio_imagenes
+        imagen_principal = obj.imagenes.filter(es_principal=True).first()
+        if imagen_principal:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(imagen_principal.imagen.url)
+            return imagen_principal.imagen.url
+        
+        # Si no hay imagen principal, tomar la primera
+        primera_imagen = obj.imagenes.first()
+        if primera_imagen:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(primera_imagen.imagen.url)
+            return primera_imagen.imagen.url
+        
+        # Fallback a imagen antigua del modelo Servicios
         if obj.imagen:
             request = self.context.get('request')
             if request:

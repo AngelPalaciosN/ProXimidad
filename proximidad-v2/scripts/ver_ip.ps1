@@ -128,18 +128,18 @@ $frontendRunning = Test-Port 5173
 
 if ($backendRunning) {
     Write-Host "  Backend (8000):  " -NoNewline -ForegroundColor White
-    Write-Host "✓ ACTIVO" -ForegroundColor Green
+    Write-Host "ACTIVO" -ForegroundColor Green
 } else {
     Write-Host "  Backend (8000):  " -NoNewline -ForegroundColor White
-    Write-Host "✗ INACTIVO" -ForegroundColor Red
+    Write-Host "INACTIVO" -ForegroundColor Red
 }
 
 if ($frontendRunning) {
     Write-Host "  Frontend (5173): " -NoNewline -ForegroundColor White
-    Write-Host "✓ ACTIVO" -ForegroundColor Green
+    Write-Host "ACTIVO" -ForegroundColor Green
 } else {
     Write-Host "  Frontend (5173): " -NoNewline -ForegroundColor White
-    Write-Host "✗ INACTIVO" -ForegroundColor Red
+    Write-Host "INACTIVO" -ForegroundColor Red
 }
 
 Write-Host ""

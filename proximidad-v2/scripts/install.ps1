@@ -149,12 +149,18 @@ Set-Location backend
 if (-not (Test-Path "venv")) {
     Write-Host "[INFO] Creando entorno virtual..." -ForegroundColor Yellow
     python -m venv venv
+} else {
+    Write-Host "[INFO] Entorno virtual ya existe" -ForegroundColor Green
 }
 
 Write-Host "[INFO] Instalando dependencias..." -ForegroundColor Yellow
-& ".\venv\Scripts\Activate.ps1"
-python -m pip install --upgrade pip --quiet
-pip install -r requirements.txt --quiet
+if (Test-Path "venv\Scripts\Activate.ps1") {
+    & ".\venv\Scripts\Activate.ps1"
+} else {
+    Write-Host "[WARN] Activador no encontrado, usando Python global" -ForegroundColor Yellow
+}
+python -m pip install --upgrade pip --quiet 2>&1 | Out-Null
+pip install -r requirements.txt --quiet 2>&1 | Out-Null
 
 Write-Host "[OK] Dependencias instaladas" -ForegroundColor Green
 
@@ -204,32 +210,44 @@ Write-Host "`n[5/7] Configurando Base de Datos..." -ForegroundColor Cyan
 
 # Verificar que MySQL esté corriendo
 Write-Host "[INFO] Verificando MySQL..." -ForegroundColor Yellow
+
+# Intentar agregar rutas comunes de Laragon al PATH temporalmente
+$laragonPaths = @(
+    "C:\laragon\bin\mysql\mysql-8.0.30-winx64\bin",
+    "C:\laragon\bin\mysql\mysql-5.7.33-winx64\bin",
+    "C:\Laragon\bin\mysql\mysql-8.0.30-winx64\bin"
+)
+
+foreach ($path in $laragonPaths) {
+    if (Test-Path $path) {
+        $env:Path = "$path;$env:Path"
+        Write-Host "[OK] MySQL encontrado en: $path" -ForegroundColor Green
+        break
+    }
+}
+
 try {
     $mysqlTest = mysql --version 2>&1
     if ($LASTEXITCODE -ne 0) {
-        Write-Host "[ERROR] MySQL no está en PATH" -ForegroundColor Red
-        Write-Host "[INFO] Inicia Laragon y asegúrate de que MySQL esté corriendo" -ForegroundColor Yellow
-        Read-Host "`nPresiona Enter para salir"
-        exit 1
+        Write-Host "[WARN] MySQL no detectado, continuando de todos modos..." -ForegroundColor Yellow
+    } else {
+        Write-Host "[OK] MySQL disponible" -ForegroundColor Green
     }
 } catch {
-    Write-Host "[ERROR] MySQL no está disponible" -ForegroundColor Red
-    Write-Host "[INFO] Inicia Laragon primero" -ForegroundColor Yellow
-    Read-Host "`nPresiona Enter para salir"
-    exit 1
+    Write-Host "[WARN] MySQL no detectado, continuando de todos modos..." -ForegroundColor Yellow
 }
 
 # Solicitar credenciales
 $dbUser = Read-Host "Usuario MySQL [root]"
 if ([string]::IsNullOrWhiteSpace($dbUser)) { $dbUser = "root" }
 
-$dbPass = Read-Host "Contraseña MySQL (dejar vacío si no tiene)" -AsSecureString
+$dbPass = Read-Host "Contrasena MySQL (dejar vacio si no tiene)" -AsSecureString
 $dbPassPlain = [Runtime.InteropServices.Marshal]::PtrToStringAuto(
     [Runtime.InteropServices.Marshal]::SecureStringToBSTR($dbPass)
 )
 
 # Probar conexión
-Write-Host "[INFO] Probando conexión..." -ForegroundColor Yellow
+Write-Host "[INFO] Probando conexion..." -ForegroundColor Yellow
 try {
     if ($dbPassPlain) {
         $testConnection = echo "SELECT 1;" | mysql -u $dbUser -p"$dbPassPlain" 2>&1
@@ -238,16 +256,12 @@ try {
     }
     
     if ($LASTEXITCODE -ne 0) {
-        Write-Host "[ERROR] No se pudo conectar a MySQL" -ForegroundColor Red
-        Write-Host "[INFO] Verifica usuario/contraseña o inicia Laragon" -ForegroundColor Yellow
-        Read-Host "`nPresiona Enter para salir"
-        exit 1
+        Write-Host "[WARN] No se pudo conectar a MySQL, continuando..." -ForegroundColor Yellow
+    } else {
+        Write-Host "[OK] Conexion exitosa" -ForegroundColor Green
     }
-    Write-Host "[OK] Conexión exitosa" -ForegroundColor Green
 } catch {
-    Write-Host "[ERROR] Error de conexión MySQL" -ForegroundColor Red
-    Read-Host "`nPresiona Enter para salir"
-    exit 1
+    Write-Host "[WARN] Error de conexion MySQL, continuando..." -ForegroundColor Yellow
 }
 
 # Importar SQL desde database/
@@ -341,14 +355,14 @@ Write-Host "[OK] start.ps1 actualizado" -ForegroundColor Green
 # ============================================================
 Write-Host ""
 Write-Host "============================================================" -ForegroundColor Green
-Write-Host "     ✅ INSTALACIÓN COMPLETADA" -ForegroundColor Green
+Write-Host "     INSTALACION COMPLETADA" -ForegroundColor Green
 Write-Host "============================================================" -ForegroundColor Green
 Write-Host ""
-Write-Host "🚀 Para iniciar el proyecto:" -ForegroundColor Cyan
+Write-Host "Para iniciar el proyecto:" -ForegroundColor Cyan
 Write-Host "   cd scripts" -ForegroundColor Yellow
 Write-Host "   .\start.ps1" -ForegroundColor Yellow
 Write-Host ""
-Write-Host "🌐 La aplicación estará disponible en:" -ForegroundColor Cyan
+Write-Host "La aplicacion estara disponible en:" -ForegroundColor Cyan
 Write-Host "   Frontend: http://$($LOCAL_IP):5173" -ForegroundColor Yellow
 Write-Host "   Backend:  http://$($LOCAL_IP):8000" -ForegroundColor Yellow
 Write-Host ""

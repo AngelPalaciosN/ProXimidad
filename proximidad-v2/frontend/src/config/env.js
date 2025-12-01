@@ -1,8 +1,8 @@
 // Configuración de variables de entorno
 export const config = {
   // API Configuration
-  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://proximidad.serveirc.com/api',
-  API_FALLBACK_URL: 'http://192.168.1.50/api', // IP local como fallback
+  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://192.168.1.70:8000/api',
+  API_FALLBACK_URL: 'http://localhost:8000/api', // Localhost como fallback
   
   // App Configuration
   APP_TITLE: import.meta.env.VITE_APP_TITLE || 'ProXimidad',
