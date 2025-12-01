@@ -1,7 +1,8 @@
 // Configuración de variables de entorno
 export const config = {
   // API Configuration
-  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://10.1.104.36:8000/api',
+  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://proximidad.serveirc.com/api',
+  API_FALLBACK_URL: 'http://192.168.1.50/api', // IP local como fallback
   
   // App Configuration
   APP_TITLE: import.meta.env.VITE_APP_TITLE || 'ProXimidad',
@@ -24,13 +25,39 @@ export const config = {
   IS_PRODUCTION: import.meta.env.PROD,
 };
 
-// Helper function para construir URLs de API
+// Helper function para construir URLs de API con fallback
 export const buildApiUrl = (endpoint) => {
   const baseUrl = config.API_BASE_URL.endsWith('/') 
     ? config.API_BASE_URL.slice(0, -1) 
     : config.API_BASE_URL;
   const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
   return `${baseUrl}${cleanEndpoint}`;
+};
+
+// Helper function para hacer fetch con fallback automático
+export const fetchWithFallback = async (endpoint, options = {}) => {
+  const primaryUrl = buildApiUrl(endpoint);
+  
+  try {
+    const response = await fetch(primaryUrl, options);
+    if (response.ok) return response;
+    throw new Error(`HTTP error! status: ${response.status}`);
+  } catch (error) {
+    console.warn(`Intento con URL principal falló (${primaryUrl}), intentando con fallback...`);
+    
+    // Construir URL de fallback
+    const fallbackBaseUrl = config.API_FALLBACK_URL.endsWith('/') 
+      ? config.API_FALLBACK_URL.slice(0, -1) 
+      : config.API_FALLBACK_URL;
+    const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+    const fallbackUrl = `${fallbackBaseUrl}${cleanEndpoint}`;
+    
+    const fallbackResponse = await fetch(fallbackUrl, options);
+    if (!fallbackResponse.ok) {
+      throw new Error(`Ambas URLs fallaron. Status: ${fallbackResponse.status}`);
+    }
+    return fallbackResponse;
+  }
 };
 
 // Helper function para validar archivos
