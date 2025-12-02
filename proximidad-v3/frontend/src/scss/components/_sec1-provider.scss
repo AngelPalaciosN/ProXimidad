@@ -68,23 +68,27 @@
     font-weight: 700;
     line-height: 1;
     margin-bottom: 0.5rem;
+    color: $text-light !important; // Forzar blanco
   }
 
   .metric-suffix {
     font-size: 1.5rem;
     font-weight: 600;
+    color: $text-light !important; // Forzar blanco
   }
 
   .metric-label {
     font-size: 1.1rem;
     font-weight: 600;
     margin-bottom: 0.25rem;
+    color: $text-light !important; // Forzar blanco
   }
 
   .metric-description {
     font-size: 0.875rem;
-    opacity: 0.8;
+    opacity: 0.9;
     margin: 0;
+    color: $text-light !important; // Forzar blanco
   }
 
   // Bloque 1: Servicios Exitosos - Azul Primary (#005187)
@@ -222,6 +226,31 @@
   @include media-breakpoint-down(sm) {
     .section-header h2 {
       font-size: 1.75rem;
+    }
+  }
+
+  // Tarjetas de servicios
+  .servicio-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: none;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .card-footer {
+      padding: 1rem;
+    }
+
+    .btn-outline-primary,
+    .btn-outline-danger {
+      border-radius: 0.5rem;
+      transition: all 0.2s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+      }
     }
   }
 }
