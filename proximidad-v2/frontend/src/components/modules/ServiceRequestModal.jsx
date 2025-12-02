@@ -3,6 +3,9 @@
 import { useState } from "react"
 import { Modal, Form, Button, Alert, Row, Col } from "react-bootstrap"
 import { FaCalendarAlt, FaDollarSign, FaFileAlt, FaUser, FaClock, FaExclamationTriangle } from "react-icons/fa"
+import axios from "axios"
+import { buildApiUrl } from "../../config/env"
+import Swal from "sweetalert2"
 
 const ServiceRequestModal = ({ show, onHide, service, user }) => {
   const [formData, setFormData] = useState({
@@ -25,12 +28,38 @@ const ServiceRequestModal = ({ show, onHide, service, user }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    
+    // Validar que el usuario esté logueado
+    if (!user || !user.id) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Debes iniciar sesión',
+        text: 'Para solicitar un servicio debes estar registrado e iniciar sesión',
+      })
+      return
+    }
+    
     setLoading(true)
 
     try {
-      // Simular envío de solicitud
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-
+      // Preparar datos para enviar
+      const solicitudData = {
+        servicio: service.id,
+        cliente: user.id,
+        descripcion_personalizada: formData.descripcion_personalizada,
+        urgencia: formData.urgencia,
+        fecha_preferida: formData.fecha_preferida || null,
+        presupuesto_maximo: formData.presupuesto_maximo || null,
+        comentarios_adicionales: formData.comentarios_adicionales || '',
+      }
+      
+      console.log('📤 Enviando solicitud:', solicitudData)
+      
+      // Enviar solicitud al backend
+      const response = await axios.post(buildApiUrl('/solicitudes/crear/'), solicitudData)
+      
+      console.log('✅ Solicitud creada:', response.data)
+      
       setShowSuccess(true)
 
       // Resetear formulario después de 3 segundos
@@ -45,8 +74,16 @@ const ServiceRequestModal = ({ show, onHide, service, user }) => {
           comentarios_adicionales: "",
         })
       }, 3000)
+      
     } catch (error) {
-      console.error("Error al enviar solicitud:", error)
+      console.error("❌ Error al enviar solicitud:", error)
+      
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al enviar solicitud',
+        text: error.response?.data?.error || 'No se pudo enviar la solicitud. Inténtalo de nuevo.',
+      })
+      
     } finally {
       setLoading(false)
     }
@@ -70,8 +107,7 @@ const ServiceRequestModal = ({ show, onHide, service, user }) => {
           </div>
           <h3 className="text-success mb-3">¡Solicitud Enviada!</h3>
           <p className="mb-4">
-            Tu solicitud ha sido enviada a <strong>{service.proveedor.nombre}</strong>. Te notificaremos cuando
-            responda.
+            Tu solicitud ha sido enviada a <strong>{service.proveedor_info?.nombre_completo || service.proveedor_nombre || 'el proveedor'}</strong>. Recibirás un email de confirmación y te notificaremos cuando responda.
           </p>
           <div className="alert alert-info">
             <small>

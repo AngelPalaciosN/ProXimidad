@@ -232,14 +232,10 @@ const ClientDashboard = () => {
         setServices(serviciosTransformados)
         console.log('Servicios cargados en ClientDashboard:', serviciosTransformados)
         
-        // Datos mock para requests hasta que se implemente
-        setMyRequests(mockRequests)
-        
       } catch (error) {
         console.error('Error cargando servicios:', error)
         // Fallback a datos mock si falla la API
         setServices(mockServices)
-        setMyRequests(mockRequests)
       } finally {
         setLoading(false)
       }
@@ -247,6 +243,29 @@ const ClientDashboard = () => {
     
     fetchData()
   }, [])
+  
+  // Cargar solicitudes del cliente cuando el usuario esté disponible
+  useEffect(() => {
+    const fetchSolicitudes = async () => {
+      if (user && user.id) {
+        try {
+          console.log('📥 Cargando solicitudes para cliente:', user.id)
+          const response = await axios.get(buildApiUrl(`/solicitudes/cliente/${user.id}/`))
+          const solicitudesAPI = response.data.solicitudes || []
+          
+          console.log('✅ Solicitudes cargadas:', solicitudesAPI)
+          setMyRequests(solicitudesAPI)
+          
+        } catch (error) {
+          console.error('❌ Error cargando solicitudes:', error)
+          // Fallback a mock si falla
+          setMyRequests(mockRequests)
+        }
+      }
+    }
+    
+    fetchSolicitudes()
+  }, [user?.id, user])
 
   // Cargar favoritos cuando el usuario esté disponible
   useEffect(() => {
@@ -682,7 +701,7 @@ const ClientDashboard = () => {
                       <Card className="request-card">
                         <Card.Body>
                           <div className="request-header">
-                            <h5>{request.servicio}</h5>
+                            <h5>{request.servicio_nombre || request.servicio}</h5>
                             {getStatusBadge(request.estado)}
                           </div>
 
@@ -690,20 +709,24 @@ const ClientDashboard = () => {
                             <div className="detail-row">
                               <FaUser className="detail-icon" />
                               <span>
-                                <strong>Proveedor:</strong> {request.proveedor}
+                                <strong>Proveedor:</strong> {request.proveedor_nombre || request.proveedor}
                               </span>
                             </div>
                             <div className="detail-row">
                               <FaDollarSign className="detail-icon" />
                               <span>
-                                <strong>Precio acordado:</strong> ${request.precio_acordado.toLocaleString()}
+                                <strong>Precio acordado:</strong> ${(request.precio_acordado || 0).toLocaleString()}
                               </span>
                             </div>
                             <div className="detail-row">
                               <FaCalendarAlt className="detail-icon" />
                               <span>
                                 <strong>Fecha de solicitud:</strong>{" "}
-                                {new Date(request.fecha_solicitud).toLocaleDateString()}
+                                {new Date(request.fecha_solicitud).toLocaleDateString('es-ES', {
+                                  year: 'numeric',
+                                  month: 'long',
+                                  day: 'numeric'
+                                })}
                               </span>
                             </div>
                             <div className="detail-row">
@@ -724,6 +747,12 @@ const ClientDashboard = () => {
                                 </Badge>
                               </span>
                             </div>
+                            {request.respuesta_proveedor && (
+                              <div className="description-box bg-light">
+                                <strong>Respuesta del proveedor:</strong>
+                                <p>{request.respuesta_proveedor}</p>
+                              </div>
+                            )}
                             <div className="description-box">
                               <strong>Descripción:</strong>
                               <p>{request.descripcion_personalizada}</p>
@@ -735,7 +764,23 @@ const ClientDashboard = () => {
                               Ver Detalles
                             </Button>
                             {request.estado === "pendiente" && (
-                              <Button variant="outline-danger" size="sm">
+                              <Button 
+                                variant="outline-danger" 
+                                size="sm"
+                                onClick={async () => {
+                                  if (window.confirm('¿Estás seguro de cancelar esta solicitud?')) {
+                                    try {
+                                      await axios.delete(buildApiUrl(`/solicitudes/${request.id}/cancelar/`))
+                                      // Recargar solicitudes
+                                      const response = await axios.get(buildApiUrl(`/solicitudes/cliente/${user.id}/`))
+                                      setMyRequests(response.data.solicitudes || [])
+                                    } catch (error) {
+                                      console.error('Error al cancelar solicitud:', error)
+                                      alert('Error al cancelar la solicitud')
+                                    }
+                                  }
+                                }}
+                              >
                                 Cancelar
                               </Button>
                             )}

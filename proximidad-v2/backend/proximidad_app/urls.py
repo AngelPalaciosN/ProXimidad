@@ -1,7 +1,7 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from . import views, views_optimizadas
+from . import views, views_optimizadas, views_solicitudes
 
 urlpatterns = [
     # APIs básicas (existentes)
@@ -32,6 +32,15 @@ urlpatterns = [
     
     # Estadísticas (existentes)
     path('estadisticas/', views.estadisticas_dashboard, name='estadisticas_dashboard'),
+    
+    # ===== SOLICITUDES DE SERVICIOS =====
+    path('solicitudes/crear/', views_solicitudes.crear_solicitud, name='crear_solicitud'),
+    path('solicitudes/cliente/<int:cliente_id>/', views_solicitudes.listar_solicitudes_cliente, name='solicitudes_cliente'),
+    path('solicitudes/proveedor/<int:proveedor_id>/', views_solicitudes.listar_solicitudes_proveedor, name='solicitudes_proveedor'),
+    path('solicitudes/<int:solicitud_id>/', views_solicitudes.detalle_solicitud, name='detalle_solicitud'),
+    path('solicitudes/<int:solicitud_id>/actualizar/', views_solicitudes.actualizar_estado_solicitud, name='actualizar_solicitud'),
+    path('solicitudes/<int:solicitud_id>/cancelar/', views_solicitudes.cancelar_solicitud, name='cancelar_solicitud'),
+    path('solicitudes/estadisticas/<int:usuario_id>/', views_solicitudes.estadisticas_solicitudes, name='estadisticas_solicitudes'),
     
     # ===== NUEVAS RUTAS OPTIMIZADAS =====
     
