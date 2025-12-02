@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Container, Row, Col, Card, Button, Badge, Form } from "react-bootstrap"
+import { Container, Row, Col, Card, Button, Badge, Form, Modal } from "react-bootstrap"
 import {
   FaSearch,
   FaHeart,
@@ -28,6 +28,7 @@ import Header from "./Header"
 import ServiceDetailModal from "./ServiceDetailModal"
 import ServiceRequestModal from "./ServiceRequestModal"
 import { buildApiUrl } from "../../config/env"
+import Swal from "sweetalert2"
 
 // Datos mock fuera del componente para evitar recreaciones
 const mockServices = [
@@ -198,6 +199,13 @@ const ClientDashboard = () => {
   const [showDetailModal, setShowDetailModal] = useState(false)
   const [selectedService, setSelectedService] = useState(null)
   const [loading, setLoading] = useState(true)
+  
+  // Estados para modal de calificación
+  const [showRatingModal, setShowRatingModal] = useState(false)
+  const [solicitudACalificar, setSolicitudACalificar] = useState(null)
+  const [calificacion, setCalificacion] = useState(5)
+  const [comentario, setComentario] = useState('')
+  const [enviandoComentario, setEnviandoComentario] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -380,6 +388,63 @@ const ClientDashboard = () => {
   }
 
   const categories = [...new Set(services.map((service) => service.categoria_nombre))]
+  
+  // Handler para abrir modal de calificación
+  const handleAbrirModalCalificacion = (solicitud) => {
+    setSolicitudACalificar(solicitud)
+    setCalificacion(5)
+    setComentario('')
+    setShowRatingModal(true)
+  }
+  
+  // Handler para enviar calificación
+  const handleEnviarCalificacion = async () => {
+    if (!comentario.trim()) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Comentario requerido',
+        text: 'Por favor escribe un comentario sobre el servicio recibido',
+      })
+      return
+    }
+    
+    setEnviandoComentario(true)
+    
+    try {
+      const comentarioData = {
+        servicio_fk: solicitudACalificar.servicio,
+        usuario_fk: user.id,
+        mensaje: comentario,
+        calificacion: calificacion,
+      }
+      
+      console.log('📝 Enviando comentario:', comentarioData)
+      
+      await axios.post(buildApiUrl('/comentarios/crear/'), comentarioData)
+      
+      Swal.fire({
+        icon: 'success',
+        title: '¡Gracias por tu calificación!',
+        text: 'Tu comentario ha sido publicado exitosamente',
+        timer: 3000,
+      })
+      
+      setShowRatingModal(false)
+      setSolicitudACalificar(null)
+      setCalificacion(5)
+      setComentario('')
+      
+    } catch (error) {
+      console.error('❌ Error al enviar calificación:', error)
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.response?.data?.error || 'No se pudo enviar la calificación. Inténtalo de nuevo.',
+      })
+    } finally {
+      setEnviandoComentario(false)
+    }
+  }
 
   if (loading || authLoading) {
     return (
@@ -785,8 +850,13 @@ const ClientDashboard = () => {
                               </Button>
                             )}
                             {request.estado === "completado" && (
-                              <Button variant="outline-success" size="sm">
-                                Calificar
+                              <Button 
+                                variant="success" 
+                                size="sm"
+                                onClick={() => handleAbrirModalCalificacion(request)}
+                              >
+                                <FaStar className="me-1" />
+                                Calificar Servicio
                               </Button>
                             )}
                           </div>
@@ -892,6 +962,111 @@ const ClientDashboard = () => {
         onToggleFavorite={handleToggleFavorite}
         isFavorite={selectedService ? favorites.includes(selectedService.id) : false}
       />
+
+      {/* Modal de Calificación */}
+      <Modal 
+        show={showRatingModal} 
+        onHide={() => setShowRatingModal(false)}
+        size="lg"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <FaStar className="text-warning me-2" />
+            Calificar Servicio Completado
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {solicitudACalificar && (
+            <>
+              <div className="mb-4 p-3 bg-light rounded">
+                <h6 className="mb-2">Servicio: <strong>{solicitudACalificar.servicio_nombre}</strong></h6>
+                <p className="mb-1">
+                  <FaUser className="me-2" />
+                  Proveedor: <strong>{solicitudACalificar.proveedor_nombre}</strong>
+                </p>
+                <p className="mb-0">
+                  <FaCheckCircle className="text-success me-2" />
+                  Completado el: {new Date(solicitudACalificar.fecha_completado || solicitudACalificar.fecha_actualizacion).toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </p>
+              </div>
+
+              <Form.Group className="mb-4">
+                <Form.Label className="fw-bold">
+                  <FaStar className="text-warning me-1" />
+                  Calificación (1-5 estrellas) *
+                </Form.Label>
+                <div className="d-flex gap-2 align-items-center">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <FaStar
+                      key={star}
+                      size={32}
+                      className={star <= calificacion ? 'text-warning' : 'text-muted'}
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => setCalificacion(star)}
+                    />
+                  ))}
+                  <span className="ms-2 h5 mb-0">{calificacion}.0</span>
+                </div>
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label className="fw-bold">
+                  Comentario sobre el servicio *
+                </Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={5}
+                  value={comentario}
+                  onChange={(e) => setComentario(e.target.value)}
+                  placeholder="Describe tu experiencia con el servicio: calidad del trabajo, profesionalismo, cumplimiento de plazos, comunicación, etc."
+                  maxLength={500}
+                />
+                <Form.Text className="text-muted">
+                  {comentario.length}/500 caracteres
+                </Form.Text>
+              </Form.Group>
+
+              <div className="alert alert-info mb-0">
+                <small>
+                  <FaCheckCircle className="me-2" />
+                  Tu calificación y comentario serán visibles públicamente y ayudarán a otros usuarios a tomar decisiones informadas.
+                </small>
+              </div>
+            </>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button 
+            variant="outline-secondary" 
+            onClick={() => setShowRatingModal(false)}
+            disabled={enviandoComentario}
+          >
+            Cancelar
+          </Button>
+          <Button
+            variant="success"
+            onClick={handleEnviarCalificacion}
+            disabled={!comentario.trim() || enviandoComentario}
+          >
+            {enviandoComentario ? (
+              <>
+                <FaSpinner className="spinner-border spinner-border-sm me-2" />
+                Enviando...
+              </>
+            ) : (
+              <>
+                <FaStar className="me-2" />
+                Publicar Calificación
+              </>
+            )}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   )
 }
