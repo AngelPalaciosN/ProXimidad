@@ -205,7 +205,7 @@ const ServiceCreator = ({ show, onHide, proveedorId, servicio = null, onSuccess 
 
     // precio_base: DECIMAL(10,2) NOT NULL
     if (!formData.precio_base || formData.precio_base <= 0) {
-      newErrors.precio_base = "Ingresa un precio válido mayor a 0"
+      newErrors.precio_base = "Ingresa un precio válido mayor a 0 (en pesos colombianos)"
     }
 
     // ubicacion: VARCHAR(200) NOT NULL
@@ -485,7 +485,7 @@ const ServiceCreator = ({ show, onHide, proveedorId, servicio = null, onSuccess 
             </motion.div>
 
             <motion.div className="form-group" variants={itemVariants}>
-              <label htmlFor="precio_base">Precio Base (USD) *</label>
+              <label htmlFor="precio_base">Precio Base (COP) *</label>
               <div className="input-with-prefix">
                 <span className="prefix">$</span>
                 <input
@@ -494,13 +494,14 @@ const ServiceCreator = ({ show, onHide, proveedorId, servicio = null, onSuccess 
                   name="precio_base"
                   value={formData.precio_base}
                   onChange={handleChange}
-                  placeholder="0.00"
+                  placeholder="50000"
                   disabled={loading}
                   min="0"
-                  step="0.01"
+                  step="1000"
                   className={errors.precio_base ? "error-input" : ""}
                 />
               </div>
+              <small className="form-text text-muted">Precio en pesos colombianos (COP)</small>
               {errors.precio_base && <span className="error-message">{errors.precio_base}</span>}
             </motion.div>
           </div>

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=ProXimidad Server V3
+Comment=Inicia todos los servicios de ProXimidad V3
+Exec=sudo /home/proximidad/Desktop/start_server_v3.sh
+Icon=/home/proximidad/proximidad_icon.png
+Terminal=true
+Categories=System;
+X-GNOME-Autostart-enabled=true

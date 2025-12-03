@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Servicios, Usuario, Favoritos, Categoria, Comentarios, ServicioImagenes, Solicitud
+from .models import Servicios, Usuario, Favoritos, Categoria, Comentarios, ServicioImagenes
+# Solicitud migrado a proximidad_app2
 
 
 class CategoriaSerializer(serializers.ModelSerializer):
@@ -320,99 +321,6 @@ class RegistroSerializer(serializers.ModelSerializer):
         }
 
 
-class SolicitudSerializer(serializers.ModelSerializer):
-    """Serializer completo para solicitudes de servicios"""
-    servicio_nombre = serializers.CharField(source='servicio.nombre_servicio', read_only=True)
-    cliente_nombre = serializers.CharField(source='cliente.nombre_completo', read_only=True)
-    proveedor_nombre = serializers.CharField(source='proveedor.nombre_completo', read_only=True)
-    servicio_info = ServiciosListSerializer(source='servicio', read_only=True)
-    cliente_info = UsuarioBasicSerializer(source='cliente', read_only=True)
-    proveedor_info = UsuarioBasicSerializer(source='proveedor', read_only=True)
-    dias_pendiente = serializers.ReadOnlyField()
-    
-    class Meta:
-        model = Solicitud
-        fields = [
-            'id', 'servicio', 'servicio_nombre', 'servicio_info',
-            'cliente', 'cliente_nombre', 'cliente_info',
-            'proveedor', 'proveedor_nombre', 'proveedor_info',
-            'estado', 'precio_acordado', 'descripcion_personalizada',
-            'urgencia', 'fecha_preferida', 'presupuesto_maximo',
-            'comentarios_adicionales', 'respuesta_proveedor',
-            'fecha_respuesta', 'fecha_solicitud', 'fecha_actualizacion',
-            'fecha_inicio', 'fecha_completado', 'dias_pendiente',
-            'notificado_cliente', 'notificado_proveedor'
-        ]
-        read_only_fields = [
-            'id', 'fecha_solicitud', 'fecha_actualizacion', 'fecha_respuesta',
-            'fecha_inicio', 'fecha_completado', 'dias_pendiente',
-            'servicio_info', 'cliente_info', 'proveedor_info',
-            'notificado_cliente', 'notificado_proveedor'
-        ]
-    
-    def validate_precio_acordado(self, value):
-        """Valida que el precio acordado sea positivo"""
-        if value is not None and value <= 0:
-            raise serializers.ValidationError("El precio acordado debe ser mayor a 0")
-        return value
-    
-    def validate_presupuesto_maximo(self, value):
-        """Valida que el presupuesto máximo sea positivo"""
-        if value is not None and value <= 0:
-            raise serializers.ValidationError("El presupuesto máximo debe ser mayor a 0")
-        return value
-    
-    def validate(self, data):
-        """Validaciones adicionales"""
-        # Validar que el cliente no sea el proveedor
-        if data.get('cliente') == data.get('proveedor'):
-            raise serializers.ValidationError("Un usuario no puede solicitarse servicios a sí mismo")
-        
-        # Validar que el proveedor del servicio sea el proveedor de la solicitud
-        if data.get('servicio') and data.get('proveedor'):
-            if data['servicio'].proveedor != data['proveedor']:
-                raise serializers.ValidationError("El proveedor no coincide con el proveedor del servicio")
-        
-        return data
+# SOLICITUD SERIALIZERS MIGRADOS A proximidad_app2/serializers.py
+# No modificar - usar proximidad_app2.serializers
 
-
-class SolicitudListSerializer(serializers.ModelSerializer):
-    """Serializer ligero para listados de solicitudes"""
-    servicio_nombre = serializers.CharField(source='servicio.nombre_servicio', read_only=True)
-    cliente_nombre = serializers.CharField(source='cliente.nombre_completo', read_only=True)
-    proveedor_nombre = serializers.CharField(source='proveedor.nombre_completo', read_only=True)
-    dias_pendiente = serializers.ReadOnlyField()
-    
-    class Meta:
-        model = Solicitud
-        fields = [
-            'id', 'servicio', 'servicio_nombre', 'cliente', 'cliente_nombre',
-            'proveedor', 'proveedor_nombre', 'estado', 'precio_acordado',
-            'urgencia', 'fecha_solicitud', 'fecha_actualizacion',
-            'dias_pendiente'
-        ]
-
-
-class SolicitudCreateSerializer(serializers.ModelSerializer):
-    """Serializer específico para crear solicitudes"""
-    
-    class Meta:
-        model = Solicitud
-        fields = [
-            'servicio', 'cliente', 'proveedor', 'descripcion_personalizada',
-            'urgencia', 'fecha_preferida', 'presupuesto_maximo',
-            'comentarios_adicionales'
-        ]
-    
-    def validate(self, data):
-        """Validaciones al crear solicitud"""
-        # Validar que el cliente no sea el proveedor
-        if data.get('cliente') == data.get('proveedor'):
-            raise serializers.ValidationError("Un usuario no puede solicitarse servicios a sí mismo")
-        
-        # Validar que el proveedor del servicio coincida
-        if data.get('servicio') and data.get('proveedor'):
-            if data['servicio'].proveedor != data['proveedor']:
-                raise serializers.ValidationError("El proveedor no coincide con el proveedor del servicio")
-        
-        return data

@@ -77,11 +77,38 @@ const ServiceRequestModal = ({ show, onHide, service, user }) => {
       
     } catch (error) {
       console.error("❌ Error al enviar solicitud:", error)
+      console.error("❌ Detalles del error:", {
+        status: error.response?.status,
+        data: error.response?.data,
+        config: error.config
+      })
+      
+      let errorMessage = 'No se pudo enviar la solicitud. Inténtalo de nuevo.'
+      
+      if (error.response) {
+        // Error del servidor
+        if (error.response.status === 400) {
+          const errors = error.response.data
+          if (typeof errors === 'object') {
+            errorMessage = Object.entries(errors)
+              .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(', ') : value}`)
+              .join('\n')
+          } else {
+            errorMessage = error.response.data?.error || error.response.data?.message || 'Datos inválidos'
+          }
+        } else if (error.response.status === 500) {
+          errorMessage = 'Error en el servidor. Por favor contacta al administrador.'
+        }
+      } else if (error.request) {
+        // No se recibió respuesta
+        errorMessage = 'No se pudo conectar con el servidor. Verifica tu conexión.'
+      }
       
       Swal.fire({
         icon: 'error',
         title: 'Error al enviar solicitud',
-        text: error.response?.data?.error || 'No se pudo enviar la solicitud. Inténtalo de nuevo.',
+        text: errorMessage,
+        footer: 'Si el problema persiste, contacta al soporte'
       })
       
     } finally {
@@ -140,17 +167,17 @@ const ServiceRequestModal = ({ show, onHide, service, user }) => {
               />
             </Col>
             <Col md={8}>
-              <h5 className="text-primary">{service.nombre}</h5>
+              <h5 className="text-primary">{service.nombre_servicio || service.nombre}</h5>
               <p className="text-muted mb-3">{service.descripcion}</p>
               <div className="service-details">
                 <div className="detail-item">
                   <FaUser className="me-2 text-primary" />
-                  <strong>Proveedor:</strong> {service.proveedor_info?.nombre || service.proveedor?.nombre || "No especificado"}
-                  <span className="rating ms-2">⭐ {service.calificacion || service.proveedor?.calificacion || 4.5}</span>
+                  <strong>Proveedor:</strong> {service.proveedor_info?.nombre_completo || service.proveedor_nombre || service.proveedor?.nombre || "No especificado"}
+                  <span className="rating ms-2">⭐ {service.promedio_calificacion || service.calificacion || service.proveedor?.calificacion || 4.5}</span>
                 </div>
                 <div className="detail-item">
                   <FaDollarSign className="me-2 text-success" />
-                  <strong>Precio base:</strong> ${service.precio?.toLocaleString() || "Por acordar"}
+                  <strong>Precio base:</strong> ${service.precio_base || service.precio ? new Intl.NumberFormat('es-CO').format(service.precio_base || service.precio) : "Por acordar"} COP
                 </div>
                 <div className="detail-item">
                   <FaClock className="me-2 text-info" />
@@ -276,22 +303,22 @@ const ServiceRequestModal = ({ show, onHide, service, user }) => {
             <h6 className="mb-2">Resumen de tu solicitud:</h6>
             <ul className="mb-0">
               <li>
-                <strong>Servicio:</strong> {service.nombre}
+                <strong>Servicio:</strong> {service.nombre_servicio || service.nombre}
               </li>
               <li>
-                <strong>Proveedor:</strong> {service.proveedor.nombre}
+                <strong>Proveedor:</strong> {service.proveedor_info?.nombre_completo || service.proveedor_nombre || service.proveedor?.nombre || "No especificado"}
               </li>
               <li>
-                <strong>Precio base:</strong> ${service.precio.toLocaleString()}
+                <strong>Precio base:</strong> ${new Intl.NumberFormat('es-CO').format(service.precio_base || service.precio || 0)} COP
               </li>
               {formData.presupuesto_maximo && (
                 <li>
                   <strong>Tu presupuesto máximo:</strong> $
-                  {Number.parseInt(formData.presupuesto_maximo).toLocaleString()}
+                  {Number.parseInt(formData.presupuesto_maximo).toLocaleString()} COP
                 </li>
               )}
               <li>
-                <strong>Urgencia:</strong> {formData.urgencia}
+                <strong>Urgencia:</strong> {formData.urgencia === 'baja' ? '🟢 Baja' : formData.urgencia === 'media' ? '🟡 Media' : '🔴 Alta'}
               </li>
             </ul>
           </div>

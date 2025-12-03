@@ -1,6 +1,7 @@
 """
 Views para gestionar solicitudes de servicios entre clientes y proveedores.
 Incluye notificaciones por email en cada cambio de estado.
+MIGRADO A proximidad_app2 - API de Solicitudes
 """
 from django.core.mail import send_mail
 from django.conf import settings
@@ -9,8 +10,9 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from .models import Solicitud, Servicios, Usuario
-from .serializer import (
+from .models import Solicitud
+from proximidad_app.models import Servicios, Usuario
+from .serializers import (
     SolicitudSerializer, 
     SolicitudListSerializer, 
     SolicitudCreateSerializer
@@ -216,27 +218,85 @@ def crear_solicitud(request):
     }
     """
     try:
-        # Obtener el proveedor del servicio automáticamente
+        # Log de datos recibidos para debugging
+        logger.info(f"🔍 Recibiendo solicitud de creación con datos: {request.data}")
+        
+        # Validar campo servicio
         servicio_id = request.data.get('servicio')
         if not servicio_id:
+            logger.error("❌ Campo 'servicio' faltante en la solicitud")
             return Response(
-                {'error': 'El campo servicio es requerido'},
+                {'servicio': ['El campo servicio es requerido']},
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        servicio = get_object_or_404(Servicios, id=servicio_id)
+        # Validar campo cliente
+        cliente_id = request.data.get('cliente')
+        if not cliente_id:
+            logger.error("❌ Campo 'cliente' faltante en la solicitud")
+            return Response(
+                {'cliente': ['El campo cliente es requerido']},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Validar campo descripción
+        descripcion = request.data.get('descripcion_personalizada')
+        if not descripcion or not descripcion.strip():
+            logger.error("❌ Campo 'descripcion_personalizada' faltante o vacío")
+            return Response(
+                {'descripcion_personalizada': ['La descripción del proyecto es requerida']},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Verificar que el servicio existe
+        try:
+            servicio = Servicios.objects.get(id=servicio_id)
+            logger.info(f"✅ Servicio encontrado: {servicio.nombre_servicio} (ID: {servicio_id})")
+        except Servicios.DoesNotExist:
+            logger.error(f"❌ Servicio con ID {servicio_id} no encontrado")
+            return Response(
+                {'servicio': [f'Servicio con ID {servicio_id} no existe']},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Verificar que el servicio tiene un proveedor
+        if not servicio.proveedor:
+            logger.error(f"❌ Servicio {servicio_id} no tiene proveedor asignado")
+            return Response(
+                {'servicio': ['Este servicio no tiene un proveedor asignado']},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Verificar que el cliente existe
+        try:
+            cliente = Usuario.objects.get(id=cliente_id)
+            logger.info(f"✅ Cliente encontrado: {cliente.nombre_completo} (ID: {cliente_id})")
+        except Usuario.DoesNotExist:
+            logger.error(f"❌ Cliente con ID {cliente_id} no encontrado")
+            return Response(
+                {'cliente': [f'Cliente con ID {cliente_id} no existe']},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         
         # Agregar el proveedor automáticamente
         data = request.data.copy()
         data['proveedor'] = servicio.proveedor.id
         
+        logger.info(f"📝 Creando solicitud con proveedor auto-asignado: {servicio.proveedor.nombre_completo} (ID: {servicio.proveedor.id})")
+        
         serializer = SolicitudCreateSerializer(data=data)
         
         if serializer.is_valid():
             solicitud = serializer.save()
+            logger.info(f"✅ Solicitud creada exitosamente: ID {solicitud.id}")
             
             # Enviar emails de notificación
-            enviar_email_notificacion('solicitud_creada', solicitud)
+            try:
+                enviar_email_notificacion('solicitud_creada', solicitud)
+                logger.info(f"📧 Emails de notificación enviados para solicitud {solicitud.id}")
+            except Exception as email_error:
+                logger.warning(f"⚠️ Error al enviar emails (solicitud creada): {str(email_error)}")
+                # No fallar la solicitud por error de email
             
             # Retornar la solicitud completa con toda la info
             response_serializer = SolicitudSerializer(solicitud, context={'request': request})
@@ -246,12 +306,13 @@ def crear_solicitud(request):
                 'solicitud': response_serializer.data
             }, status=status.HTTP_201_CREATED)
         
+        logger.error(f"❌ Errores de validación: {serializer.errors}")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
     except Exception as e:
-        logger.error(f"Error al crear solicitud: {str(e)}")
+        logger.error(f"❌ Error inesperado al crear solicitud: {str(e)}", exc_info=True)
         return Response(
-            {'error': f'Error al crear solicitud: {str(e)}'},
+            {'error': f'Error interno del servidor: {str(e)}'},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 

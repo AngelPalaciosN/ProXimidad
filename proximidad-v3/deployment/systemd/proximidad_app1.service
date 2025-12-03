@@ -1,0 +1,63 @@
+# ============================================
+# Systemd Service for ProXimidad App 1 (Public API)
+# ============================================
+# Ubicación: /etc/systemd/system/proximidad_app1.service
+#
+# Comandos:
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable proximidad_app1
+#   sudo systemctl start proximidad_app1
+#   sudo systemctl status proximidad_app1
+#   sudo systemctl restart proximidad_app1
+#   sudo journalctl -u proximidad_app1 -f
+
+[Unit]
+Description=ProXimidad Django App 1 - Public API (Gunicorn)
+After=network.target mariadb.service
+Requires=mariadb.service
+
+[Service]
+Type=notify
+User=proximidad
+Group=proximidad
+RuntimeDirectory=gunicorn_app1
+WorkingDirectory=/home/proximidad/backend
+
+# Entorno
+Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+Environment="DJANGO_SETTINGS_MODULE=core.settings"
+Environment="PYTHONUNBUFFERED=1"
+Environment="PROXIMIDAD_APP_MODE=app1"
+
+# Comando Gunicorn
+ExecStart=/usr/local/bin/gunicorn \
+    --name proximidad_app1 \
+    --workers 3 \
+    --worker-class sync \
+    --bind 127.0.0.1:8000 \
+    --timeout 60 \
+    --max-requests 1000 \
+    --max-requests-jitter 50 \
+    --access-logfile /home/proximidad/logs/app1_access.log \
+    --error-logfile /home/proximidad/logs/app1_error.log \
+    --log-level info \
+    --capture-output \
+    --enable-stdio-inheritance \
+    core.wsgi_app1:application
+
+# Restart en caso de fallo
+Restart=on-failure
+RestartSec=5s
+
+# Límites de recursos
+LimitNOFILE=4096
+TimeoutStartSec=60s
+TimeoutStopSec=30s
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=proximidad_app1
+
+[Install]
+WantedBy=multi-user.target

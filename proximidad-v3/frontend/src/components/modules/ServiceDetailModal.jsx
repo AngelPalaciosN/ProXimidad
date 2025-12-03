@@ -299,7 +299,8 @@ const ServiceDetailModal = ({ show, onHide, service, user, onToggleFavorite, isF
                       <div className="price-header">
                         <div className="price">
                           <span className="currency">$</span>
-                          <span className="amount">{serviceDetails.precio.toLocaleString()}</span>
+                          <span className="amount">{new Intl.NumberFormat('es-CO').format(serviceDetails.precio)}</span>
+                          <span className="currency-code">COP</span>
                         </div>
                         <div className="delivery-time">
                           <FaClock />

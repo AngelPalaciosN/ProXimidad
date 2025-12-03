@@ -1,28 +1,36 @@
 """
-URL configuration for ProXimidad project.
+URL configuration for ProXimidad V3 - Arquitectura de 2 APIs
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+proximidad_app  → API pública: servicios, búsqueda, imágenes (lectura)
+proximidad_app2 → API privada: solicitudes, proveedores, emails (operaciones)
 """
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
+import os
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('proximidad_app.urls')),
-]
+# Determinar qué app cargar según variable de entorno
+app_mode = os.environ.get('PROXIMIDAD_APP_MODE', 'all')
+
+if app_mode == 'app1':
+    # Solo cargar rutas de proximidad_app
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+        path('api/', include('proximidad_app.urls')),
+    ]
+elif app_mode == 'app2':
+    # Solo cargar rutas de proximidad_app2
+    urlpatterns = [
+        path('api/', include('proximidad_app2.urls')),
+    ]
+else:
+    # Modo desarrollo: cargar ambas
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+        path('api/', include('proximidad_app.urls')),
+        path('api/', include('proximidad_app2.urls')),
+    ]
 
 # Servir archivos media en desarrollo
 if settings.DEBUG:

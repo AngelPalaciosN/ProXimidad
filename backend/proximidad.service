@@ -1,0 +1,32 @@
+[Unit]
+Description=Gunicorn daemon for ProXimidad Django Backend
+After=network.target
+
+[Service]
+Type=notify
+# Usuario que ejecutará el servicio
+User=proximidad
+Group=www-data
+
+# Directorio del proyecto
+WorkingDirectory=/home/proximidad/backend
+
+# Ruta al entorno virtual
+Environment="PATH=/home/proximidad/backend/venv/bin"
+
+# Comando para ejecutar Gunicorn
+ExecStart=/home/proximidad/backend/venv/bin/gunicorn \
+    --config /home/proximidad/backend/gunicorn_config.py \
+    --workers 3 \
+    --bind 127.0.0.1:8000 \
+    core.wsgi:application
+
+# Reiniciar automáticamente si falla
+Restart=always
+RestartSec=10
+
+# Límites de recursos
+LimitNOFILE=4096
+
+[Install]
+WantedBy=multi-user.target

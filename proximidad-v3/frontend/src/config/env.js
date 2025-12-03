@@ -1,8 +1,10 @@
 // Configuración de variables de entorno
 export const config = {
   // API Configuration
-  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://192.168.1.70:8000/api',
-  API_FALLBACK_URL: 'http://localhost:8000/api', // Localhost como fallback
+  // En producción usa URL relativa (/api) para que funcione con Nginx
+  // En desarrollo usa localhost:8000
+  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:8000/api'),
+  API_FALLBACK_URL: '/api', // URL relativa como fallback en producción
   
   // App Configuration
   APP_TITLE: import.meta.env.VITE_APP_TITLE || 'ProXimidad',

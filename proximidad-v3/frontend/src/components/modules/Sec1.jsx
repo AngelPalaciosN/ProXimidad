@@ -8,13 +8,10 @@ import { buildApiUrl } from '../../config/env';
 export default function Sec1({ handleAbrirFormulario }) {
   const [displayText, setDisplayText] = useState("");
   const fullText = "Haciendo facil tu dedicacion";
-  const [usuarios, setUsuarios] = useState([]);
-  const [servicios, setServicios] = useState([]);
   const [formData, setFormData] = useState({
-    usuario_fk: "",
-    servicio_fk: "",
+    nombre: "",
+    email: "",
     mensaje: "",
-    calificacion: "",
   });
   const [isFormVisible, setIsFormVisible] = useState(false);
   const formRef = useRef(null);
@@ -31,32 +28,6 @@ export default function Sec1({ handleAbrirFormulario }) {
     typeText();
   }, []);
 
-  useEffect(() => {
-    const fetchUsuarios = async () => {
-      try {
-        const response = await axios.get(buildApiUrl('/usuarios/'));
-        // Los usuarios vienen directamente como array
-        setUsuarios(Array.isArray(response.data) ? response.data : []);
-      } catch (err) {
-        console.error('Error fetching users:', err);
-        setUsuarios([]);
-      }
-    };
-
-    const fetchServicios = async () => {
-      try {
-        const response = await axios.get(buildApiUrl('/servicios/'));
-        setServicios(response.data.servicios || []);
-      } catch (err) {
-        console.error('Error fetching services:', err);
-        setServicios([]);
-      }
-    };
-
-    fetchUsuarios();
-    fetchServicios();
-  }, []);
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -71,10 +42,10 @@ export default function Sec1({ handleAbrirFormulario }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const apiUrl = buildApiUrl('/comentarios/crear/');
+    const apiUrl = buildApiUrl('/contacto/');
     Swal.fire({
-      title: '¿Enviar comentario?',
-      text: "¿Estás seguro de que quieres enviar este comentario?",
+      title: '¿Enviar sugerencia?',
+      text: "¿Estás seguro de que quieres enviar esta sugerencia?",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -84,23 +55,22 @@ export default function Sec1({ handleAbrirFormulario }) {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          // Preparar datos para envío
-          const dataToSend = {
-            ...formData,
-            calificacion: formData.calificacion ? parseInt(formData.calificacion) : null
-          };
-          await axios.post(apiUrl, dataToSend);
-          Swal.fire('Enviado!', 'Tu comentario ha sido enviado.', 'success');
+          await axios.post(apiUrl, {
+            nombre: formData.nombre,
+            email: formData.email,
+            mensaje: formData.mensaje,
+            tipo: 'sugerencia'
+          });
+          Swal.fire('Enviado!', 'Tu sugerencia ha sido enviada.', 'success');
           setFormData({
-            usuario_fk: "",
-            servicio_fk: "",
+            nombre: "",
+            email: "",
             mensaje: "",
-            calificacion: "",
           });
           setIsFormVisible(false);
         } catch (err) {
-          console.error('Error sending comment:', err);
-          Swal.fire('Error', 'No se pudo enviar tu comentario. Intenta de nuevo más tarde.', 'error');
+          console.error('Error sending suggestion:', err);
+          Swal.fire('Error', 'No se pudo enviar tu sugerencia. Intenta de nuevo más tarde.', 'error');
         }
       }
     });
@@ -150,37 +120,26 @@ export default function Sec1({ handleAbrirFormulario }) {
                 <div className="comment-form-container" ref={formRef}>
                   <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3">
-                      <Form.Label>Usuario</Form.Label>
-                      <Form.Select name="usuario_fk" value={formData.usuario_fk} onChange={handleInputChange} required>
-                        <option value="">Selecciona un usuario</option>
-                        {usuarios.map(usuario => (
-                          <option key={usuario.id} value={usuario.id}> 
-                            {usuario.nombre_completo}
-                          </option>
-                        ))}
-                      </Form.Select>
+                      <Form.Label>Nombre</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="nombre"
+                        value={formData.nombre}
+                        onChange={handleInputChange}
+                        placeholder="Tu nombre completo"
+                        required
+                      />
                     </Form.Group>
                     <Form.Group className="mb-3">
-                      <Form.Label>Servicio Relacionado</Form.Label>
-                      <Form.Select name="servicio_fk" value={formData.servicio_fk} onChange={handleInputChange} required>
-                        <option value="">Selecciona un servicio</option>
-                        {servicios.map(servicio => (
-                          <option key={servicio.id} value={servicio.id}> 
-                            {servicio.nombre_servicio}
-                          </option>
-                        ))}
-                      </Form.Select>
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Calificación (Opcional)</Form.Label>
-                      <Form.Select name="calificacion" value={formData.calificacion} onChange={handleInputChange}>
-                        <option value="">Sin calificación</option>
-                        <option value="1">⭐ 1 - Muy malo</option>
-                        <option value="2">⭐⭐ 2 - Malo</option>
-                        <option value="3">⭐⭐⭐ 3 - Regular</option>
-                        <option value="4">⭐⭐⭐⭐ 4 - Bueno</option>
-                        <option value="5">⭐⭐⭐⭐⭐ 5 - Excelente</option>
-                      </Form.Select>
+                      <Form.Label>Correo Electrónico</Form.Label>
+                      <Form.Control
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        placeholder="tu@email.com"
+                        required
+                      />
                     </Form.Group>
                     <Form.Group className="mb-3">
                       <Form.Label>Mensaje</Form.Label>
@@ -190,7 +149,7 @@ export default function Sec1({ handleAbrirFormulario }) {
                         name="mensaje"
                         value={formData.mensaje}
                         onChange={handleInputChange}
-                        placeholder="Tu comentario"
+                        placeholder="¿Qué te gustaría ver en ProXimidad?"
                         required
                       />
                     </Form.Group>

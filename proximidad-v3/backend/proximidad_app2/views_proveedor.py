@@ -2,6 +2,7 @@
 API específica para proveedores de servicios.
 Esta API maneja todas las operaciones relacionadas con el panel del proveedor,
 manteniendo una separación clara con las APIs de clientes.
+MIGRADO A proximidad_app2 - API de Proveedores
 
 Endpoints disponibles:
 - GET /api/proveedor/mis-servicios/ - Lista de servicios del proveedor
@@ -16,9 +17,10 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Servicios, Solicitud, Comentarios, Usuario
-from .serializer import (
-    ServiciosSerializer, 
+from .models import Solicitud
+from proximidad_app.models import Servicios, Comentarios, Usuario
+from proximidad_app.serializer import ServiciosSerializer
+from .serializers import (
     SolicitudSerializer,
     SolicitudListSerializer
 )

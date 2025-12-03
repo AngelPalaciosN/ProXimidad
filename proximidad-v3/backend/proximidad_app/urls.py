@@ -1,7 +1,8 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from . import views, views_optimizadas, views_solicitudes, views_proveedor
+from . import views, views_optimizadas
+# views_solicitudes y views_proveedor MIGRADOS a proximidad_app2
 
 urlpatterns = [
     # APIs básicas (existentes)
@@ -33,14 +34,7 @@ urlpatterns = [
     # Estadísticas (existentes)
     path('estadisticas/', views.estadisticas_dashboard, name='estadisticas_dashboard'),
     
-    # ===== SOLICITUDES DE SERVICIOS =====
-    path('solicitudes/crear/', views_solicitudes.crear_solicitud, name='crear_solicitud'),
-    path('solicitudes/cliente/<int:cliente_id>/', views_solicitudes.listar_solicitudes_cliente, name='solicitudes_cliente'),
-    path('solicitudes/proveedor/<int:proveedor_id>/', views_solicitudes.listar_solicitudes_proveedor, name='solicitudes_proveedor'),
-    path('solicitudes/<int:solicitud_id>/', views_solicitudes.detalle_solicitud, name='detalle_solicitud'),
-    path('solicitudes/<int:solicitud_id>/actualizar/', views_solicitudes.actualizar_estado_solicitud, name='actualizar_solicitud'),
-    path('solicitudes/<int:solicitud_id>/cancelar/', views_solicitudes.cancelar_solicitud, name='cancelar_solicitud'),
-    path('solicitudes/estadisticas/<int:usuario_id>/', views_solicitudes.estadisticas_solicitudes, name='estadisticas_solicitudes'),
+    # NOTA: Rutas de solicitudes y proveedor MIGRADAS a proximidad_app2/urls.py
     
     # ===== NUEVAS RUTAS OPTIMIZADAS =====
     
@@ -60,15 +54,6 @@ urlpatterns = [
     
     # Health check optimizado
     path('v2/health/', views_optimizadas.health_check_optimizado, name='health_v2'),
-    
-    # ===== API PROVEEDOR (SEPARADA) =====
-    # Endpoints exclusivos para el panel del proveedor
-    path('proveedor/mis-servicios/', views_proveedor.mis_servicios, name='proveedor_servicios'),
-    path('proveedor/solicitudes/', views_proveedor.solicitudes_recibidas, name='proveedor_solicitudes'),
-    path('proveedor/solicitudes/<int:solicitud_id>/responder/', views_proveedor.responder_solicitud, name='proveedor_responder'),
-    path('proveedor/estadisticas/', views_proveedor.estadisticas_proveedor, name='proveedor_estadisticas'),
-    path('proveedor/calificacion/', views_proveedor.calificacion_promedio, name='proveedor_calificacion'),
-    path('proveedor/dashboard/', views_proveedor.dashboard_resumen, name='proveedor_dashboard'),
 ]
 
 # Servir archivos media en desarrollo

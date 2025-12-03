@@ -12,12 +12,19 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
-from decouple import config, Csv
+from decouple import Config, RepositoryEnv, Csv
 from datetime import timedelta
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Configurar decouple para leer .env explícitamente
+env_file = os.path.join(BASE_DIR, '.env')
+if os.path.exists(env_file):
+    config = Config(RepositoryEnv(env_file))
+else:
+    from decouple import config
 
 
 # Quick-start development settings - unsuitable for production
@@ -44,7 +51,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'django_filters',
-    'proximidad_app',
+    'proximidad_app',      # API 1: Servicios públicos
+    'proximidad_app2',     # API 2: Solicitudes y Proveedores
     'rest_framework_simplejwt',
 ]
 
@@ -86,9 +94,9 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': config('DATABASE_ENGINE', default='django.db.backends.mysql'),
-        'NAME': config('DATABASE_NAME', default='proxima'),
-        'USER': config('DATABASE_USER', default='root'),
-        'PASSWORD': config('DATABASE_PASSWORD', default=''),
+        'NAME': config('DATABASE_NAME', default='proximidad_db'),
+        'USER': config('DATABASE_USER', default='proximidad'),
+        'PASSWORD': config('DATABASE_PASSWORD', default='123456'),
         'HOST': config('DATABASE_HOST', default='localhost'),
         'PORT': config('DATABASE_PORT', default='3306'),
         'OPTIONS': {

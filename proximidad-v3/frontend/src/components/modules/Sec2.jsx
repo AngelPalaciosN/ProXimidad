@@ -1,59 +1,37 @@
-import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Carousel, Card, Image } from "react-bootstrap";
-import { CheckCircle, Clock, Shield, Briefcase } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Container, Row, Col, Card, Image, Button } from "react-bootstrap";
+import { ChevronLeft, ChevronRight, Star, Clock, DollarSign } from "lucide-react";
 import axios from 'axios';
-import { config, buildApiUrl } from "../../config/env.js";
+import { buildApiUrl } from "../../config/env.js";
 
 export default function Sec2() {
   const [fetchedServicios, setFetchedServicios] = useState([]);
-  
-  const xAnimations = [
-    {
-      symbol: "X",
-      color: "#005187",
-      style: { transform: "rotate(0deg)", transition: "transform 0.3s ease-in-out" },
-    },
-    {
-      symbol: "×",
-      color: "#4d82bc",
-      style: { transform: "scale(1.2)", transition: "transform 0.3s ease-in-out" },
-    },
-    {
-      symbol: "✗",
-      color: "#005187",
-      style: { transform: "skew(-10deg)", transition: "transform 0.3s ease-in-out" },
-    },
-    {
-      symbol: "𝗫",
-      color: "#005187",
-      style: { opacity: 0.7, transition: "opacity 0.3s ease-in-out" },
-    },
-    {
-      symbol: "✘",
-      color: "#4d82bc",
-      style: { transform: "translateY(-3px)", transition: "transform 0.3s ease-in-out" },
-    },
-  ];
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [slidesPerView, setSlidesPerView] = useState(3);
+  const sliderRef = useRef(null);
 
-  const [currentXAnimation, setCurrentXAnimation] = useState(xAnimations[0]);
-
+  // Responsive slides per view
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentXAnimation((prevAnim) => {
-        const currentIndex = xAnimations.indexOf(prevAnim);
-        const nextIndex = (currentIndex + 1) % xAnimations.length;
-        return xAnimations[nextIndex];
-      });
-    }, 1000);
+    const handleResize = () => {
+      if (window.innerWidth < 576) {
+        setSlidesPerView(1);
+      } else if (window.innerWidth < 992) {
+        setSlidesPerView(2);
+      } else {
+        setSlidesPerView(3);
+      }
+    };
 
-    return () => clearInterval(interval);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
     const fetchServicios = async () => {
         try {
             const response = await axios.get(buildApiUrl('/servicios/'));
-            // La API devuelve {count: X, servicios: [...]}
             const serviciosArray = response.data.servicios || [];
             setFetchedServicios(serviciosArray);
             console.log('Servicios cargados:', serviciosArray);
@@ -64,88 +42,158 @@ export default function Sec2() {
     fetchServicios();
   }, []);
 
-  const getIconForService = (index) => {
-    const icons = [
-        <CheckCircle className="feature-icon" size={24} />, 
-        <Shield className="feature-icon" size={24} />, 
-        <Clock className="feature-icon" size={24} />
-    ];
-    return icons[index % icons.length] || <Briefcase className="feature-icon" size={24} />;
-  }
+  const maxIndex = Math.max(0, fetchedServicios.length - slidesPerView);
+
+  const handlePrev = () => {
+    if (isAnimating || currentIndex === 0) return;
+    setIsAnimating(true);
+    setCurrentIndex((prev) => prev - 1);
+    setTimeout(() => setIsAnimating(false), 400);
+  };
+
+  const handleNext = () => {
+    if (isAnimating || currentIndex >= maxIndex) return;
+    setIsAnimating(true);
+    setCurrentIndex((prev) => prev + 1);
+    setTimeout(() => setIsAnimating(false), 400);
+  };
+
+  const renderStars = (rating) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalf = rating % 1 >= 0.5;
+
+    for (let i = 0; i < 5; i++) {
+      if (i < fullStars) {
+        stars.push(<Star key={i} size={14} fill="#ffc107" color="#ffc107" />);
+      } else if (i === fullStars && hasHalf) {
+        stars.push(
+          <span key={i} className="star-half-container">
+            <Star size={14} color="#e0e0e0" />
+            <Star size={14} fill="#ffc107" color="#ffc107" className="star-half" />
+          </span>
+        );
+      } else {
+        stars.push(<Star key={i} size={14} color="#e0e0e0" />);
+      }
+    }
+    return stars;
+  };
 
   return (
-    <section className="sec2" id="servicios">
-      <div className="x-symbol-container">
-        <span
-          className={`animated-x ${currentXAnimation.symbol !== "X" ? "animate" : ""}`}
-          style={{
-            ...currentXAnimation.style,
-            color: currentXAnimation.color,
-          }}
-        >
-          {currentXAnimation.symbol}
-        </span>
-      </div>
-
+    <section className="sec2-provider" id="servicios">
       <Container>
         <Row className="text-center mb-5">
           <Col>
             <h2 className="section-title">Nuestros Servicios</h2>
-            <p className="section-subtitle">Descubre cómo podemos ayudarte</p>
+            <p className="section-subtitle">Explora todos los servicios que ofrecemos</p>
           </Col>
         </Row>
 
-        <Row>
-          <Col md={12} lg={6} className="mb-4 mb-lg-0">
-            {fetchedServicios.length > 0 ? (
-              <Carousel className="services-carousel" indicators={true} controls={true}>
+        {fetchedServicios.length > 0 ? (
+          <div className="slider-wrapper">
+            {/* Control Prev */}
+            <button
+              className={`slider-control slider-control-prev ${currentIndex === 0 ? "disabled" : ""}`}
+              onClick={handlePrev}
+              disabled={currentIndex === 0}
+              aria-label="Anterior"
+            >
+              <ChevronLeft size={28} />
+            </button>
+
+            {/* Slider Track */}
+            <div className="slider-container">
+              <div
+                className="slider-track"
+                ref={sliderRef}
+                style={{
+                  transform: `translateX(-${currentIndex * (100 / slidesPerView)}%)`,
+                }}
+              >
                 {fetchedServicios.map((servicio) => (
-                  <Carousel.Item key={servicio.id}>
-                    <div className="carousel-image-container">
-                      <Image
-                        src={servicio.imagen_url || `${config.API_BASE_URL}/media/servicios/default.jpg`} 
-                        alt={servicio.nombre_servicio || servicio.nombre}
-                        fluid
-                        className="d-block w-100 carousel-image"
-                        onError={(e) => {
-                          e.target.src = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=400&h=250&fit=crop";
-                        }}
-                      />
-                    </div>
-                    <Carousel.Caption>
-                      <h3>{servicio.nombre_servicio || servicio.nombre}</h3>
-                      <p>{servicio.descripcion_servicio || servicio.descripcion || 'Descripción no disponible.'}</p>
-                    </Carousel.Caption>
-                  </Carousel.Item>
-                ))}
-              </Carousel>
-            ) : (
-              <p>Cargando servicios...</p>
-            )}
-          </Col>
+                  <div key={servicio.id} className="slider-slide" style={{ width: `${100 / slidesPerView}%` }}>
+                    <Card className="service-slider-card">
+                      <div className="card-image-container">
+                        <Image
+                          src={servicio.imagen_url || "/placeholder.svg"}
+                          alt={servicio.nombre_servicio || servicio.nombre}
+                          className="card-image"
+                          onError={(e) => {
+                            e.target.src = "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=400&h=250&fit=crop";
+                          }}
+                        />
+                        <div className="card-rating">
+                          {renderStars(servicio.calificacion || 4.5)}
+                          <span className="rating-number">{servicio.calificacion || 4.5}</span>
+                        </div>
+                      </div>
 
-          <Col md={12} lg={6}>
-            <div className="services-cards">
-              {fetchedServicios.length > 0 ? (
-                fetchedServicios.map((servicio, index) => (
-                  <Card key={servicio.id} className="service-card mb-4">
-                    <Card.Body className="d-flex">
-                      <div className="service-icon-container">
-                        {getIconForService(index)}
-                      </div>
-                      <div className="service-content">
-                        <Card.Title>{servicio.nombre_servicio || servicio.nombre}</Card.Title>
-                        <Card.Text>{servicio.descripcion_servicio || servicio.descripcion || 'Descripción no disponible.'}</Card.Text>
-                      </div>
-                    </Card.Body>
-                  </Card>
-                ))
-              ) : (
-                <p>Cargando detalles...</p>
-              )}
+                      <Card.Body className="card-content">
+                        <Card.Title className="service-title">
+                          {servicio.nombre_servicio || servicio.nombre}
+                        </Card.Title>
+
+                        <Card.Text className="service-description">
+                          {servicio.descripcion_servicio || servicio.descripcion || "Descripción no disponible."}
+                        </Card.Text>
+
+                        <div className="service-meta">
+                          <div className="meta-item">
+                            <DollarSign size={16} />
+                            <span className="meta-value">
+                              ${servicio.precio ? new Intl.NumberFormat('es-CO').format(servicio.precio) : "Consultar"} COP
+                            </span>
+                          </div>
+                          <div className="meta-item">
+                            <Clock size={16} />
+                            <span className="meta-value">{servicio.tiempo_entrega || "A convenir"}</span>
+                          </div>
+                        </div>
+
+                        <Button className="btn-ver-servicio">Ver Detalles</Button>
+                      </Card.Body>
+                    </Card>
+                  </div>
+                ))}
+              </div>
             </div>
-          </Col>
-        </Row>
+
+            {/* Control Next */}
+            <button
+              className={`slider-control slider-control-next ${currentIndex >= maxIndex ? "disabled" : ""}`}
+              onClick={handleNext}
+              disabled={currentIndex >= maxIndex}
+              aria-label="Siguiente"
+            >
+              <ChevronRight size={28} />
+            </button>
+          </div>
+        ) : (
+          <div className="text-center">
+            <p>Cargando servicios...</p>
+          </div>
+        )}
+
+        {/* Indicadores */}
+        {fetchedServicios.length > 0 && (
+          <div className="slider-indicators">
+            {Array.from({ length: maxIndex + 1 }).map((_, idx) => (
+              <button
+                key={idx}
+                className={`indicator ${currentIndex === idx ? "active" : ""}`}
+                onClick={() => {
+                  if (!isAnimating) {
+                    setIsAnimating(true);
+                    setCurrentIndex(idx);
+                    setTimeout(() => setIsAnimating(false), 400);
+                  }
+                }}
+                aria-label={`Ir a slide ${idx + 1}`}
+              />
+            ))}
+          </div>
+        )}
       </Container>
     </section>
   );
