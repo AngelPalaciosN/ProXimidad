@@ -2,7 +2,7 @@ Nombre del Proyecto: Proximidad
 Propietario: Alan Isaac Toro Holguín-Angel David Palacio Navas
 Fecha: Diciembre 3 del 2025
 
-Este software es propiedad e idea de Alan Isaac Toro Holguín, y está protegido por las leyes de derechos de autor y tratados internacionales.
+Este software es propiedad e idea de Alan Isaac Toro Holguín&Angel David Palacio Navas, y está protegido por las leyes de derechos de autor y tratados internacionales.
 
 Queda estrictamente prohibido:
 
